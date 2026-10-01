@@ -1,0 +1,41 @@
+# Demanda de aço
+
+Aplicação web responsiva para cadastro e consulta de demandas, feita com React e Vite. Nesta etapa, o sistema funciona somente no frontend e usa dados simulados em arquivos JSON; não é necessário iniciar um backend.
+
+## Requisitos
+
+- Git instalado.
+- Node.js e npm instalados.
+
+## Clonar e executar
+
+Os comandos abaixo devem ser executados no **CMD (Prompt de Comando do Windows)**.
+
+1. Abra o CMD e clone o repositório:
+
+   ```cmd
+   git clone https://github.com/DiogoBrito777/projeto_instituto
+   ```
+
+2. Entre na pasta do projeto:
+
+   ```cmd
+   cd projeto_instituto
+   ```
+
+3. Instale as dependências (necessário na primeira execução):
+
+   ```cmd
+   npm install
+   ```
+
+4. Inicie a aplicação:
+
+   ```cmd
+   npm run dev
+   ```
+
+5. Abra no navegador o endereço exibido no CMD, normalmente `http://localhost:5173`.
+
+Para encerrar o servidor de desenvolvimento, pressione `Ctrl+C` no CMD.
+
