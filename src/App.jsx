@@ -5,6 +5,7 @@ import Demandas from './pages/Demandas.jsx'
 import NovaDemanda from './pages/NovaDemanda.jsx'
 import DetalhesDemanda from './pages/DetalhesDemanda.jsx'
 import AtualizarDemanda from './pages/AtualizarDemanda.jsx'
+import VisaoGeral from './pages/VisaoGeral.jsx' // NOVO
 import './App.css'
 
 function PlusIcon() {
@@ -25,6 +26,7 @@ function SearchIcon() {
 }
 
 function getPageFromHash() {
+  if (window.location.hash === '#visao-geral') return 'visao-geral' // NOVO
   if (window.location.hash === '#nova-demanda') return 'nova-demanda'
   if (window.location.hash === '#departamentos') return 'departamentos'
   if (window.location.hash.startsWith('#demanda/') && window.location.hash.endsWith('/editar')) return 'atualizar-demanda'
@@ -35,11 +37,12 @@ function getPageFromHash() {
 function App() {
   const [activePage, setActivePage] = useState(getPageFromHash)
   const searchInput = useRef(null)
+  const isHomePage = activePage === 'visao-geral' // NOVO
   const isCreatePage = activePage === 'nova-demanda'
   const isDepartmentsPage = activePage === 'departamentos'
   const isDetailPage = activePage === 'detalhes-demanda'
   const isUpdatePage = activePage === 'atualizar-demanda'
-  const pageTitle = isCreatePage ? 'Nova demanda' : isDepartmentsPage ? 'Departamentos' : isUpdatePage ? 'Atualizar Demanda' : isDetailPage ? 'Detalhes da Demanda' : 'Demandas'
+  const pageTitle = isHomePage ? 'Visão geral' : isCreatePage ? 'Nova demanda' : isDepartmentsPage ? 'Departamentos' : isUpdatePage ? 'Atualizar Demanda' : isDetailPage ? 'Detalhes da Demanda' : 'Demandas'
 
   useEffect(() => {
     function handleHashChange() {
@@ -70,7 +73,7 @@ function App() {
               <PlusIcon />
               <span>Criar</span>
             </button>
-          ) : !isDepartmentsPage && !isDetailPage && !isUpdatePage ? (
+          ) : !isHomePage && !isDepartmentsPage && !isDetailPage && !isUpdatePage ? (
             <button
               className="topbar-search"
               type="button"
@@ -84,6 +87,8 @@ function App() {
 
         {isCreatePage ? (
           <NovaDemanda />
+        ) : isHomePage ? (
+          <VisaoGeral />
         ) : isDepartmentsPage ? (
           <Departamentos />
         ) : isDetailPage ? (
