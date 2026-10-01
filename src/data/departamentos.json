@@ -1,0 +1,34 @@
+[
+  {
+    "id": "tecnologia",
+    "nome": "Tecnologia da Informação (TI)",
+    "descricao": "Suporte à manutenção de equipamentos.",
+    "demandasAbertas": 12,
+    "icone": "tecnologia",
+    "cor": "azul"
+  },
+  {
+    "id": "hidraulica",
+    "nome": "Hidráulica",
+    "descricao": "Vazamentos e instalações hidráulicas.",
+    "demandasAbertas": 5,
+    "icone": "hidraulica",
+    "cor": "verde"
+  },
+  {
+    "id": "administrativo",
+    "nome": "Administrativo",
+    "descricao": "Rotinas, documentação e processos.",
+    "demandasAbertas": 8,
+    "icone": "administrativo",
+    "cor": "roxo"
+  },
+  {
+    "id": "eletrica",
+    "nome": "Elétrica",
+    "descricao": "Iluminação e quadros de distribuição.",
+    "demandasAbertas": 3,
+    "icone": "eletrica",
+    "cor": "laranja"
+  }
+]

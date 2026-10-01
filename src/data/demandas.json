@@ -1,0 +1,115 @@
+{
+  "departamento": "Infraestrutura e Serviços",
+  "descricaoDepartamento": "Gerencie as demandas direcionadas a este departamento.",
+  "demandasAtivas": 12,
+  "demandas": [
+    {
+      "id": "DM-2048",
+      "prioridade": "Alta",
+      "titulo": "Manutenção do ar-condicionado",
+      "origem": "Recursos Humanos",
+      "solicitante": "Marina Alves",
+      "status": "Em andamento",
+      "data": "2025-06-18"
+    },
+    {
+      "id": "DM-2047",
+      "prioridade": "Média",
+      "titulo": "Atualização de acessos ao sistema",
+      "origem": "Tecnologia",
+      "solicitante": "Lucas Ribeiro",
+      "status": "Pendente",
+      "data": "2025-06-18"
+    },
+    {
+      "id": "DM-2046",
+      "prioridade": "Baixa",
+      "titulo": "Solicitação de material de escritório",
+      "origem": "Financeiro",
+      "solicitante": "Carolina Freitas",
+      "status": "Concluído",
+      "data": "2025-06-17"
+    },
+    {
+      "id": "DM-2045",
+      "prioridade": "Média",
+      "titulo": "Reparo na iluminação do corredor",
+      "origem": "Operações",
+      "solicitante": "Rafael Gomes",
+      "status": "Em andamento",
+      "data": "2025-06-17"
+    },
+    {
+      "id": "DM-2044",
+      "prioridade": "Alta",
+      "titulo": "Inclusão de novo fornecedor",
+      "origem": "Compras",
+      "solicitante": "Beatriz Lima",
+      "status": "Pendente",
+      "data": "2025-06-16"
+    },
+    {
+      "id": "DM-2043",
+      "prioridade": "Baixa",
+      "titulo": "Reserva da sala multiuso",
+      "origem": "Comunicação",
+      "solicitante": "Thiago Mendes",
+      "status": "Concluído",
+      "data": "2025-06-16"
+    },
+    {
+      "id": "DM-2042",
+      "prioridade": "Baixa",
+      "titulo": "Substituição de lâmpadas no estacionamento",
+      "origem": "Facilities",
+      "solicitante": "Isabela Rocha",
+      "status": "Em andamento",
+      "data": "2025-06-15"
+    },
+    {
+      "id": "DM-2041",
+      "prioridade": "Média",
+      "titulo": "Ajuste na climatização da recepção",
+      "origem": "Infraestrutura",
+      "solicitante": "Gabriel Costa",
+      "status": "Pendente",
+      "data": "2025-06-14"
+    },
+    {
+      "id": "DM-2040",
+      "prioridade": "Alta",
+      "titulo": "Revisão da rede elétrica do bloco B",
+      "origem": "Operações",
+      "solicitante": "Júlia Martins",
+      "status": "Em andamento",
+      "data": "2025-06-13"
+    },
+    {
+      "id": "DM-2039",
+      "prioridade": "Baixa",
+      "titulo": "Reposição de cadeiras para atendimento",
+      "origem": "Compras",
+      "solicitante": "Pedro Nunes",
+      "status": "Concluído",
+      "data": "2025-06-12"
+    },
+    {
+      "id": "DM-2038",
+      "prioridade": "Média",
+      "titulo": "Manutenção preventiva dos elevadores",
+      "origem": "Facilities",
+      "solicitante": "Camila Santos",
+      "status": "Pendente",
+      "data": "2025-06-11"
+    },
+    {
+      "id": "DM-2037",
+      "prioridade": "Alta",
+      "titulo": "Adequação do acesso ao depósito",
+      "origem": "Segurança do Trabalho",
+      "solicitante": "Eduardo Barros",
+      "status": "Em andamento",
+      "data": "2025-06-10"
+    }
+  ]
+}
