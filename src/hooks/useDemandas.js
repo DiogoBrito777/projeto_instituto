@@ -1,13 +1,29 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { obterStorage } from '../services/storage.js'
 
-// Lista de demandas como estado do React. A carga acontece no estado inicial (sem useEffect)
-// e "recarregar" é chamado por quem gravou algo, por exemplo depois de "Resetar dados".
+// Lista de demandas como estado do React, com os estados de carregando e erro.
+// A leitura é assíncrona (espera curta do storage) para "Carregando demandas…" aparecer.
+// O setCarga acontece quando a leitura TERMINA (dentro do .then), não direto no useEffect;
+// "ativo" evita atualizar uma tela que já foi fechada.
 export function useDemandas() {
-  const [carga, setCarga] = useState(() => obterStorage().carregarDemandas())
+  const [carga, setCarga] = useState(null)
+  const [versao, setVersao] = useState(0)
+
+  useEffect(() => {
+    let ativo = true
+    obterStorage()
+      .lerDemandas()
+      .then((resultado) => {
+        if (ativo) setCarga(resultado)
+      })
+    return () => {
+      ativo = false
+    }
+  }, [versao])
 
   function recarregar() {
-    setCarga(obterStorage().carregarDemandas())
+    setCarga(null)
+    setVersao((atual) => atual + 1)
   }
 
   function resetar() {
@@ -17,8 +33,9 @@ export function useDemandas() {
   }
 
   return {
-    demandas: carga.ok ? carga.dados : [],
-    erro: carga.ok ? null : carga.erro,
+    carregando: carga === null,
+    demandas: carga?.ok ? carga.dados : [],
+    erro: carga && !carga.ok ? carga.erro : null,
     recarregar,
     resetar,
   }
