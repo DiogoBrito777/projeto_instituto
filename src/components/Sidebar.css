@@ -179,7 +179,16 @@
     border-radius: 3px 3px 0 0;
   }
 
+  /* O perfil ficava oculto (display: none) e, com ele, o botão Sair: no celular não havia como
+     encerrar a sessão (teste manual 03/10). Agora aparece abaixo do menu, sem mudar o restante. */
   .sidebar-profile {
-    display: none;
+    margin-top: 8px;
+  }
+
+  /* Alvo de toque de 34 px, igual aos itens do menu no celular (WCAG 2.5.8 pede no mínimo 24 px). */
+  .logout-button {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
   }
 }
