@@ -1,0 +1,296 @@
+{
+  "geradoEm": "2026-10-03T19:47:13.400Z",
+  "axe": "4.13.0",
+  "rotas": {
+    "#visao-geral @1280": {
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "descricao": "Elements must meet minimum color contrast ratio thresholds",
+          "ocorrencias": 12,
+          "exemplo": ".profile-avatar"
+        }
+      ],
+      "passaram": 30,
+      "incompletas": 1,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 1280,
+        "clientW": 1280
+      },
+      "foco": {
+        "focaveis": 17,
+        "semIndicadorDetectado": [
+          "input \"\""
+        ]
+      }
+    },
+    "#demandas @1280": {
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "descricao": "Elements must meet minimum color contrast ratio thresholds",
+          "ocorrencias": 36,
+          "exemplo": ".profile-avatar"
+        }
+      ],
+      "passaram": 32,
+      "incompletas": 0,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 1280,
+        "clientW": 1280
+      },
+      "foco": {
+        "focaveis": 11,
+        "semIndicadorDetectado": [
+          "input \"\"",
+          "select \"Mais recentes\nMais antigas\nMai\""
+        ]
+      }
+    },
+    "#nova-demanda @1280": {
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "descricao": "Elements must meet minimum color contrast ratio thresholds",
+          "ocorrencias": 1,
+          "exemplo": ".profile-avatar"
+        }
+      ],
+      "passaram": 33,
+      "incompletas": 0,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 1280,
+        "clientW": 1280
+      },
+      "foco": {
+        "focaveis": 13,
+        "semIndicadorDetectado": []
+      }
+    },
+    "#departamentos @1280": {
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "descricao": "Elements must meet minimum color contrast ratio thresholds",
+          "ocorrencias": 8,
+          "exemplo": ".profile-avatar"
+        }
+      ],
+      "passaram": 31,
+      "incompletas": 0,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 1280,
+        "clientW": 1280
+      },
+      "foco": {
+        "focaveis": 11,
+        "semIndicadorDetectado": [
+          "input \"\""
+        ]
+      }
+    },
+    "#demanda/DM-2048 @1280": {
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "descricao": "Elements must meet minimum color contrast ratio thresholds",
+          "ocorrencias": 20,
+          "exemplo": ".profile-avatar"
+        }
+      ],
+      "passaram": 29,
+      "incompletas": 0,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 1280,
+        "clientW": 1280
+      },
+      "foco": {
+        "focaveis": 10,
+        "semIndicadorDetectado": []
+      }
+    },
+    "#demanda/DM-2048/editar @1280": {
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "descricao": "Elements must meet minimum color contrast ratio thresholds",
+          "ocorrencias": 20,
+          "exemplo": ".profile-avatar"
+        },
+        {
+          "id": "target-size",
+          "impacto": "serious",
+          "descricao": "All touch targets must be 24px large, or leave sufficient space",
+          "ocorrencias": 1,
+          "exemplo": "select[name=\"prioridade\"]"
+        }
+      ],
+      "passaram": 33,
+      "incompletas": 0,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 1280,
+        "clientW": 1280
+      },
+      "foco": {
+        "focaveis": 21,
+        "semIndicadorDetectado": [
+          "select \"Em andamento\nPendente\nConcluíd\"",
+          "select \"Alta\nMédia\nBaixa\""
+        ]
+      }
+    },
+    "#visao-geral @360": {
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "descricao": "Elements must meet minimum color contrast ratio thresholds",
+          "ocorrencias": 11,
+          "exemplo": ".stat-card__top > .badge--ambar.badge"
+        }
+      ],
+      "passaram": 31,
+      "incompletas": 1,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 360,
+        "clientW": 360
+      },
+      "foco": {
+        "focaveis": 16,
+        "semIndicadorDetectado": [
+          "input \"\""
+        ]
+      }
+    },
+    "#demandas @360": {
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "descricao": "Elements must meet minimum color contrast ratio thresholds",
+          "ocorrencias": 35,
+          "exemplo": ".department-description"
+        }
+      ],
+      "passaram": 33,
+      "incompletas": 1,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 360,
+        "clientW": 360
+      },
+      "foco": {
+        "focaveis": 10,
+        "semIndicadorDetectado": [
+          "input \"\"",
+          "select \"Mais recentes\nMais antigas\nMai\""
+        ]
+      }
+    },
+    "#nova-demanda @360": {
+      "violacoes": [],
+      "passaram": 34,
+      "incompletas": 1,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 360,
+        "clientW": 360
+      },
+      "foco": {
+        "focaveis": 12,
+        "semIndicadorDetectado": []
+      }
+    },
+    "#departamentos @360": {
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "descricao": "Elements must meet minimum color contrast ratio thresholds",
+          "ocorrencias": 7,
+          "exemplo": ".departments-intro > p"
+        }
+      ],
+      "passaram": 30,
+      "incompletas": 0,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 360,
+        "clientW": 360
+      },
+      "foco": {
+        "focaveis": 10,
+        "semIndicadorDetectado": [
+          "input \"\""
+        ]
+      }
+    },
+    "#demanda/DM-2048 @360": {
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "descricao": "Elements must meet minimum color contrast ratio thresholds",
+          "ocorrencias": 19,
+          "exemplo": ".detail-breadcrumb > a[href$=\"#demandas\"]"
+        }
+      ],
+      "passaram": 30,
+      "incompletas": 1,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 360,
+        "clientW": 360
+      },
+      "foco": {
+        "focaveis": 9,
+        "semIndicadorDetectado": []
+      }
+    },
+    "#demanda/DM-2048/editar @360": {
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "descricao": "Elements must meet minimum color contrast ratio thresholds",
+          "ocorrencias": 19,
+          "exemplo": ".detail-breadcrumb > a[href$=\"#demandas\"]"
+        },
+        {
+          "id": "target-size",
+          "impacto": "serious",
+          "descricao": "All touch targets must be 24px large, or leave sufficient space",
+          "ocorrencias": 1,
+          "exemplo": "select[name=\"prioridade\"]"
+        }
+      ],
+      "passaram": 34,
+      "incompletas": 1,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 360,
+        "clientW": 360
+      },
+      "foco": {
+        "focaveis": 20,
+        "semIndicadorDetectado": [
+          "select \"Em andamento\nPendente\nConcluíd\"",
+          "select \"Alta\nMédia\nBaixa\""
+        ]
+      }
+    }
+  }
+}
