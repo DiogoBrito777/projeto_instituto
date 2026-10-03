@@ -35,7 +35,13 @@ function numeroDoId(id) {
 
 // backend: objeto com getItem/setItem/removeItem (o localStorage do navegador ou um falso nos testes).
 // gerarSemente: função chamada só na primeira carga, para as datas serem relativas a esse momento.
-export function criarStorage({ backend, gerarSemente, atrasoMs = 250, falhaSimulada = false }) {
+export function criarStorage({
+  backend,
+  gerarSemente,
+  atrasoMs = 250,
+  atrasoLeituraMs = 150,
+  falhaSimulada = false,
+}) {
   function ler(chave) {
     if (!backend) return { ok: false, erro: ERROS.INDISPONIVEL }
     try {
@@ -76,6 +82,13 @@ export function criarStorage({ backend, gerarSemente, atrasoMs = 250, falhaSimul
     return { ok: false, erro: ERROS.CORROMPIDO }
   }
 
+  // Leitura usada pelas telas. A espera curta existe só para o estado "Carregando demandas…" ser
+  // visível na demonstração (exigência do enunciado); desvio do kit registrado no CHANGELOG (Bloco 2A).
+  async function lerDemandas() {
+    await esperar(atrasoLeituraMs)
+    return carregarDemandas()
+  }
+
   // Atraso curto e falha simulada (?falha=1) só nas gravações, para demonstrar carregando e erro.
   async function antesDeGravar() {
     await esperar(atrasoMs)
@@ -107,8 +120,9 @@ export function criarStorage({ backend, gerarSemente, atrasoMs = 250, falhaSimul
     return gravacao.ok ? { ok: true, dados: nova } : gravacao
   }
 
-  // Ler → alterar → gravar numa função só, para não haver gravação pela metade espalhada nas telas.
-  // "alterar" recebe a demanda atual e devolve a nova versão.
+  // Ler → validar → gravar numa função só, para não haver gravação pela metade espalhada nas telas.
+  // "alterar" recebe a demanda ATUAL (lida agora, não a da tela) e devolve um resultado:
+  // { ok: true, dados: novaDemanda } ou { ok: false, erro }. Se a regra recusar, nada é gravado.
   async function atualizarDemanda(id, alterar) {
     const permissao = await antesDeGravar()
     if (!permissao.ok) return permissao
@@ -119,10 +133,12 @@ export function criarStorage({ backend, gerarSemente, atrasoMs = 250, falhaSimul
     const atual = carga.dados.find((demanda) => demanda.id === id)
     if (!atual) return { ok: false, erro: ERROS.NAO_ENCONTRADA }
 
-    const atualizada = alterar(atual)
-    const lista = carga.dados.map((demanda) => (demanda.id === id ? atualizada : demanda))
+    const alteracao = alterar(atual)
+    if (!alteracao.ok) return alteracao
+
+    const lista = carga.dados.map((demanda) => (demanda.id === id ? alteracao.dados : demanda))
     const gravacao = gravar(CHAVES.demandas, lista)
-    return gravacao.ok ? { ok: true, dados: atualizada } : gravacao
+    return gravacao.ok ? { ok: true, dados: alteracao.dados } : gravacao
   }
 
   // Apaga só as chaves deste app; a próxima carga recria a semente com datas de agora.
@@ -137,7 +153,7 @@ export function criarStorage({ backend, gerarSemente, atrasoMs = 250, falhaSimul
     }
   }
 
-  return { carregarDemandas, criarDemanda, atualizarDemanda, resetarDados }
+  return { carregarDemandas, lerDemandas, criarDemanda, atualizarDemanda, resetarDados }
 }
 
 // Instância usada pelo app. Criada só quando alguém pede, porque os testes rodam sem navegador.
