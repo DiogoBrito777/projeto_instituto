@@ -1,0 +1,56 @@
+{
+  "usuario": {
+    "nome": "Márcio Almeida",
+    "papel": "Gestor",
+    "iniciais": "MA"
+  },
+  "plano": {
+    "titulo": "Demandas Finalizadas",
+    "percentual": 25,
+    "descricao": "25% da meta concluída"
+  },
+  "indicadores": {
+    "total": { "valor": 4, "badge": "+70% este mês", "tom": "cinza" },
+    "pendentes": { "valor": 1, "badge": "+1 hoje", "tom": "ambar" },
+    "altaPrioridade": { "valor": 1, "badge": "Atenção!", "tom": "vermelho" },
+    "concluidas": { "valor": 1, "badge": "25% do total", "tom": "verde" }
+  },
+  "demandas": [
+    {
+      "id": "DM-1000",
+      "status": "alta-prioridade",
+      "statusLabel": "Alta prioridade",
+      "titulo": "Manutenção do ar-condicionado",
+      "descricao": "O equipamento do RH parou de funcionar, prejudicando a rotina da equipe.",
+      "categoria": "Manutenção",
+      "responsavel": "ST"
+    },
+    {
+      "id": "DM-1001",
+      "status": "pendente",
+      "statusLabel": "Pendente",
+      "titulo": "Atualização de acessos ao sistema",
+      "descricao": "Precisamos atualizar o acesso ao sistema para o novato.",
+      "categoria": "Tecnologia da Informação",
+      "responsavel": "KR"
+    },
+    {
+      "id": "DM-1002",
+      "status": "em-andamento",
+      "statusLabel": "Em andamento",
+      "titulo": "Solicitação de material de escritório",
+      "descricao": "Alguns itens estão em falta.",
+      "categoria": "Administrativo",
+      "responsavel": "TE"
+    },
+    {
+      "id": "DM-1003",
+      "status": "concluida",
+      "statusLabel": "Concluída",
+      "titulo": "Reparo na iluminação do corredor",
+      "descricao": "Acho que a lâmpada explodiu, ninguém quer passar por lá.",
+      "categoria": "Manutenção",
+      "responsavel": "ST"
+    }
+  ]
+}

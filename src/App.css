@@ -1,0 +1,1017 @@
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+  background: #fff;
+}
+
+.app-main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.topbar {
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 0 18px 0 20px;
+  border-bottom: 1px solid #d7d7d7;
+}
+
+.page-title {
+  margin: 0;
+  color: #171b1a;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.topbar-action {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 14px;
+  border: 1px solid #d0d0d0;
+  border-radius: 12px;
+  background: #fff;
+  color: #1d2422;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 140ms ease, border-color 140ms ease;
+}
+
+.topbar-action:hover {
+  border-color: #9bb5af;
+  background: #f7faf9;
+}
+
+.button-icon {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-width: 1.8;
+}
+
+.page-content {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  padding: 45px 40px 60px;
+}
+
+/* =========================================================
+   FORMULÁRIO DE DEMANDA
+   ========================================================= */
+
+.demand-form {
+  box-sizing: border-box;
+  width: min(100%, 1000px);
+  align-self: center;
+  margin: 0 auto;
+  padding: 48px 52px;
+  border: 1px solid #d6d6d6;
+  border-radius: 20px;
+  background: #fff;
+}
+
+/* =========================================================
+   GRID DO FORMULÁRIO
+   ========================================================= */
+
+.form-grid {
+  display: grid;
+  gap: 20px;
+}
+
+.form-grid--locations {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.form-grid--details {
+  grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+  margin-top: 22px;
+}
+
+/* =========================================================
+   CAMPOS
+   ========================================================= */
+
+.field {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Labels maiores */
+.field label {
+  color: #267768;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+/* Inputs, selects e textarea */
+.field input,
+.field select,
+.field textarea {
+  box-sizing: border-box;
+  width: 100%;
+  border: 1px solid #d0d0d0;
+  border-radius: 999px;
+  outline: none;
+  background: #fff;
+  color: #1e2926;
+  font: inherit;
+  font-size: 16px;
+  transition: border-color 140ms ease, box-shadow 140ms ease;
+}
+
+/* Inputs e selects maiores */
+.field input,
+.field select {
+  height: 52px;
+  padding: 0 20px;
+}
+
+.field select {
+  padding-right: 34px;
+  cursor: pointer;
+}
+
+/* Textarea maior */
+.field textarea {
+  min-height: 180px;
+  padding: 16px 20px;
+  border-radius: 18px;
+  resize: vertical;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: #25796a;
+  box-shadow: 0 0 0 4px rgb(37 121 106 / 12%);
+}
+
+.field--description {
+  margin-top: 22px;
+}
+
+/* =========================================================
+   RODAPÉ DO FORMULÁRIO
+   ========================================================= */
+
+.form-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+/* Botão maior */
+.submit-button {
+  min-height: 52px;
+  padding: 0 32px;
+  border: 1px solid #1b7766;
+  border-radius: 999px;
+  background: #1b7766;
+  color: #fff;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 140ms ease, border-color 140ms ease;
+}
+
+.submit-button:hover {
+  border-color: #125e51;
+  background: #125e51;
+}
+
+.form-notice {
+  margin: 0;
+  color: #267768;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   PESQUISA DA BARRA SUPERIOR
+   ========================================================= */
+
+.topbar-search {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  place-items: center;
+  padding: 0;
+  border: 1px solid #d2d2d2;
+  border-radius: 9px;
+  background: #fff;
+  color: #161c1b;
+  cursor: pointer;
+  transition: background-color 140ms ease, border-color 140ms ease;
+}
+
+.topbar-search:hover {
+  border-color: #9bb5af;
+  background: #f7faf9;
+}
+
+.search-icon {
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-width: 1.9;
+}
+
+/* =========================================================
+   PÁGINA DE DEMANDAS
+   ========================================================= */
+
+.demands-page {
+  box-sizing: border-box;
+  width: 100%;
+  flex: 1;
+  padding: 28px 30px 30px;
+}
+
+.department-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 28px;
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  color: #54716b;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.department-heading h2 {
+  margin: 0;
+  color: #1d3430;
+  font-size: 24px;
+  font-weight: 400;
+  letter-spacing: -0.035em;
+  line-height: 1.2;
+}
+
+.department-description {
+  margin: 8px 0 0;
+  color: #788782;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.active-count {
+  margin: 0 0 8px;
+  color: #71817d;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.demands-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 30px;
+}
+
+.search-field {
+  display: block;
+  width: min(100%, 430px);
+}
+
+.search-field input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 34px;
+  padding: 6px 10px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  outline: none;
+  background: transparent;
+  color: #273b37;
+  font: inherit;
+  font-size: 11px;
+  transition: border-color 140ms ease, background-color 140ms ease;
+}
+
+.search-field input::placeholder {
+  color: #8a9693;
+  opacity: 1;
+}
+
+.search-field input:focus {
+  border-color: #c9d9d5;
+  background: #fbfdfc;
+}
+
+.sort-control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 7px;
+  color: #83908d;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.sort-control select {
+  max-width: 170px;
+  padding: 5px 18px 5px 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: #344641;
+  font: inherit;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.results-count {
+  margin: 14px 0 11px;
+  color: #82908c;
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.demands-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: 22px;
+  row-gap: 15px;
+}
+
+.demand-card {
+  display: flex;
+  min-width: 0;
+  min-height: 170px;
+  flex-direction: column;
+  padding: 15px 17px 14px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  transition: border-color 140ms ease, background-color 140ms ease;
+}
+
+.demand-card:hover {
+  border-color: #e5ecea;
+  background: #fcfdfd;
+}
+
+.demand-card-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.demand-id,
+.priority {
+  color: #7f8d89;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  line-height: 1.3;
+}
+
+.demand-title {
+  display: -webkit-box;
+  min-height: 34px;
+  margin: 15px 0 10px;
+  overflow: hidden;
+  color: #1e3430;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.45;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.demand-meta {
+  display: grid;
+  gap: 7px;
+  color: #53645f;
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.demand-meta p {
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.demand-meta p span {
+  margin-right: 4px;
+  color: #87938f;
+}
+
+.demand-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 9px;
+  margin-top: auto;
+  padding-top: 14px;
+  color: #86938f;
+  font-size: 9px;
+  line-height: 1.3;
+}
+
+.demand-card-footer time {
+  white-space: nowrap;
+}
+
+.demand-status {
+  font-weight: 500;
+}
+
+.demand-status--progress {
+  color: #a95c1b;
+}
+
+.demand-status--pending {
+  color: #b44444;
+}
+
+.demand-status--done {
+  color: #16745e;
+}
+
+.empty-state {
+  display: grid;
+  min-height: 220px;
+  place-content: center;
+  text-align: center;
+}
+
+.empty-state h3 {
+  margin: 0 0 6px;
+  color: #1e3430;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.empty-state p {
+  margin: 0;
+  color: #7b8985;
+  font-size: 12px;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+  color: #788782;
+  font-size: 10px;
+}
+
+.pagination button {
+  display: grid;
+  width: 29px;
+  height: 29px;
+  place-items: center;
+  padding: 0;
+  border: 1px solid #dce3e1;
+  border-radius: 8px;
+  background: #fff;
+  color: #2a4a43;
+  font: inherit;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.pagination button:hover:not(:disabled) {
+  border-color: #8db8ad;
+  background: #f5faf8;
+}
+
+.pagination button:disabled {
+  color: #b2bcb9;
+  cursor: default;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* =========================================================
+   PÁGINA DE DEPARTAMENTOS
+   ========================================================= */
+
+.departments-page {
+  box-sizing: border-box;
+  width: 100%;
+  flex: 1;
+  padding: 18px;
+  background: #f3f4f6;
+}
+
+.departments-intro h2 {
+  margin: 0;
+  color: #18212f;
+  font-size: 15px;
+  font-weight: 650;
+  line-height: 1.3;
+}
+
+.departments-intro p {
+  margin: 3px 0 0;
+  color: #7b8491;
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.department-search {
+  display: flex;
+  min-height: 34px;
+  align-items: center;
+  gap: 8px;
+  margin-top: 13px;
+  padding: 0 10px;
+  border: 1px solid #e7e9ed;
+  border-radius: 6px;
+  background: #fff;
+  color: #77818e;
+}
+
+.department-search svg {
+  width: 13px;
+  height: 13px;
+  flex: 0 0 13px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-width: 1.8;
+}
+
+.department-search input {
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #25313f;
+  font: inherit;
+  font-size: 10px;
+}
+
+.department-search input::placeholder {
+  color: #99a1ad;
+  opacity: 1;
+}
+
+.department-search:focus-within {
+  border-color: #adcac3;
+  box-shadow: 0 0 0 2px rgb(37 121 106 / 8%);
+}
+
+.departments-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 11px;
+  margin-top: 12px;
+}
+
+.department-card {
+  display: flex;
+  min-width: 0;
+  min-height: 120px;
+  flex-direction: column;
+  padding: 12px;
+  border: 1px solid #eceef1;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgb(16 24 40 / 3%);
+  transition: box-shadow 140ms ease, transform 140ms ease;
+}
+
+.department-card:hover {
+  box-shadow: 0 4px 12px rgb(16 24 40 / 7%);
+  transform: translateY(-1px);
+}
+
+.department-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 9px;
+}
+
+.department-icon {
+  display: grid;
+  width: 23px;
+  height: 23px;
+  flex: 0 0 23px;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+}
+
+.department-icon svg {
+  width: 12px;
+  height: 12px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.department-icon--azul {
+  background: #3b82f6;
+}
+
+.department-icon--verde {
+  background: #18bd69;
+}
+
+.department-icon--roxo {
+  background: #8b5cf6;
+}
+
+.department-icon--laranja {
+  background: #f97316;
+}
+
+.department-count {
+  padding: 4px 7px;
+  border-radius: 999px;
+  font-size: 8px;
+  font-weight: 550;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.department-count--azul {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.department-count--verde {
+  background: #ecfdf3;
+  color: #159447;
+}
+
+.department-count--roxo {
+  background: #f5f0ff;
+  color: #7c3aed;
+}
+
+.department-count--laranja {
+  background: #fff4ec;
+  color: #ea580c;
+}
+
+.department-card h3 {
+  margin: 7px 0 3px;
+  color: #202a39;
+  font-size: 10px;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+.department-card > p {
+  margin: 0;
+  color: #858d99;
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.department-card > a {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  gap: 4px;
+  margin-top: auto;
+  padding-top: 7px;
+  color: #208345;
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+}
+
+.department-card > a:hover {
+  color: #126a34;
+  text-decoration: underline;
+}
+
+.department-card > a span {
+  font-size: 13px;
+  line-height: 0.8;
+}
+
+.department-empty-state {
+  display: grid;
+  min-height: 160px;
+  place-items: center;
+  color: #78838f;
+  font-size: 11px;
+  text-align: center;
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 760px) {
+  .app-shell {
+    flex-direction: column;
+  }
+
+  .topbar {
+    min-height: 52px;
+  }
+
+  .page-content {
+    padding: 30px 24px 42px;
+  }
+
+  .demand-form {
+    width: 100%;
+    padding: 40px 32px 32px;
+  }
+
+  .form-grid {
+    gap: 17px;
+  }
+
+  .field label {
+    font-size: 14px;
+  }
+
+  .field input,
+  .field select,
+  .field textarea {
+    font-size: 15px;
+  }
+
+  .field input,
+  .field select {
+    height: 48px;
+  }
+
+  .field textarea {
+    min-height: 160px;
+  }
+
+  .submit-button {
+    min-height: 48px;
+    font-size: 15px;
+  }
+
+  .demands-page {
+    padding: 26px 22px 32px;
+  }
+
+  .demands-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 14px;
+  }
+}
+
+/* =========================================================
+   CELULAR
+   ========================================================= */
+
+@media (max-width: 520px) {
+  .topbar {
+    padding-inline: 16px;
+  }
+
+  .page-content {
+    padding: 22px 14px 32px;
+  }
+
+  .demand-form {
+    width: 100%;
+    padding: 30px 20px 24px;
+    border-radius: 17px;
+  }
+
+  .form-grid {
+    gap: 16px;
+  }
+
+  .form-grid--locations,
+  .form-grid--details {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .form-grid--details {
+    margin-top: 18px;
+  }
+
+  .field {
+    gap: 7px;
+  }
+
+  .field label {
+    font-size: 14px;
+  }
+
+  .field input,
+  .field select,
+  .field textarea {
+    font-size: 15px;
+  }
+
+  .field input,
+  .field select {
+    height: 48px;
+    padding-inline: 16px;
+  }
+
+  .field textarea {
+    min-height: 160px;
+    padding: 14px 16px;
+  }
+
+  .field--description {
+    margin-top: 18px;
+  }
+
+  .form-footer {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 26px;
+  }
+
+  .submit-button {
+    width: 100%;
+    min-height: 48px;
+    font-size: 15px;
+  }
+
+  .form-notice {
+    font-size: 12px;
+  }
+
+  .demands-page {
+    padding: 22px 15px 26px;
+  }
+
+  .department-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .department-heading h2 {
+    font-size: 21px;
+  }
+
+  .active-count {
+    margin: 0;
+  }
+
+  .demands-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 21px;
+  }
+
+  .search-field {
+    width: 100%;
+  }
+
+  .search-field input {
+    min-height: 38px;
+    padding-inline: 10px;
+    border-color: #e1e7e5;
+  }
+
+  .sort-control {
+    justify-content: flex-end;
+    min-height: 30px;
+    font-size: 10px;
+  }
+
+  .sort-control select {
+    max-width: 170px;
+    font-size: 10px;
+  }
+
+  .results-count {
+    margin-top: 9px;
+    font-size: 9px;
+  }
+
+  .demands-grid {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 7px;
+  }
+
+  .demand-card {
+    min-height: 145px;
+    padding: 14px 13px 12px;
+    border-color: #edf1ef;
+  }
+
+  .demand-id,
+  .priority,
+  .demand-meta,
+  .demand-card-footer {
+    font-size: 9px;
+  }
+
+  .demand-title {
+    font-size: 12px;
+  }
+}
+
+/* =========================================================
+   DEPARTAMENTOS - CELULAR
+   ========================================================= */
+
+@media (max-width: 520px) {
+  .departments-page {
+    padding: 17px 14px 26px;
+  }
+
+  .departments-intro h2 {
+    font-size: 16px;
+  }
+
+  .departments-intro p,
+  .department-search input {
+    font-size: 10px;
+  }
+
+  .department-search {
+    min-height: 38px;
+    margin-top: 14px;
+  }
+
+  .departments-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+    margin-top: 13px;
+  }
+
+  .department-card {
+    min-height: 118px;
+    padding: 13px;
+  }
+
+  .department-icon {
+    width: 25px;
+    height: 25px;
+    flex-basis: 25px;
+  }
+
+  .department-icon svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .department-count {
+    font-size: 8px;
+  }
+
+  .department-card h3 {
+    font-size: 11px;
+  }
+
+  .department-card > p,
+  .department-card > a {
+    font-size: 9px;
+  }
+}
