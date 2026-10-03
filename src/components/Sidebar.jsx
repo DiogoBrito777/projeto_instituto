@@ -1,3 +1,4 @@
+import departamentos from '../data/departamentos.json'
 import './Sidebar.css'
 
 const navigation = [
@@ -64,7 +65,24 @@ function Icon({ name }) {
   )
 }
 
-function Sidebar({ activeItem }) {
+// Gerência aparece como "Gerenciamento"; setor aparece com o nome do departamento.
+function descricaoDoPerfil(usuario) {
+  if (usuario.perfil === 'gerenciamento') return 'Gerenciamento'
+  return departamentos.find((item) => item.id === usuario.departamento)?.nome ?? 'Departamento'
+}
+
+const CONECTIVOS = ['de', 'da', 'do', 'e']
+
+function iniciais(nome) {
+  return nome
+    .split(' ')
+    .filter((parte) => !CONECTIVOS.includes(parte))
+    .slice(0, 2)
+    .map((parte) => parte[0].toUpperCase())
+    .join('')
+}
+
+function Sidebar({ activeItem, usuario, onSair }) {
   return (
     <aside className="sidebar">
       <a className="sidebar-brand" href="#inicio">
@@ -87,13 +105,13 @@ function Sidebar({ activeItem }) {
 
       <div className="sidebar-profile">
         <div className="profile-avatar" aria-hidden="true">
-          MA
+          {iniciais(usuario.nome)}
         </div>
         <div className="profile-copy">
-          <span className="profile-name">Márcio Almeida</span>
-          <span className="profile-role">Gestor</span>
+          <span className="profile-name">{usuario.nome}</span>
+          <span className="profile-role">{descricaoDoPerfil(usuario)}</span>
         </div>
-        <button className="logout-button" type="button" aria-label="Sair">
+        <button className="logout-button" type="button" aria-label="Sair" onClick={onSair}>
           <Icon name="logout" />
         </button>
       </div>

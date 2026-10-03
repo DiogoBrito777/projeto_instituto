@@ -6,6 +6,8 @@ import NovaDemanda from './pages/NovaDemanda.jsx'
 import DetalhesDemanda from './pages/DetalhesDemanda.jsx'
 import AtualizarDemanda from './pages/AtualizarDemanda.jsx'
 import VisaoGeral from './pages/VisaoGeral.jsx' // NOVO
+import Login from './pages/Login.jsx'
+import { useSessao } from './hooks/useSessao.js'
 import './App.css'
 
 function PlusIcon() {
@@ -26,6 +28,7 @@ function SearchIcon() {
 }
 
 function getPageFromHash() {
+  if (window.location.hash === '#login') return 'login'
   if (window.location.hash === '#visao-geral') return 'visao-geral' // NOVO
   if (window.location.hash === '#nova-demanda') return 'nova-demanda'
   if (window.location.hash === '#departamentos') return 'departamentos'
@@ -36,6 +39,7 @@ function getPageFromHash() {
 
 function App() {
   const [activePage, setActivePage] = useState(getPageFromHash)
+  const { usuario, entrar, sair } = useSessao()
   const searchInput = useRef(null)
   const isHomePage = activePage === 'visao-geral' // NOVO
   const isCreatePage = activePage === 'nova-demanda'
@@ -53,13 +57,29 @@ function App() {
     return () => window.removeEventListener('hashchange', handleHashChange)
   }, [])
 
+  // RN01 / CA-R10: sem sessão só existe o login; com sessão, o login leva à Visão Geral.
+  // location.replace troca o endereço sem criar entrada no histórico, então o botão Voltar
+  // não reabre telas protegidas depois de Sair.
   useEffect(() => {
-    document.title = `${pageTitle} | Demanda de aço`
-  }, [pageTitle])
+    if (!usuario && activePage !== 'login') window.location.replace('#login')
+    if (usuario && activePage === 'login') window.location.replace('#visao-geral')
+  }, [usuario, activePage])
+
+  useEffect(() => {
+    document.title = `${usuario ? pageTitle : 'Entrar'} | Demanda de aço`
+  }, [usuario, pageTitle])
+
+  if (!usuario) {
+    return <Login onEntrar={entrar} />
+  }
 
   return (
     <div className="app-shell">
-      <Sidebar activeItem={isDetailPage || isUpdatePage ? 'demandas' : activePage} />
+      <Sidebar
+        activeItem={isDetailPage || isUpdatePage ? 'demandas' : activePage}
+        usuario={usuario}
+        onSair={sair}
+      />
 
       <main className="app-main">
         <header className="topbar">

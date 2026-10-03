@@ -1,0 +1,16 @@
+# CHANGELOG
+
+Uma entrada por bloco/PR (formato em `docs/CONVENCOES.md`).
+
+### 2026-10-03 · Bloco 1 · feat/fundacao
+- **Arquivos novos:** `src/domain/status.js`, `prioridades.js`, `prazos.js`, `permissoes.js` (+ `*.test.js`); `src/services/storage.js` (+ `storage.test.js`), `seed.js`, `auth.js`; `src/hooks/useSessao.js`, `useDemandas.js`; `src/pages/Login.jsx`, `Login.css`; `src/data/usuarios.json`, `seed-demandas.json`; `docs/CHANGELOG.md`, `docs/EXPLICACAO_BLOCO1.md`.
+- **Arquivos alterados:** `src/App.jsx` (guarda de rotas e login), `src/components/Sidebar.jsx` (usuário logado e Sair), `src/components/Sidebar.css` (Sair visível no celular), `src/data/departamentos.json` (acrescenta `tiposAtendimento`), `package.json` (`vitest` e script `test`), `docs/MENSAGENS_VALIDACAO.md` (mensagens novas marcadas como proposta).
+- **O quê:** regras de status, prioridade, prazo e permissão em funções puras com testes; camada única de dados com semente versionada, resultado explícito, dados corrompidos sem apagamento automático, "Resetar dados", atraso e falha simulados (`?falha=1`) nas gravações e IDs por contador; login com sessão no `sessionStorage`, Sair funcional e guarda de rotas.
+- **Por quê:** não havia camada de dados (G03), nem login/perfis (G07); a máquina de estados do app não batia com a proposta (G09); datas simuladas eram fixas (G18).
+- **Mudança visual:** só a tela nova de login. Sidebar mantém layout e classes; troca o usuário fixo "Márcio Almeida / Gestor" pelo usuário logado.
+- **Atende:** RN01–RN06, RN09–RN11, RN13–RN16, RN18–RN21 (como funções testadas; a interface dessas ações é dos Blocos 2 e 4); RF-R01; CA-R01, CA-R02, CA-R07, CA-R10, CA-R11 (no nível das regras).
+- **Verificação:** `npm test` 5 arquivos / 61 testes passaram · `npm run lint` 0 avisos e 0 erros · `npm run build` OK. Teste manual no navegador (CT-R01, CT-R02, CT-R11): **não executado**.
+- **Teste manual (03/10, Edge, navegação privada):** passou nos 5 logins, em entrar e sair, no F5 (sessão e dados mantidos) e em fechar o navegador (pede login de novo). Teclado: parcial, com TAB inconsistente nas telas antigas (fica para o Bloco 3). Dados corrompidos: não executado. Evidência em `docs/evidencias/depois/TESTE_MANUAL_BLOCO1.md`.
+- **Observação (decisão de projeto, não bug):** voltar para a URL na mesma aba mantém a sessão ativa, porque ela fica no `sessionStorage`; só o **Sair** encerra a sessão. Fechar o navegador também encerra.
+- **Correção — Sair no celular (falha do teste manual):** em 360 px a Sidebar escondia o perfil inteiro (`.sidebar-profile { display: none }` no `@media (max-width: 760px)`), e com ele o botão Sair. Agora o perfil aparece abaixo do menu e o Sair tem alvo de 34 × 34 px (WCAG 2.5.8). Mudança visual só no celular, por acessibilidade; o layout no computador não muda. Arquivo: `src/components/Sidebar.css`. Verificado pelo assistente no navegador embutido em 360 × 740: o Sair fica visível, é alcançado por Tab e o Enter encerra a sessão. Reteste da equipe no Edge: não executado.
+- **Preexistente (não alterado):** `DetalhesDemanda.jsx` e `AtualizarDemanda.jsx` usam `localStorage` direto e a DM-2048 fixa; as telas ainda leem `demandas.json` e `VisaoGeral.json`. Fica para o Bloco 2.
