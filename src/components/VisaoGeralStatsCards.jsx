@@ -1,27 +1,17 @@
-const CARDS = [
-  { key: 'total', label: 'Total de demandas' },
-  { key: 'pendentes', label: 'Pendentes' },
-  { key: 'altaPrioridade', label: 'Alta prioridade' },
-  { key: 'concluidas', label: 'Concluídas' },
-]
-
+// Recebe os indicadores já calculados (listas.js → indicadoresVisaoGeral): a lista muda conforme o perfil.
+// O selo só aparece quando o indicador tem um texto de apoio.
 export default function VisaoGeralStatsCards({ indicadores }) {
   return (
     <section className="stats">
-      {CARDS.map(({ key, label }) => {
-        const dado = indicadores[key]
-        if (!dado) return null
-
-        return (
-          <div className="stat-card" key={key}>
-            <div className="stat-card__top">
-              <span className="stat-card__label">{label}</span>
-              <span className={`badge badge--${dado.tom}`}>{dado.badge}</span>
-            </div>
-            <div className="stat-card__value">{dado.valor}</div>
+      {indicadores.map(({ chave, rotulo, valor, badge, tom }) => (
+        <div className="stat-card" key={chave}>
+          <div className="stat-card__top">
+            <span className="stat-card__label">{rotulo}</span>
+            {badge && <span className={`badge badge--${tom ?? 'cinza'}`}>{badge}</span>}
           </div>
-        )
-      })}
+          <div className="stat-card__value">{valor}</div>
+        </div>
+      ))}
     </section>
   )
 }

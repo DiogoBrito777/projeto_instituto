@@ -1,13 +1,15 @@
-export default function VisaoGeralFilterTabs({ ativo, onChange, indicadores }) {
+// "Alta prioridade" agora filtra pela prioridade (Alta ou Urgente), não por um status inventado (G05).
+// As contagens vêm calculadas da base (listas.js → filtrarVisaoGeral).
+export default function VisaoGeralFilterTabs({ ativo, onChange, contagens }) {
   const tabs = [
     { key: 'todas', label: 'Todas' },
-    { key: 'pendente', label: 'Pendentes', count: indicadores.pendentes.valor },
+    { key: 'pendentes', label: 'Pendentes', count: contagens.pendentes },
     {
       key: 'alta-prioridade',
       label: 'Alta prioridade',
-      count: indicadores.altaPrioridade.valor,
+      count: contagens['alta-prioridade'],
     },
-    { key: 'concluida', label: 'Concluídas' },
+    { key: 'concluidas', label: 'Concluídas' },
   ]
 
   return (

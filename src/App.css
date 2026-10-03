@@ -349,6 +349,81 @@
   cursor: pointer;
 }
 
+/* Bloco 2A: elementos novos da lista (abas, filtros, pendentes e nível Urgente),
+   no mesmo tom das cores já usadas nesta tela. */
+.demand-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 22px;
+}
+
+.demand-tab {
+  min-height: 32px;
+  padding: 0 14px;
+  border: 1px solid #c9d9d5;
+  border-radius: 999px;
+  background: #fff;
+  color: #344641;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.demand-tab--active {
+  border-color: #1b7766;
+  background: #1b7766;
+  color: #fff;
+}
+
+.demands-filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px 18px;
+}
+
+.pending-section {
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e5ecea;
+}
+
+.pending-title {
+  margin: 0 0 8px;
+  color: #1d3430;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.form-error {
+  margin: 10px 0 0;
+  color: #b42318;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.update-observacao-label {
+  display: block;
+  margin-bottom: 6px;
+  color: #24413c;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.form-counter {
+  display: block;
+  margin-top: 4px;
+  color: #4d5f5a;
+  font-size: 11px;
+  text-align: right;
+}
+
+.priority--urgente {
+  color: #a3261c;
+  font-weight: 700;
+}
+
 .results-count {
   margin: 14px 0 11px;
   color: #82908c;
