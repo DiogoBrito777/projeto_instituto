@@ -1,0 +1,37 @@
+[
+  {
+    "usuario": "admin",
+    "senha": "admin",
+    "nome": "Gerenciamento",
+    "perfil": "gerenciamento",
+    "departamento": null
+  },
+  {
+    "usuario": "user01",
+    "senha": "user01",
+    "nome": "Equipe de TI",
+    "perfil": "departamento",
+    "departamento": "tecnologia"
+  },
+  {
+    "usuario": "user02",
+    "senha": "user02",
+    "nome": "Equipe de Hidráulica",
+    "perfil": "departamento",
+    "departamento": "hidraulica"
+  },
+  {
+    "usuario": "user03",
+    "senha": "user03",
+    "nome": "Equipe Administrativa",
+    "perfil": "departamento",
+    "departamento": "administrativo"
+  },
+  {
+    "usuario": "user04",
+    "senha": "user04",
+    "nome": "Equipe de Elétrica",
+    "perfil": "departamento",
+    "departamento": "eletrica"
+  }
+]

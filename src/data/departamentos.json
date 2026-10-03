@@ -5,7 +5,8 @@
     "descricao": "Suporte à manutenção de equipamentos.",
     "demandasAbertas": 12,
     "icone": "tecnologia",
-    "cor": "azul"
+    "cor": "azul",
+    "tiposAtendimento": ["Suporte a equipamento", "Acesso a sistemas", "Rede e internet"]
   },
   {
     "id": "hidraulica",
@@ -13,7 +14,8 @@
     "descricao": "Vazamentos e instalações hidráulicas.",
     "demandasAbertas": 5,
     "icone": "hidraulica",
-    "cor": "verde"
+    "cor": "verde",
+    "tiposAtendimento": ["Vazamento", "Instalação hidráulica", "Manutenção preventiva"]
   },
   {
     "id": "administrativo",
@@ -21,7 +23,8 @@
     "descricao": "Rotinas, documentação e processos.",
     "demandasAbertas": 8,
     "icone": "administrativo",
-    "cor": "roxo"
+    "cor": "roxo",
+    "tiposAtendimento": ["Documentação", "Compras e materiais", "Reserva de espaço"]
   },
   {
     "id": "eletrica",
@@ -29,6 +32,7 @@
     "descricao": "Iluminação e quadros de distribuição.",
     "demandasAbertas": 3,
     "icone": "eletrica",
-    "cor": "laranja"
+    "cor": "laranja",
+    "tiposAtendimento": ["Iluminação", "Tomadas e instalações", "Quadro de distribuição"]
   }
 ]

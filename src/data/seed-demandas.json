@@ -1,0 +1,204 @@
+[
+  {
+    "id": "DM-2001",
+    "titulo": "Computador da recepção não liga",
+    "descricao": "O computador da recepção da Hidráulica não liga desde a manhã. A luz do botão não acende.",
+    "tipo": "Suporte a equipamento",
+    "origem": "hidraulica",
+    "destino": "tecnologia",
+    "prioridade": "Não definida",
+    "status": "Pendente de aceite",
+    "solicitante": "Marina Alves",
+    "criadaHaHoras": 5,
+    "historico": [
+      { "haHoras": 5, "autor": "Equipe de Hidráulica", "perfil": "departamento", "tipo": "criacao", "texto": "Demanda criada." }
+    ]
+  },
+  {
+    "id": "DM-2002",
+    "titulo": "Lâmpadas queimadas no arquivo",
+    "descricao": "Três lâmpadas do arquivo do Administrativo estão queimadas. A sala fica escura à tarde.",
+    "tipo": "Iluminação",
+    "origem": "administrativo",
+    "destino": "eletrica",
+    "prioridade": "Não definida",
+    "status": "Pendente de aceite",
+    "solicitante": "Lucas Ribeiro",
+    "criadaHaHoras": 90,
+    "historico": [
+      { "haHoras": 90, "autor": "Equipe Administrativa", "perfil": "departamento", "tipo": "criacao", "texto": "Demanda criada." }
+    ]
+  },
+  {
+    "id": "DM-2003",
+    "titulo": "Vazamento na copa do bloco B",
+    "descricao": "Pia da copa do bloco B vazando por baixo do gabinete. Colocamos um balde.",
+    "tipo": "Vazamento",
+    "origem": "eletrica",
+    "destino": "hidraulica",
+    "prioridade": "Média",
+    "status": "Em andamento",
+    "solicitante": "Carolina Freitas",
+    "criadaHaHoras": 14,
+    "aceitaHaHoras": 10,
+    "historico": [
+      { "haHoras": 14, "autor": "Equipe de Elétrica", "perfil": "departamento", "tipo": "criacao", "texto": "Demanda criada." },
+      { "haHoras": 10, "autor": "Equipe de Hidráulica", "perfil": "departamento", "tipo": "aceite", "texto": "Demanda aceita com prioridade Média." }
+    ]
+  },
+  {
+    "id": "DM-2004",
+    "titulo": "Compra de cartuchos para a impressora",
+    "descricao": "A impressora do laboratório de TI está sem tinta preta. Precisamos de dois cartuchos.",
+    "tipo": "Compras e materiais",
+    "origem": "tecnologia",
+    "destino": "administrativo",
+    "prioridade": "Alta",
+    "status": "Em andamento",
+    "solicitante": "Rafael Gomes",
+    "criadaHaHoras": 44,
+    "aceitaHaHoras": 40,
+    "historico": [
+      { "haHoras": 44, "autor": "Equipe de TI", "perfil": "departamento", "tipo": "criacao", "texto": "Demanda criada." },
+      { "haHoras": 40, "autor": "Equipe Administrativa", "perfil": "departamento", "tipo": "aceite", "texto": "Demanda aceita com prioridade Alta." }
+    ]
+  },
+  {
+    "id": "DM-2005",
+    "titulo": "Disjuntor desarmando no almoxarifado",
+    "descricao": "O disjuntor do almoxarifado desarma sempre que a bomba d'água liga.",
+    "tipo": "Quadro de distribuição",
+    "origem": "hidraulica",
+    "destino": "eletrica",
+    "prioridade": "Urgente",
+    "status": "Em andamento",
+    "solicitante": "Beatriz Lima",
+    "criadaHaHoras": 33,
+    "aceitaHaHoras": 30,
+    "historico": [
+      { "haHoras": 33, "autor": "Equipe de Hidráulica", "perfil": "departamento", "tipo": "criacao", "texto": "Demanda criada." },
+      { "haHoras": 30, "autor": "Equipe de Elétrica", "perfil": "departamento", "tipo": "aceite", "texto": "Demanda aceita com prioridade Urgente." }
+    ]
+  },
+  {
+    "id": "DM-2006",
+    "titulo": "Acesso ao sistema de protocolo",
+    "descricao": "Duas pessoas novas do Administrativo precisam de acesso ao sistema de protocolo.",
+    "tipo": "Acesso a sistemas",
+    "origem": "administrativo",
+    "destino": "tecnologia",
+    "prioridade": "Baixa",
+    "status": "Aguardando (processamento interno)",
+    "solicitante": "Thiago Mendes",
+    "criadaHaHoras": 220,
+    "aceitaHaHoras": 216,
+    "aguardandoHaHoras": 190,
+    "historico": [
+      { "haHoras": 220, "autor": "Equipe Administrativa", "perfil": "departamento", "tipo": "criacao", "texto": "Demanda criada." },
+      { "haHoras": 216, "autor": "Equipe de TI", "perfil": "departamento", "tipo": "aceite", "texto": "Demanda aceita com prioridade Baixa." },
+      { "haHoras": 190, "autor": "Equipe de TI", "perfil": "departamento", "tipo": "status", "texto": "Aguardando liberação de licenças." }
+    ]
+  },
+  {
+    "id": "DM-2007",
+    "titulo": "Troca de fiação do servidor",
+    "descricao": "A fiação que alimenta o rack do servidor está aquecendo.",
+    "tipo": "Instalação hidráulica",
+    "origem": "tecnologia",
+    "destino": "hidraulica",
+    "prioridade": "Não definida",
+    "status": "Em triagem",
+    "solicitante": "Isabela Rocha",
+    "criadaHaHoras": 30,
+    "historico": [
+      { "haHoras": 30, "autor": "Equipe de TI", "perfil": "departamento", "tipo": "criacao", "texto": "Demanda criada." },
+      { "haHoras": 20, "autor": "Equipe de Hidráulica", "perfil": "departamento", "tipo": "recusa", "texto": "Recusada: fiação elétrica não é competência da Hidráulica." }
+    ]
+  },
+  {
+    "id": "DM-2008",
+    "titulo": "Reserva do auditório para treinamento",
+    "descricao": "Reserva do auditório para o treinamento de segurança da Elétrica.",
+    "tipo": "Reserva de espaço",
+    "origem": "eletrica",
+    "destino": "administrativo",
+    "prioridade": "Média",
+    "status": "Concluída",
+    "solicitante": "Gabriel Costa",
+    "criadaHaHoras": 120,
+    "aceitaHaHoras": 100,
+    "historico": [
+      { "haHoras": 120, "autor": "Equipe de Elétrica", "perfil": "departamento", "tipo": "criacao", "texto": "Demanda criada." },
+      { "haHoras": 100, "autor": "Equipe Administrativa", "perfil": "departamento", "tipo": "aceite", "texto": "Demanda aceita com prioridade Média." },
+      { "haHoras": 60, "autor": "Equipe Administrativa", "perfil": "departamento", "tipo": "status", "texto": "Concluída: auditório reservado." }
+    ]
+  },
+  {
+    "id": "DM-2009",
+    "titulo": "Instalar aplicativo de música pessoal",
+    "descricao": "Pedido para instalar aplicativo de música pessoal nos computadores da Hidráulica.",
+    "tipo": "Suporte a equipamento",
+    "origem": "hidraulica",
+    "destino": "tecnologia",
+    "prioridade": "Não definida",
+    "status": "Não aplicável",
+    "solicitante": "Júlia Martins",
+    "criadaHaHoras": 80,
+    "historico": [
+      { "haHoras": 80, "autor": "Equipe de Hidráulica", "perfil": "departamento", "tipo": "criacao", "texto": "Demanda criada." },
+      { "haHoras": 70, "autor": "Equipe de TI", "perfil": "departamento", "tipo": "recusa", "texto": "Recusada: software pessoal fora da política de uso." },
+      { "haHoras": 50, "autor": "Gerenciamento", "perfil": "gerenciamento", "tipo": "encerramento", "texto": "Não aplicável: nenhum setor atende instalação de software pessoal." }
+    ]
+  },
+  {
+    "id": "DM-2010",
+    "titulo": "Conserto da torneira do banheiro",
+    "descricao": "Torneira do banheiro do Administrativo pingando.",
+    "tipo": "Manutenção preventiva",
+    "origem": "administrativo",
+    "destino": "hidraulica",
+    "prioridade": "Não definida",
+    "status": "Cancelada",
+    "solicitante": "Pedro Nunes",
+    "criadaHaHoras": 60,
+    "historico": [
+      { "haHoras": 60, "autor": "Equipe Administrativa", "perfil": "departamento", "tipo": "criacao", "texto": "Demanda criada." },
+      { "haHoras": 40, "autor": "Gerenciamento", "perfil": "gerenciamento", "tipo": "encerramento", "texto": "Cancelada: pedido duplicado da DM-2003." }
+    ]
+  },
+  {
+    "id": "DM-2011",
+    "titulo": "Tomadas sem energia na sala de reunião",
+    "descricao": "As tomadas da parede norte da sala de reunião estão sem energia.",
+    "tipo": "Tomadas e instalações",
+    "origem": "gerenciamento",
+    "destino": "eletrica",
+    "prioridade": "Média",
+    "status": "Em andamento",
+    "solicitante": "Gerenciamento",
+    "criadaHaHoras": 26,
+    "aceitaHaHoras": 20,
+    "historico": [
+      { "haHoras": 26, "autor": "Gerenciamento", "perfil": "gerenciamento", "tipo": "criacao", "texto": "Demanda criada." },
+      { "haHoras": 20, "autor": "Equipe de Elétrica", "perfil": "departamento", "tipo": "aceite", "texto": "Demanda aceita com prioridade Média." },
+      { "haHoras": 2, "autor": "Gerenciamento", "perfil": "gerenciamento", "tipo": "cobranca", "texto": "Cobrança: qual a previsão de conserto? A sala será usada na sexta." }
+    ]
+  },
+  {
+    "id": "DM-2012",
+    "titulo": "Rede lenta no setor de Elétrica",
+    "descricao": "A internet do setor de Elétrica está muito lenta desde segunda-feira.",
+    "tipo": "Rede e internet",
+    "origem": "eletrica",
+    "destino": "tecnologia",
+    "prioridade": "Baixa",
+    "status": "Em andamento",
+    "solicitante": "Camila Santos",
+    "criadaHaHoras": 30,
+    "aceitaHaHoras": 24,
+    "historico": [
+      { "haHoras": 30, "autor": "Equipe de Elétrica", "perfil": "departamento", "tipo": "criacao", "texto": "Demanda criada." },
+      { "haHoras": 24, "autor": "Equipe de TI", "perfil": "departamento", "tipo": "aceite", "texto": "Demanda aceita com prioridade Baixa." }
+    ]
+  }
+]
