@@ -27,6 +27,16 @@ Princípios: dizer **o que fazer**, não só "inválido"; texto junto ao campo (
 | Reset concluído | "Dados de demonstração restaurados." |
 | Reset falhou | "Não foi possível resetar os dados. Recarregue a página e tente de novo." |
 
+## Atualizar demanda (**proposta, Bloco 2A** — revisar em grupo)
+| Situação | Mensagem |
+|---|---|
+| Perfil sem ação disponível naquele status | "Você pode consultar esta demanda, mas não há alterações disponíveis para o seu perfil neste status." |
+| Salvar sem mudar nada | "Nenhuma alteração para salvar." |
+| Erro ao salvar | "Não foi possível salvar. Suas alterações continuam no formulário. Tente novamente." |
+| Botão durante a gravação | "Salvando…" |
+| Observação (instrução visível) | Rótulo "Observação (opcional)" + contador "N/500 caracteres" |
+| Observação acima do limite | "A observação deve ter no máximo 500 caracteres." |
+
 ## Aceite, recusa e encerramento
 | Situação | Mensagem |
 |---|---|
