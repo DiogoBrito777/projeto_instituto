@@ -8,7 +8,7 @@ const admin = { usuario: 'admin', nome: 'Gerenciamento', perfil: 'gerenciamento'
 const eletrica = { usuario: 'user04', nome: 'Equipe de Elétrica', perfil: 'departamento', departamento: 'eletrica' }
 const hidraulica = { usuario: 'user02', nome: 'Equipe de Hidráulica', perfil: 'departamento', departamento: 'hidraulica' }
 
-const TIPOS_ELETRICA = ['Iluminação', 'Tomadas e instalações', 'Quadro de distribuição']
+const TIPOS_ELETRICA = ['Iluminação', 'Tomadas e instalações', 'Quadro de distribuição', 'Outros']
 
 function demanda(status, extra = {}) {
   return {
@@ -81,6 +81,12 @@ describe('salvarAtualizacao', () => {
     const resultado = salvarAtualizacao(demanda(STATUS.EM_ANDAMENTO), { tipo: 'Tomadas e instalações' }, eletrica, contexto())
     expect(resultado.ok).toBe(true)
     expect(resultado.dados.tipo).toBe('Tomadas e instalações')
+  })
+
+  it('aceita trocar para "Outros" na tela Atualizar', () => {
+    const resultado = salvarAtualizacao(demanda(STATUS.EM_ANDAMENTO), { tipo: 'Outros' }, eletrica, contexto())
+    expect(resultado.ok).toBe(true)
+    expect(resultado.dados.tipo).toBe('Outros')
   })
 
   it('NÃO aceita tipo de outro setor', () => {

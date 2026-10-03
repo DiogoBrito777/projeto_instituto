@@ -202,7 +202,7 @@ Casos detalhados de regras de negócio (CT-R01…CT-R14): `docs/REQUISITOS_REGRA
 **Registro de defeitos corrigidos** (preencher): `ID | commit da correção | evidência antes | evidência depois`.
 
 ## 11. Limitações conhecidas (não esconder na apresentação)
-Sem back-end; dados e perfis só no navegador e editáveis (não é segurança); e-mail apenas simulado; login fictício; sem sincronização entre dispositivos; teste com leitor de tela restrito ao que a equipe executar; layout mudou durante o desenvolvimento (seção 12).
+Sem back-end; dados e perfis só no navegador e editáveis (não é segurança); e-mail apenas simulado; login fictício; sem sincronização entre dispositivos; teste com leitor de tela restrito ao que a equipe executar; layout mudou durante o desenvolvimento (seção 12); setores fixos em 4 (TI, Hidráulica, Administrativo, Elétrica), em `departamentos.json`: **cadastro de novos setores é funcionalidade futura**, e até lá um pedido de área fora deles segue devolução à triagem → redirecionar ou "Não aplicável" (proposta em `ATAS_RASCUNHO_27-09_e_02-10.md`, item 11).
 
 ## 12. Lacunas de processo a corrigir
 - **Atas faltantes:** reuniões de 27/09 e 02/10 (rascunhos retroativos em `docs/ATAS_RASCUNHO_27-09_e_02-10.md`, a confirmar com os presentes) e a decisão de 03/10 sobre perfis, triagem e cobrança.

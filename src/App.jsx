@@ -103,7 +103,7 @@ function App() {
             <button
               className="topbar-action"
               type="button"
-              onClick={() => document.getElementById('origem')?.focus()}
+              onClick={() => document.getElementById('destino')?.focus()}
             >
               <PlusIcon />
               <span>Criar</span>
@@ -121,7 +121,7 @@ function App() {
         </header>
 
         {isCreatePage ? (
-          <NovaDemanda />
+          <NovaDemanda usuario={usuario} />
         ) : isHomePage ? (
           <VisaoGeral usuario={usuario} />
         ) : isDepartmentsPage ? (

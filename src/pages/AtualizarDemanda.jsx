@@ -8,6 +8,8 @@ import { prazoResolucao } from '../domain/prazos.js'
 import { estaFinal } from '../domain/status.js'
 import { nomeDoSetor, tiposDoSetor } from '../domain/setores.js'
 import { Carregando, ErroDados, SemPermissao } from '../components/EstadoDados.jsx'
+import ContadorLimite from '../components/ContadorLimite.jsx'
+import { useAvisoLimite } from '../hooks/useAvisoLimite.js'
 import { MENSAGENS } from '../mensagens.js'
 import { formatarData, formatarDataHora } from '../formatos.js'
 import './DetalhesDemanda.css'
@@ -47,11 +49,13 @@ function FormularioAtualizacao({ demand, usuario }) {
   const [form, setForm] = useState({ status: demand.status, tipo: demand.tipo, observacao: '' })
   const [salvando, setSalvando] = useState(false)
   const [mensagemErro, setMensagemErro] = useState('')
+  const limiteObservacao = useAvisoLimite(LIMITE_OBSERVACAO)
   const prazo = prazoResolucao(demand)
   const historico = [...demand.historico].reverse()
 
   function changeField(event) {
     const { name, value } = event.target
+    if (name === 'observacao') limiteObservacao.aoMudar(value)
     setForm((current) => ({ ...current, [name]: value }))
   }
 
@@ -166,13 +170,17 @@ function FormularioAtualizacao({ demand, usuario }) {
                 name="observacao"
                 value={form.observacao}
                 onChange={changeField}
+                onPaste={limiteObservacao.aoColar}
                 maxLength={LIMITE_OBSERVACAO}
                 aria-describedby="observacao-contador"
               />
             </label>
-            <span id="observacao-contador" className="form-counter">
-              {form.observacao.length}/{LIMITE_OBSERVACAO} caracteres
-            </span>
+            <ContadorLimite
+              id="observacao"
+              valor={form.observacao}
+              limite={LIMITE_OBSERVACAO}
+              aviso={limiteObservacao.aviso}
+            />
           </section>
 
           <div className="detail-actions update-actions">

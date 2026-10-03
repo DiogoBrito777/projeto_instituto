@@ -419,6 +419,36 @@
   text-align: right;
 }
 
+/* Bloco 2B: instrução e erro junto de cada campo da Nova Demanda. */
+.field-hint {
+  margin: 0;
+  color: #4d5f5a;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.field-error {
+  margin: 0;
+  color: #b42318;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.field [aria-invalid='true'] {
+  border-color: #b42318;
+}
+
+/* Aviso de limite de caracteres (role="status"). Fica sempre no DOM: vazio, tem altura zero;
+   não usar display: none, senão o leitor de tela pode não anunciar quando o texto aparece. */
+.form-limit {
+  display: block;
+  color: #9a3412;
+  font-size: 12px;
+  font-weight: 500;
+  text-align: right;
+}
+
 .priority--urgente {
   color: #a3261c;
   font-weight: 700;
