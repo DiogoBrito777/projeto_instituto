@@ -1,8 +1,16 @@
 import { useDemandas } from '../hooks/useDemandas.js'
-import { podeAceitar, podeVer, podeVerDetalhes, resumoParaSolicitante, setorResponsavel } from '../domain/permissoes.js'
+import {
+  podeAceitar,
+  podeRedirecionar,
+  podeVer,
+  podeVerDetalhes,
+  resumoParaSolicitante,
+  setorResponsavel,
+} from '../domain/permissoes.js'
 import { podeEditar } from '../domain/acoes.js'
 import { prazoResolucao } from '../domain/prazos.js'
-import { estaFinal } from '../domain/status.js'
+import { prazoDeAceite } from '../domain/atencao.js'
+import { STATUS, estaFinal } from '../domain/status.js'
 import { nomeDoSetor } from '../domain/setores.js'
 import { Carregando, ErroDados, SemPermissao } from '../components/EstadoDados.jsx'
 import { MENSAGENS } from '../mensagens.js'
@@ -10,8 +18,9 @@ import { formatarData, formatarDataHora } from '../formatos.js'
 import './DetalhesDemanda.css'
 
 // O botão "Atribuir responsável" e o diálogo dele saíram no Bloco 2A: gravavam direto no
-// localStorage e permitiam trocar o setor sem regra. Voltam no Bloco 4 como "Redirecionar para
-// outro departamento", só da gerência, em triagem e com justificativa (RN18).
+// localStorage e permitiam trocar o setor sem regra. Voltaram no Bloco 4C como "Triar demanda" →
+// "Redirecionar", só da gerência e em triagem (RN18). A seção 4 dos requisitos exige só o novo
+// destino (e o tipo do novo setor, decisão de 04/10), sem justificativa.
 
 function DetailField({ label, children }) {
   return (
@@ -91,6 +100,10 @@ function DetalhesDemanda({ id, usuario }) {
                   {/* Em triagem, o responsável é a gerência; "Departamento" segue mostrando o destino. */}
                   <DetailField label="Responsável (setor)">{nomeDoSetor(setorResponsavel(demand))}</DetailField>
                   <DetailField label="Prazo">{prazo ? formatarDataHora(prazo.toISOString()) : 'Definido no aceite'}</DetailField>
+                  {/* Bloco 4C: pendente mostra até quando aceitar (48 h, ou 24 h com teto após redirecionar). */}
+                  {demand.status === STATUS.PENDENTE_ACEITE && (
+                    <DetailField label="Aceitar até">{formatarDataHora(prazoDeAceite(demand).toISOString())}</DetailField>
+                  )}
                 </>
               ) : (
                 <DetailField label="Setor atual">{nomeDoSetor(exibida.setorAtual)}</DetailField>
@@ -108,6 +121,14 @@ function DetalhesDemanda({ id, usuario }) {
             <div className="detail-actions">
               <button className="detail-button detail-button--outline" type="button" onClick={() => { window.location.hash = `#demanda/${demand.id}/editar` }}>
                 {podeAceitar(usuario, demand) ? 'Aceitar ou recusar' : 'Atualizar demanda'}
+              </button>
+            </div>
+          )}
+          {/* Bloco 4C: em triagem, só a gerência tria (redirecionar, não aplicável ou cancelar; RN18, RN19). */}
+          {podeRedirecionar(usuario, demand) && (
+            <div className="detail-actions">
+              <button className="detail-button detail-button--outline" type="button" onClick={() => { window.location.hash = `#demanda/${demand.id}/editar` }}>
+                Triar demanda
               </button>
             </div>
           )}

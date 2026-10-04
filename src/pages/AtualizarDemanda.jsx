@@ -2,7 +2,8 @@ import { useRef, useState } from 'react'
 import departamentos from '../data/departamentos.json'
 import { useDemandas } from '../hooks/useDemandas.js'
 import { obterStorage } from '../services/storage.js'
-import { podeAceitar, podeVer } from '../domain/permissoes.js'
+import { podeAceitar, podeRedirecionar, podeVer } from '../domain/permissoes.js'
+import FormularioTriagem from './TriagemDemanda.jsx'
 import {
   ERROS_ACAO,
   LIMITE_MOTIVO,
@@ -455,6 +456,9 @@ function AtualizarDemanda({ id, usuario }) {
   }
   // RN20 / CA-R07: demanda final não tem nenhuma ação, para nenhum perfil.
   if (estaFinal(demand.status)) return <Aviso demand={demand} texto={MENSAGENS.finalizada} />
+  // Bloco 4C: "modo triagem", só a gerência e só em triagem (RN18, RN19). Setor comum não chega aqui:
+  // o de destino nem vê a demanda (SemPermissao acima) e quem abriu cai no aviso abaixo.
+  if (podeRedirecionar(usuario, demand)) return <FormularioTriagem demand={demand} usuario={usuario} />
   // Entra quem pode editar (Em andamento/Aguardando) ou aceitar/recusar (Pendente de aceite), só o executor.
   if (!podeEditar(usuario, demand) && !podeAceitar(usuario, demand)) {
     return <Aviso demand={demand} texto={MENSAGENS.semEdicao} />
