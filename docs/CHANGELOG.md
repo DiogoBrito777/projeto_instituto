@@ -280,3 +280,25 @@ Uma entrada por bloco/PR (formato em `docs/CONVENCOES.md`).
     - a DM-2013 (aberta há 40 h) foi redirecionada às 05:09; o pop-up e os Detalhes mostraram "até 05/10 05:09" (24 h; pela regra antiga seriam 8 h);
     - `user02`: a DM-2013 em Pendentes de aceite, "Aguardando aceite há menos de 1 hora", "Aceitar até 05/10 05:09".
   - **Não executado:** Edge, leitor de tela, celular real, axe.
+
+### 2026-10-04 · Bloco 4C — ajuste: justificativa obrigatória ao redirecionar · feat/bloco4c-acoes-gerencia
+- **Decisão do dono do projeto, combinada desde a 2A:** o redirecionamento exige justificativa. Cada redirecionamento reinicia o relógio de 24 h; sem motivo registrado, a gerência poderia redirecionar várias vezes sem ninguém saber por quê. *(Isso resolve a divergência apontada no 4C entre a entrada da 2A e a primeira versão do 4C.)*
+- **Domínio** — `src/domain/acoes.js`:
+  - `redirecionarDemanda(demanda, { setor, tipo, justificativa }, usuario, contexto)` exige justificativa com a mesma validação de Não aplicável e Cancelar (`LIMITE_JUSTIFICATIVA = LIMITE_MOTIVO = 500`; vazia ou só espaços → `justificativa-ausente`; acima de 500 → `justificativa-longa`). A ordem das conferências não mudou: estado final, perfil, transição, setor, tipo e por último a justificativa.
+  - O histórico `redirecionamento` grava `setor`, `tipoAtendimento` e `justificativa`, com o texto "Redirecionada para <setor> (<tipo>): <justificativa>." (sem ponto duplicado se a justificativa já termina com pontuação).
+- **Interface** — `src/pages/TriagemDemanda.jsx`:
+  - o pop-up "Confirmar redirecionamento" ganhou o campo "Justificativa (obrigatória)", no mesmo padrão dos outros dois: foco no campo ao abrir, contador e aviso de limite, erro junto do campo com `aria-invalid`, Esc e "Voltar";
+  - o campo virou um trecho único, reaproveitado nos três pop-ups.
+- **Textos:** `src/mensagens.js` (o pop-up termina em "Explique o motivo: ele fica no histórico.") e `docs/MENSAGENS_VALIDACAO.md` (proposta). O comentário de `src/pages/DetalhesDemanda.jsx` foi atualizado.
+- **Testes** — `src/domain/acoes.test.js`:
+  - 4 novos: justificativa ausente, vazia, só espaços e com 501 caracteres recusadas (500 aceita); espaços nas pontas limpos e sem ponto duplicado; o novo setor vê a justificativa e quem abriu não (o resumo não tem histórico); sem permissão continua dando "sem permissão";
+  - chamadas existentes ajustadas com o argumento novo; o texto esperado do histórico mudou (com comentário).
+- **Docs:** RN18, proposta 15 e `docs/EXPLICACAO_BLOCO4C.md` (regra, motivo e uma pergunta nova).
+- **Verificação:**
+  - `npm test` 10 arquivos / **223** testes passaram · lint 0 avisos e 0 erros · build OK.
+  - Navegador embutido, depois de "Resetar dados":
+    - `admin` na DM-2013, por teclado: o pop-up abriu com o foco na justificativa; "Confirmar redirecionamento" vazio deu "Informe a justificativa." junto do campo (`aria-invalid`, foco no campo) e nada foi gravado; Esc fechou e devolveu o foco a "Redirecionar";
+    - em 360 px, sem rolagem lateral: com justificativa, a confirmação levou à lista com o foco no h1;
+    - `user02`: no histórico dos Detalhes, "Redirecionada para Hidráulica (Vazamento): <justificativa>.";
+    - `user03` (quem abriu): só o resumo ("Não aceita pelo setor", "Setor atual: Hidráulica"), sem histórico nem o texto da justificativa.
+  - **Não executado:** Edge, leitor de tela, celular real, axe (ver `docs/TESTES_PENDENTES.md`).

@@ -19,8 +19,8 @@ import './DetalhesDemanda.css'
 
 // O botão "Atribuir responsável" e o diálogo dele saíram no Bloco 2A: gravavam direto no
 // localStorage e permitiam trocar o setor sem regra. Voltaram no Bloco 4C como "Triar demanda" →
-// "Redirecionar", só da gerência e em triagem (RN18). A seção 4 dos requisitos exige só o novo
-// destino (e o tipo do novo setor, decisão de 04/10), sem justificativa.
+// "Redirecionar", só da gerência e em triagem (RN18), com novo destino, tipo do novo setor e
+// justificativa obrigatória (decisões de 04/10; a justificativa fica no histórico).
 
 function DetailField({ label, children }) {
   return (

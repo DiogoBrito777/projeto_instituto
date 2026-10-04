@@ -201,7 +201,9 @@ function conferirJustificativa(justificativa) {
 // existe para ela). O tipo de atendimento depende do setor, então vem junto e precisa existir no novo
 // setor (decisão de 04/10). O setor que recusou pode ser escolhido de novo (sem regra nova).
 // O prazo de aceite reinicia (atencao.js → prazoDeAceite: 24 h contadas do redirecionamento).
-export function redirecionarDemanda(demanda, { setor, tipo }, usuario, contexto) {
+// Justificativa obrigatória (decisão de 04/10, combinada desde a 2A): cada redirecionamento reinicia
+// o relógio de 24 h, então ele precisa ficar explicado no histórico para o prazo não ser burlado.
+export function redirecionarDemanda(demanda, { setor, tipo, justificativa }, usuario, contexto) {
   const conferencia = conferirGerencia(demanda, usuario, STATUS.PENDENTE_ACEITE)
   if (!conferencia.ok) return conferencia
 
@@ -209,12 +211,22 @@ export function redirecionarDemanda(demanda, { setor, tipo }, usuario, contexto)
   const tiposDoNovoSetor = tiposDoSetor(setor)
   if (tiposDoNovoSetor.length === 0) return { ok: false, erro: ERROS_ACAO.SETOR_INVALIDO }
   if (!tiposDoNovoSetor.includes(tipo)) return { ok: false, erro: ERROS_ACAO.TIPO_INVALIDO }
+  const texto = conferirJustificativa(justificativa)
+  if (!texto.ok) return texto
 
+  // Ponto final só se a justificativa não terminar com pontuação ("…: motivo." e não "…: motivo..").
+  const final = /[.!?]$/.test(texto.texto) ? '' : '.'
   const redirecionadaEm = contexto.agora.toISOString()
   const registro = {
-    ...evento(usuario, contexto, `Redirecionada para ${nomeDoSetor(setor)}, tipo "${tipo}".`, 'redirecionamento'),
+    ...evento(
+      usuario,
+      contexto,
+      `Redirecionada para ${nomeDoSetor(setor)} (${tipo}): ${texto.texto}${final}`,
+      'redirecionamento',
+    ),
     setor,
     tipoAtendimento: tipo,
+    justificativa: texto.texto,
   }
   return {
     ok: true,

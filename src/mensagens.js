@@ -34,8 +34,9 @@ export const MENSAGENS = {
   redirecionarSemTipo: 'Escolha o tipo de atendimento do novo departamento.',
   justificativaAusente: 'Informe a justificativa.',
   justificativaLonga: 'A justificativa deve ter no máximo 500 caracteres.',
+  // Proposta (ajuste do 4C): o redirecionamento passou a pedir justificativa, que fica no histórico.
   redirecionarConfirmacao: (setor, tipo, prazo) =>
-    `A demanda vai para ${setor}, com o tipo "${tipo}", e volta a Pendente de aceite. O setor terá até ${prazo} para aceitar. Confirmar?`,
+    `A demanda vai para ${setor}, com o tipo "${tipo}", e volta a Pendente de aceite. O setor terá até ${prazo} para aceitar. Explique o motivo: ele fica no histórico.`,
   naoAplicavelDescricao:
     'A demanda será encerrada como "Não aplicável" (nenhum setor tem competência) e não poderá mais ser alterada.',
   cancelarDescricao: 'A demanda será cancelada e não poderá mais ser alterada.',

@@ -10,7 +10,8 @@ Quando um setor recusa uma demanda, ela vai para a **triagem** e passa a ser da 
 Detalhes → "Triar demanda" (só admin, só Em triagem)
   → tela Atualizar em "modo triagem" (src/pages/TriagemDemanda.jsx)
       mostra: motivo da recusa + quem recusou + histórico
-      Redirecionar: escolhe novo departamento + tipo dele → pop-up com o novo prazo → Confirmar
+      Redirecionar: escolhe novo departamento + tipo dele → pop-up com o novo prazo
+                    e justificativa obrigatória → Confirmar
                     → redirecionarDemanda() → Pendente de aceite no novo setor
       Marcar como não aplicável / Cancelar demanda: pop-up com justificativa obrigatória → Confirmar
                     → marcarNaoAplicavel() / cancelarDemanda() → estado final (nada muda depois)
@@ -25,7 +26,8 @@ Todas começam pelas mesmas três perguntas (`conferirGerencia`): **está finali
   - o setor tem de ser um dos 4 departamentos ("gerenciamento" não vale);
   - o **tipo de atendimento tem de existir no novo setor** (cada setor tem os seus tipos; decisão de 04/10);
   - grava: Pendente de aceite, novo `destino`, novo `tipo`, `redirecionadaEm`; a prioridade volta a "Não definida", porque quem define é o novo setor no aceite (RN10);
-  - o histórico ganha um item `redirecionamento` com o setor e o tipo novos (RN22);
+  - **justificativa obrigatória**, até 500 caracteres (vazia, só espaços ou com 501 caracteres é recusada). Motivo, decisão do dono do projeto combinada desde a 2A: cada redirecionamento reinicia o relógio de 24 h; sem justificativa, a gerência poderia redirecionar várias vezes sem ninguém saber por quê;
+  - o histórico ganha um item `redirecionamento` com o setor, o tipo e a justificativa: "Redirecionada para Hidráulica (Vazamento): motivo." (RN22). O novo setor lê nos Detalhes; quem abriu vê só o resumo, sem o histórico (RN03);
   - pode escolher de novo o setor que recusou: não há regra proibindo.
 - **`marcarNaoAplicavel`** (RN19): só a partir de Em triagem (é o que a seção 4 permite). Justificativa obrigatória, até 500 caracteres.
 - **`cancelarDemanda`** (RN19): a seção 4 permite cancelar Pendente, Em andamento, Aguardando e Em triagem, e o domínio segue isso. **A tela só oferece em triagem** (decisão de 04/10). Justificativa obrigatória, até 500 caracteres.
@@ -69,7 +71,8 @@ export function prazoAposRedirecionar(redirecionadaEm) {
 - Reaproveita as classes da tela Atualizar, já com 14 px (fonte-minima) e contraste conferido nos blocos anteriores. Nenhum CSS novo.
 
 ## 7. Perguntas que o professor pode fazer
-1. **Quem pode redirecionar?** Só a gerência e só em triagem (RN18). O setor nunca envia direto a outro setor.
+1. **Quem pode redirecionar?** Só a gerência e só em triagem (RN18), sempre com justificativa. O setor nunca envia direto a outro setor.
+   - **Por que exigir justificativa no redirecionamento?** Cada redirecionamento dá mais 24 h ao novo setor. Sem motivo registrado, daria para "esticar" o prazo redirecionando de novo, sem deixar rastro.
 2. **Por que a gerência escolhe o tipo junto com o setor?** Cada setor tem os seus tipos; sem isso, a demanda chegaria com um tipo que não existe no novo setor.
 3. **Como fica o prazo de aceite depois do redirecionamento?** Sempre 24 h, contadas do redirecionamento. A demanda que nunca foi redirecionada continua com 48 h.
 4. **Por que 24 h e não 48 h depois do redirecionamento?** A demanda já perdeu tempo na recusa e na triagem; 24 h é o mínimo justo para o novo setor e evita que ela fique parada mais tempo.

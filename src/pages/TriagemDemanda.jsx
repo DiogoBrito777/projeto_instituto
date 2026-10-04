@@ -21,8 +21,9 @@ import './DetalhesDemanda.css'
 // "Modo triagem" da tela Atualizar (Bloco 4C): só a gerência, só com a demanda Em triagem
 // (AtualizarDemanda.jsx confere com podeRedirecionar antes de mostrar esta tela).
 // Mostra por que a demanda foi recusada e quem recusou, e oferece as três saídas da triagem:
-// Redirecionar (RN18), Não aplicável e Cancelar (RN19). Cada uma passa por um pop-up de confirmação,
-// e a regra é conferida de novo no storage, com a demanda lida na hora de gravar.
+// Redirecionar (RN18), Não aplicável e Cancelar (RN19). Cada uma passa por um pop-up de confirmação
+// com justificativa obrigatória, e a regra é conferida de novo no storage, com a demanda lida na hora
+// de gravar.
 
 const contextoDaAcao = () => ({ agora: new Date(), novoId: () => crypto.randomUUID() })
 
@@ -105,23 +106,70 @@ export default function FormularioTriagem({ demand, usuario }) {
     }
     // Prazo mostrado no pop-up: o mesmo cálculo que valerá depois (24 h a partir de agora).
     setPrazoPrevisto(prazoAposRedirecionar(new Date()))
-    setDialogo('redirecionar')
+    abrirComJustificativa('redirecionar')
   }
 
-  function abrirEncerramento(chave) {
+  // Os três pop-ups da triagem pedem justificativa (redirecionar: decisão de 04/10, para o relógio
+  // de 24 h não ser reiniciado sem motivo; Não aplicável e Cancelar: RN19). Cada abertura começa vazia.
+  function abrirComJustificativa(chave) {
     setJustificativa('')
     setErroJustificativa('')
     setDialogo(chave)
   }
 
+  // Justificativa vazia não grava: a mensagem fica junto do campo e o foco volta para ele.
+  function justificativaPreenchida() {
+    if (justificativa.trim()) return true
+    setErroJustificativa(MENSAGENS.justificativaAusente)
+    campoJustificativa.current.focus()
+    return false
+  }
+
+  async function confirmarRedirecionamento() {
+    if (!justificativaPreenchida()) return
+    await gravar((atual) => redirecionarDemanda(atual, { setor, tipo, justificativa }, usuario, contextoDaAcao()))
+  }
+
   async function confirmarEncerramento() {
-    if (!justificativa.trim()) {
-      setErroJustificativa(MENSAGENS.justificativaAusente)
-      campoJustificativa.current.focus()
-      return
-    }
+    if (!justificativaPreenchida()) return
     await gravar((atual) => encerramento.acao(atual, justificativa, usuario, contextoDaAcao()))
   }
+
+  // Campo de justificativa, igual nos três pop-ups (só um pop-up fica aberto por vez).
+  const campoDeJustificativa = (
+    <>
+      <label className="detail-form-field" htmlFor="justificativa">
+        <span>Justificativa (obrigatória)</span>
+      </label>
+      <textarea
+        ref={campoJustificativa}
+        id="justificativa"
+        className="dialog-textarea"
+        data-autofocus
+        value={justificativa}
+        onChange={(event) => {
+          limiteJustificativa.aoMudar(event.target.value)
+          setJustificativa(event.target.value)
+          setErroJustificativa('')
+        }}
+        onPaste={limiteJustificativa.aoColar}
+        maxLength={LIMITE_JUSTIFICATIVA}
+        aria-invalid={erroJustificativa ? 'true' : undefined}
+        aria-describedby={['justificativa-contador', erroJustificativa && 'justificativa-erro'].filter(Boolean).join(' ')}
+      />
+      <ContadorLimite
+        id="justificativa"
+        valor={justificativa}
+        limite={LIMITE_JUSTIFICATIVA}
+        aviso={limiteJustificativa.aviso}
+      />
+      {erroJustificativa && (
+        <p id="justificativa-erro" className="field-error">
+          {erroJustificativa}
+        </p>
+      )}
+    </>
+  )
 
   function fecharDialogo() {
     if (!salvando) setDialogo(null)
@@ -228,7 +276,7 @@ export default function FormularioTriagem({ demand, usuario }) {
               ref={botaoNaoAplicavel}
               className="detail-button detail-button--outline"
               type="button"
-              onClick={() => abrirEncerramento('nao-aplicavel')}
+              onClick={() => abrirComJustificativa('nao-aplicavel')}
             >
               Marcar como não aplicável
             </button>
@@ -236,7 +284,7 @@ export default function FormularioTriagem({ demand, usuario }) {
               ref={botaoCancelar}
               className="detail-button detail-button--outline"
               type="button"
-              onClick={() => abrirEncerramento('cancelar')}
+              onClick={() => abrirComJustificativa('cancelar')}
             >
               Cancelar demanda
             </button>
@@ -271,7 +319,8 @@ export default function FormularioTriagem({ demand, usuario }) {
         </aside>
       </div>
 
-      {/* RN18: confirmação com setor, tipo e o novo prazo de aceite. "Voltar" fecha sem gravar. */}
+      {/* RN18: confirmação com setor, tipo, o novo prazo de aceite e a justificativa obrigatória.
+          "Voltar" fecha sem gravar; o campo recebe o foco ao abrir. */}
       {dialogo === 'redirecionar' && (
         <Dialogo
           titulo="Confirmar redirecionamento"
@@ -291,17 +340,16 @@ export default function FormularioTriagem({ demand, usuario }) {
               <button
                 className="detail-button detail-button--primary"
                 type="button"
-                data-autofocus
                 disabled={salvando}
-                onClick={() =>
-                  gravar((atual) => redirecionarDemanda(atual, { setor, tipo }, usuario, contextoDaAcao()))
-                }
+                onClick={confirmarRedirecionamento}
               >
                 {salvando ? MENSAGENS.salvando : 'Confirmar redirecionamento'}
               </button>
             </>
           }
-        />
+        >
+          {campoDeJustificativa}
+        </Dialogo>
       )}
 
       {/* RN19: Não aplicável e Cancelar exigem justificativa; o campo recebe o foco ao abrir. */}
@@ -328,36 +376,7 @@ export default function FormularioTriagem({ demand, usuario }) {
             </>
           }
         >
-          <label className="detail-form-field" htmlFor="justificativa">
-            <span>Justificativa (obrigatória)</span>
-          </label>
-          <textarea
-            ref={campoJustificativa}
-            id="justificativa"
-            className="dialog-textarea"
-            data-autofocus
-            value={justificativa}
-            onChange={(event) => {
-              limiteJustificativa.aoMudar(event.target.value)
-              setJustificativa(event.target.value)
-              setErroJustificativa('')
-            }}
-            onPaste={limiteJustificativa.aoColar}
-            maxLength={LIMITE_JUSTIFICATIVA}
-            aria-invalid={erroJustificativa ? 'true' : undefined}
-            aria-describedby={['justificativa-contador', erroJustificativa && 'justificativa-erro'].filter(Boolean).join(' ')}
-          />
-          <ContadorLimite
-            id="justificativa"
-            valor={justificativa}
-            limite={LIMITE_JUSTIFICATIVA}
-            aviso={limiteJustificativa.aviso}
-          />
-          {erroJustificativa && (
-            <p id="justificativa-erro" className="field-error">
-              {erroJustificativa}
-            </p>
-          )}
+          {campoDeJustificativa}
         </Dialogo>
       )}
     </section>

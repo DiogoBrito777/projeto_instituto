@@ -332,10 +332,10 @@ describe('Bloco 4C — ações da gerência em triagem (RN18, RN19, RN20)', () =
         { id: 'h2', tipo: 'recusa', texto: 'Recusada: não é da Elétrica.', autor: 'Equipe de Elétrica', data: '2026-10-04T20:00:00Z' },
       ],
     })
-  const destinoAdm = { setor: 'administrativo', tipo: 'Compras e materiais' }
+  const destinoAdm = { setor: 'administrativo', tipo: 'Compras e materiais', justificativa: 'Pedido de compra é do Administrativo' }
 
   describe('redirecionar', () => {
-    it('gerência redireciona: Pendente de aceite, novo destino e tipo, histórico com setor e tipo', () => {
+    it('gerência redireciona: Pendente de aceite, novo destino e tipo, histórico com setor, tipo e justificativa', () => {
       const resultado = redirecionarDemanda(emTriagem(), destinoAdm, admin, contexto())
       expect(resultado.ok).toBe(true)
       const nova = resultado.dados
@@ -349,17 +349,19 @@ describe('Bloco 4C — ações da gerência em triagem (RN18, RN19, RN20)', () =
         tipo: 'redirecionamento',
         setor: 'administrativo',
         tipoAtendimento: 'Compras e materiais',
+        justificativa: 'Pedido de compra é do Administrativo',
         autor: 'Gerenciamento',
         perfil: 'gerenciamento',
         data: AGORA.toISOString(),
       })
-      expect(ultimo.texto).toBe('Redirecionada para Administrativo, tipo "Compras e materiais".')
+      // Teste ajustado no Bloco 4C (justificativa obrigatória): o texto passou a trazer o motivo.
+      expect(ultimo.texto).toBe('Redirecionada para Administrativo (Compras e materiais): Pedido de compra é do Administrativo.')
       // Histórico só cresce: os itens antigos continuam iguais.
       expect(nova.historico.slice(0, 2)).toEqual(emTriagem().historico)
     })
 
     it('pode escolher de novo o setor que recusou (sem regra nova)', () => {
-      expect(redirecionarDemanda(emTriagem(), { setor: 'eletrica', tipo: 'Outros' }, admin, contexto()).ok).toBe(true)
+      expect(redirecionarDemanda(emTriagem(), { setor: 'eletrica', tipo: 'Outros', justificativa: 'J' }, admin, contexto()).ok).toBe(true)
     })
 
     it('demanda devolvida já aceita: prioridade e prazos antigos não passam ao novo setor', () => {
@@ -397,13 +399,43 @@ describe('Bloco 4C — ações da gerência em triagem (RN18, RN19, RN20)', () =
 
     it('NÃO redireciona para setor inválido: vazio, inventado ou "gerenciamento"', () => {
       for (const setor of ['', undefined, 'financeiro', 'gerenciamento']) {
-        expect(redirecionarDemanda(emTriagem(), { setor, tipo: 'Outros' }, admin, contexto()).erro).toBe(ERROS_ACAO.SETOR_INVALIDO)
+        expect(redirecionarDemanda(emTriagem(), { setor, tipo: 'Outros', justificativa: 'J' }, admin, contexto()).erro).toBe(ERROS_ACAO.SETOR_INVALIDO)
       }
     })
 
     it('NÃO redireciona com tipo que não existe no novo setor (nem vazio)', () => {
-      expect(redirecionarDemanda(emTriagem(), { setor: 'administrativo', tipo: 'Iluminação' }, admin, contexto()).erro).toBe(ERROS_ACAO.TIPO_INVALIDO)
-      expect(redirecionarDemanda(emTriagem(), { setor: 'administrativo', tipo: '' }, admin, contexto()).erro).toBe(ERROS_ACAO.TIPO_INVALIDO)
+      expect(redirecionarDemanda(emTriagem(), { setor: 'administrativo', tipo: 'Iluminação', justificativa: 'J' }, admin, contexto()).erro).toBe(ERROS_ACAO.TIPO_INVALIDO)
+      expect(redirecionarDemanda(emTriagem(), { setor: 'administrativo', tipo: '', justificativa: 'J' }, admin, contexto()).erro).toBe(ERROS_ACAO.TIPO_INVALIDO)
+    })
+
+    it('NÃO redireciona sem justificativa: ausente, vazia, só espaços ou com 501 caracteres', () => {
+      const sem = { setor: 'administrativo', tipo: 'Compras e materiais' }
+      expect(redirecionarDemanda(emTriagem(), sem, admin, contexto()).erro).toBe(ERROS_ACAO.JUSTIFICATIVA_AUSENTE)
+      expect(redirecionarDemanda(emTriagem(), { ...sem, justificativa: '' }, admin, contexto()).erro).toBe(ERROS_ACAO.JUSTIFICATIVA_AUSENTE)
+      expect(redirecionarDemanda(emTriagem(), { ...sem, justificativa: '   ' }, admin, contexto()).erro).toBe(ERROS_ACAO.JUSTIFICATIVA_AUSENTE)
+      expect(redirecionarDemanda(emTriagem(), { ...sem, justificativa: 'x'.repeat(LIMITE_JUSTIFICATIVA + 1) }, admin, contexto()).erro).toBe(ERROS_ACAO.JUSTIFICATIVA_LONGA)
+      expect(redirecionarDemanda(emTriagem(), { ...sem, justificativa: 'x'.repeat(LIMITE_JUSTIFICATIVA) }, admin, contexto()).ok).toBe(true)
+    })
+
+    it('justificativa com espaços nas pontas é gravada limpa; com ponto final não duplica o ponto', () => {
+      const nova = redirecionarDemanda(emTriagem(), { ...destinoAdm, justificativa: '  Setor certo é o Administrativo.  ' }, admin, contexto()).dados
+      const ultimo = nova.historico.at(-1)
+      expect(ultimo.justificativa).toBe('Setor certo é o Administrativo.')
+      expect(ultimo.texto).toBe('Redirecionada para Administrativo (Compras e materiais): Setor certo é o Administrativo.')
+    })
+
+    it('o novo setor vê a justificativa no histórico; quem abriu NÃO vê (RN03)', () => {
+      const nova = redirecionarDemanda(emTriagem(), destinoAdm, admin, contexto()).dados
+      expect(podeVerDetalhes(administrativo, nova)).toBe(true)
+      expect(nova.historico.at(-1).texto).toContain('Pedido de compra é do Administrativo')
+      const resumo = resumoParaSolicitante(nova)
+      expect(podeVerDetalhes(hidraulica, nova)).toBe(false)
+      expect(resumo).not.toHaveProperty('historico')
+      expect(JSON.stringify(resumo)).not.toContain('Pedido de compra')
+    })
+
+    it('com justificativa inválida, setor sem permissão continua recebendo "sem permissão" (a permissão vem antes)', () => {
+      expect(redirecionarDemanda(emTriagem(), { setor: 'administrativo', tipo: 'Outros' }, eletrica, contexto()).erro).toBe(ERROS_ACAO.SEM_PERMISSAO)
     })
   })
 
