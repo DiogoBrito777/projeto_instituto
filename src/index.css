@@ -43,3 +43,29 @@ a:focus-visible {
 #root {
   min-height: 100vh;
 }
+
+/* Bloco 3, fase 1 — skip link "Ir para o conteúdo" (WCAG 2.4.1): fora da tela até receber o foco. */
+.skip-link {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 100;
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 8px;
+  background: #0d302d;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: none;
+}
+
+/* Elementos que só recebem foco por código (título da página e <main>) não precisam de contorno:
+   não são clicáveis nem entram no Tab. */
+[tabindex='-1']:focus {
+  outline: none;
+}

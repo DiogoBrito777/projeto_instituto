@@ -56,6 +56,8 @@ function App() {
   const idDemanda = idDaRota(hash)
   const { usuario, entrar, sair } = useSessao()
   const searchInput = useRef(null)
+  const tituloDaPagina = useRef(null)
+  const hashAnterior = useRef(hash)
   const isHomePage = activePage === 'visao-geral' // NOVO
   const isCreatePage = activePage === 'nova-demanda'
   const isDepartmentsPage = activePage === 'departamentos'
@@ -84,21 +86,43 @@ function App() {
     document.title = `${usuario ? pageTitle : 'Entrar'} | Demanda de aço`
   }, [usuario, pageTitle])
 
+  // WCAG 2.4.3: com roteamento por hash o navegador não muda o foco ao trocar de tela, e quem usa
+  // leitor de tela não percebe a troca. Por isso o foco vai para o título (h1) a cada mudança de
+  // endereço. No primeiro carregamento não move, para não pular o início da página.
+  useEffect(() => {
+    if (hashAnterior.current === hash) return
+    hashAnterior.current = hash
+    tituloDaPagina.current?.focus()
+  }, [hash])
+
   if (!usuario) {
     return <Login onEntrar={entrar} />
   }
 
   return (
     <div className="app-shell">
+      {/* WCAG 2.4.1: pular o menu. É botão (e não link "#conteudo") porque com roteamento por
+          hash um link para "#conteudo" trocaria de tela. Só aparece quando recebe o foco. */}
+      <button
+        className="skip-link"
+        type="button"
+        onClick={() => document.getElementById('conteudo')?.focus()}
+      >
+        Ir para o conteúdo
+      </button>
+
       <Sidebar
         activeItem={isDetailPage || isUpdatePage ? 'demandas' : activePage}
         usuario={usuario}
         onSair={sair}
       />
 
-      <main className="app-main">
+      <main className="app-main" id="conteudo" tabIndex={-1}>
         <header className="topbar">
-          <h1 className="page-title">{pageTitle}</h1>
+          {/* O único h1 da tela; tabIndex -1 permite receber o foco por código, sem entrar no Tab. */}
+          <h1 className="page-title" ref={tituloDaPagina} tabIndex={-1}>
+            {pageTitle}
+          </h1>
           {isCreatePage ? (
             <button
               className="topbar-action"
