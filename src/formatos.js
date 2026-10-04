@@ -12,6 +12,12 @@ export function iniciais(nome) {
     .join('')
 }
 
+// "1 demanda ativa", "0 demandas ativas", "3 demandas ativas" (ajustes do teste manual, item 4:
+// a tela mostrava "1 demandas ativas"). Em português, só o 1 fica no singular.
+export function quantidade(numero, singular, plural) {
+  return `${numero} ${numero === 1 ? singular : plural}`
+}
+
 export function formatarData(iso) {
   if (!iso) return '—'
   return new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })

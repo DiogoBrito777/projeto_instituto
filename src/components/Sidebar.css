@@ -154,17 +154,19 @@
     margin: 0 0 12px 2px;
   }
 
+  /* Ajustes do teste manual (item 6): em 360 px e com zoom de 400–500% o menu era uma faixa com
+     rolagem lateral e "Departamentos" ficava cortado. Agora os itens quebram linha (WCAG 1.4.10):
+     todos ficam visíveis, sem rolagem e sem esconder nada atrás de um botão. */
   .sidebar-nav {
     flex-direction: row;
+    flex-wrap: wrap;
     gap: 5px;
-    overflow-x: auto;
     padding-bottom: 2px;
-    scrollbar-width: thin;
   }
 
   .nav-link {
     min-height: 34px;
-    flex: 0 0 auto;
+    flex: 1 1 auto;
     gap: 7px;
     padding: 0 10px;
     white-space: nowrap;
