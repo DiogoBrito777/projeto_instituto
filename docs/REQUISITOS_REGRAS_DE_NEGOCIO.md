@@ -29,6 +29,7 @@ Um login por departamento nesta entrega. Responsável individual e grupos de ace
 
 **Aceite e prioridade**
 - **RN09 (R)** Demanda nova entra no setor destino como **Pendente de aceite**, sem prioridade. O setor tem **72 h para aceitar**; depois disso, selo "Aceite atrasado".
+  - *Nota (04/10): **proposta: 48h (hoje 72h), a confirmar em ata** (proposta 14 do rascunho de 03/10). A lista e a Visão Geral já usam 48 h (`LIMITE_ACEITE_HORAS` em `src/domain/atencao.js`), com o selo "Atrasada para aceite"; nenhuma outra consequência além do selo.*
 - **RN10 (R)** Para aceitar, o setor **deve definir a prioridade** (Urgente, Alta, Média ou Baixa). Um **pop-up de confirmação** resume prioridade e prazo. Depois do aceite a **prioridade fica travada**.
 - **RN11 (R)** O setor pode **recusar**, com motivo obrigatório: a demanda vai para **Em triagem**.
 - **RN12 (R)** Para quem abriu, "Pendente de aceite" aparece como "Não aceita pelo setor".
@@ -39,6 +40,7 @@ Um login por departamento nesta entrega. Responsável individual e grupos de ace
 - **RN15 (R)** "A expirar": restar 25% do prazo ou menos. "Vencida": passou do prazo.
 - **RN16 (R)** **"Aguardando (processamento interno)"** não pausa o prazo. Acima de **7 dias** nesse status, selo "Aguardando há mais de 7 dias" (cada setor vê o seu; a gerência vê todos).
 - **RN17 (R)** Demanda **Em triagem há mais de 72 h** recebe selo para a gerência.
+  - *Nota (04/10): **proposta: 24h (hoje 72h), a confirmar em ata** (proposta 14 do rascunho de 03/10). Contadas desde a recusa. A lista e a Visão Geral já usam 24 h (`LIMITE_TRIAGEM_HORAS`), com o selo "Atrasada para triagem", só para a gerência.*
 
 **Triagem e encerramento**
 - **RN18 (R)** Só o **gerenciamento** redireciona (muda o destino; volta a Pendente de aceite e o prazo de aceite reinicia). Setor **nunca** envia direto a outro setor. "Atribuir responsável" vira "Redirecionar para outro departamento", só da gerência.
