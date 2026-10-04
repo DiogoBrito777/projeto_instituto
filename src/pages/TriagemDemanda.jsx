@@ -114,6 +114,8 @@ export default function FormularioTriagem({ demand, usuario }) {
   function abrirComJustificativa(chave) {
     setJustificativa('')
     setErroJustificativa('')
+    // O campo começa vazio: o aviso de limite da vez anterior não pode continuar (ajustes, item 5).
+    limiteJustificativa.reiniciar('')
     setDialogo(chave)
   }
 
