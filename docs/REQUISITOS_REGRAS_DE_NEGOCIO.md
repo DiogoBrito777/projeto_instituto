@@ -127,22 +127,22 @@ Quatro níveis: Urgente, Alta, Média, Baixa (o Git hoje tem três: acrescentar 
 ## 9. Casos de teste
 | ID | Cenário | Esperado | Resultado |
 |---|---|---|---|
-| CT-R01 | Abrir sem login | Vai ao login | ☐ |
-| CT-R02 | Login errado e certo (5 usuários) | Erro acessível / entra | ☐ |
-| CT-R03 | `user01` lista Recebidas e Solicitadas | Só o que lhe cabe | ☐ |
-| CT-R04 | URL de demanda alheia | CA-R01 | ☐ |
-| CT-R05 | Aceitar sem e com prioridade | CA-R03 | ☐ |
-| CT-R06 | Recusar e redirecionar | CA-R04, CA-R05 | ☐ |
-| CT-R07 | Visão de quem abriu | CA-R06 | ☐ |
-| CT-R08 | Demanda final | CA-R07 | ☐ |
-| CT-R09 | Novo prazo | CA-R08 | ☐ |
-| CT-R10 | Prazos por perfil | CA-R09 | ☐ |
-| CT-R11 | Sair + Voltar | CA-R10 | ☐ |
-| CT-R12 | Procurar atalho setor→setor | CA-R11 | ☐ |
-| CT-R13 | Teclado: login, aceite, recusa, pop-ups | Tudo operável | ☐ |
-| CT-R14 | Leitor de tela: erros e resultados | Anunciado | ☐ |
+| CT-R01 | Abrir sem login | Vai ao login | ☐ (sem registro) |
+| CT-R02 | Login errado e certo (5 usuários) | Erro acessível / entra | ☐ (parcial: login certo com os 5 usuários passou em `docs/evidencias/depois/TESTE_MANUAL_BLOCO1.md`; login errado sem registro) |
+| CT-R03 | `user01` lista Recebidas e Solicitadas | Só o que lhe cabe | ☒ passou — `docs/evidencias/depois/TESTE_MANUAL_BLOCO2A.md` (linha "Demandas") |
+| CT-R04 | URL de demanda alheia | CA-R01 | ☒ passou — `docs/evidencias/depois/TESTE_MANUAL_BLOCO2A.md` (linha "Detalhes") |
+| CT-R05 | Aceitar sem e com prioridade | CA-R03 | ☐ (conferido só pelo assistente, `docs/CHANGELOG.md` 4A; teste da equipe pendente) |
+| CT-R06 | Recusar e redirecionar | CA-R04, CA-R05 | ☐ (conferido só pelo assistente, `docs/CHANGELOG.md` 4A e 4C; teste da equipe pendente) |
+| CT-R07 | Visão de quem abriu | CA-R06 | ☒ passou — `docs/evidencias/depois/TESTE_MANUAL_BLOCO2A.md` (linha "Detalhes") |
+| CT-R08 | Demanda final | CA-R07 | ☐ (conferido só pelo assistente, `docs/CHANGELOG.md` 4C) |
+| CT-R09 | Novo prazo | CA-R08 | ☐ (sem tela ainda) |
+| CT-R10 | Prazos por perfil | CA-R09 | ☐ (sem registro) |
+| CT-R11 | Sair + Voltar | CA-R10 | ☒ passou — `docs/evidencias/depois/TESTE_MANUAL_BLOCO1.md` (linha "Entrar e sair do perfil", marcada CT-R11; o Voltar depois do Sair não aparece descrito à parte) |
+| CT-R12 | Procurar atalho setor→setor | CA-R11 | ☐ (sem registro) |
+| CT-R13 | Teclado: login, aceite, recusa, pop-ups | Tudo operável | ☐ (parcial: Bloco 1 "parcial", 2A "não executado"; no Bloco 3 o autor conferiu Tab, Enter e Shift+Tab no Edge, segundo `docs/evidencias/depois/RELATORIO_AXE_DEPOIS.md`; aceite, recusa e pop-ups sem teste da equipe) |
+| CT-R14 | Leitor de tela: erros e resultados | Anunciado | ☐ (não executado) |
 
-`☐` = a equipe preenche com evidência real. Funções puras (permissões, transições, prazos) também têm testes automáticos (`npm test`).
+`☐` = a equipe preenche com evidência real. `☒` = feito, com a fonte ao lado. Itens conferidos só pelo assistente no navegador embutido continuam `☐`, porque o teste da equipe ainda não foi feito. Pendências e roteiro em `docs/TESTES_PENDENTES.md`. Funções puras (permissões, transições, prazos) também têm testes automáticos (`npm test`).
 
 ## 10. Dados de exemplo
 - Remapear as origens legadas do mock (Financeiro, Compras, Facilities…) para os 4 departamentos.

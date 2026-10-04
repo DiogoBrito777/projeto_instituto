@@ -1,6 +1,6 @@
 # Testes pendentes — Demanda de Aço
 
-> **Regra do projeto:** teste que não foi feito é registrado aqui com honestidade e executado no fim. Nada é escondido e **nada aqui está marcado como "passou"**: quem executar marca, com data e observação.
+> **Regra do projeto:** teste que não foi feito é registrado aqui com honestidade e executado no fim. Nada é escondido. **Só se marca "passou" com fonte:** um arquivo de evidência ou o relato do autor, escrito na observação. Quem executar marca, com data e observação. *(Atualizado em 04/10 com o relato do autor, Bruno Diogo, sobre os Blocos 1, 2A e 2B.)*
 > Levantamento feito em 04/10/2026 a partir de `docs/CHANGELOG.md`, `docs/EXPLICACAO_BLOCO*.md`, `docs/evidencias/` (incluindo `TESTE_MANUAL_BLOCO1.md`, `TESTE_MANUAL_BLOCO2A.md` e os relatórios do axe), `docs/DOCUMENTACAO.md` (seções 9, 10 e 19) e `docs/REQUISITOS_REGRAS_DE_NEGOCIO.md` (seção 9).
 
 **Como usar**
@@ -18,34 +18,34 @@ Demandas do seed usadas abaixo:
 
 ## 1. Pendências por bloco
 
-### Bloco 1 — login, sessão, dados (6 itens)
+### Bloco 1 — login, sessão, dados (6 itens · 5 pendentes)
 | # | Item pendente | Quem | Como fazer | Resultado | Data | Observação |
 |---|---|---|---|---|---|---|
 | 1.1 | Dados corrompidos → "Resetar dados" (ERROR_HANDLING §5) | Bruno | 1. Logado, F12 → Application → Local Storage. 2. Na chave `demanda-de-aco:v1:demandas`, troque o valor por `{quebrado`. 3. Recarregue: deve aparecer a mensagem de dados com problema e o botão "Resetar dados". 4. Clique: os dados de demonstração voltam. | ☐ passou · ☐ não passou | | |
-| 1.2 | Reteste do **Sair** no celular, 360 px, no Edge | Bruno | F12 → modo celular, 360 px → entre → Tab até "Sair" → Enter: volta ao login. | ☐ passou · ☐ não passou | | |
+| 1.2 | Reteste do **Sair** no celular, 360 px, no Edge | Bruno | F12 → modo celular, 360 px → entre → Tab até "Sair" → Enter: volta ao login. | ☒ passou · ☐ não passou | não registrada | Relato do autor (Bruno Diogo): reteste no Edge, com o DevTools em modo dispositivo. Prints guardados pelo autor, a anexar. |
 | 1.3 | Login errado com erro acessível (CT-R02, parte "errado") | Bruno | Usuário `admin`, senha `x` → Entrar: aparece mensagem de erro e o foco vai para ela ou para o campo. | ☐ passou · ☐ não passou | | |
 | 1.4 | Abrir uma tela sem login pela URL (CT-R01) | Bruno | Numa janela privada, abra `http://localhost:5173/#demandas`: deve ir ao login. | ☐ passou · ☐ não passou | | |
 | 1.5 | Sair + botão Voltar não reabre tela protegida (CT-R11, CA-R10) | Bruno | Entre, abra Demandas, clique em Sair e depois em Voltar do navegador: continua no login. | ☐ passou · ☐ não passou | | |
 | 1.6 | Teclado em todas as telas (estava "parcial" no Bloco 1) | grupo | Roteiro da seção 2, passos de teclado. | ☐ passou · ☐ não passou | | |
 
-### Blocos 2A e 2B — telas ligadas aos dados e Nova Demanda (8 itens)
+### Blocos 2A e 2B — telas ligadas aos dados e Nova Demanda (8 itens · 7 pendentes)
 | # | Item pendente | Quem | Como fazer | Resultado | Data | Observação |
 |---|---|---|---|---|---|---|
 | 2.1 | Teclado na 2A (CT-R13): Demandas, Detalhes, Atualizar, Departamentos | grupo | Só com Tab, Shift+Tab, Enter e Esc: abrir uma demanda, ir em "Atualizar", mudar status e salvar. | ☐ passou · ☐ não passou | | |
 | 2.2 | Leitor de tela na 2A (CT-R14) | só pessoa | Seção 3.1, nas telas Demandas e Detalhes. | ☐ passou · ☐ não passou | | |
 | 2.3 | Demanda final sem ações (CT-R08, CA-R07) | Bruno | Com `admin` e com `user03`, abra a DM-2008 (Concluída): nenhum botão de ação. Abra `#demanda/DM-2008/editar`: aparece "finalizada". | ☐ passou · ☐ não passou | | |
 | 2.4 | Estados: carregando, vazio e erro (TC14) | Bruno | Busca sem resultado → "Nenhuma demanda encontrada". Abra `http://localhost:5173/?falha=1#nova-demanda`, envie uma demanda válida: "Enviando…" e depois o erro, com o formulário mantido. | ☐ passou · ☐ não passou | | |
-| 2.5 | Teste manual da Nova Demanda pela equipe (2B) | grupo | Com `user01`: enviar vazio (4 erros, foco no Destino); o destino não tem TI; o tipo muda com o destino; enviar → pop-up com o número; Esc fecha. | ☐ passou · ☐ não passou | | |
-| 2.6 | **Colar** texto acima do limite (não pôde ser testado no navegador embutido) | Bruno | Copie um texto com mais de 60 caracteres e cole no Título: o campo corta em 60 e aparece "Limite de 60 caracteres atingido. O texto foi cortado." Repita na Descrição (500). | ☐ passou · ☐ não passou | | |
+| 2.5 | Teste manual da Nova Demanda pela equipe (2B) | grupo | Com `user01`: enviar vazio (4 erros, foco no Destino); o destino não tem TI; o tipo muda com o destino; enviar → pop-up com o número; Esc fecha. | ☐ passou · ☐ não passou | | Parcial: o autor testou a 2B e achou a falha do limite (ver 2.6); os demais passos desta linha não têm registro. |
+| 2.6 | **Colar** texto acima do limite (não pôde ser testado no navegador embutido) | Bruno | Copie um texto com mais de 60 caracteres e cole no Título: o campo corta em 60 e aparece "Limite de 60 caracteres atingido. O texto foi cortado." Repita na Descrição (500). | ☒ passou · ☐ não passou | não registrada | Relato do autor (Bruno Diogo): a falha "2400/60" e "3072/500" foi corrigida com a trava e o aviso, e o reteste passou. Sem arquivo de evidência escrita; prints guardados pelo autor, a anexar. |
 | 2.7 | Leitor de tela anuncia aviso de limite e erros da Nova Demanda | só pessoa | Seção 3.1: enviar vazio e colar texto longo, ouvindo o que é lido. | ☐ passou · ☐ não passou | | |
 | 2.8 | Tipo "Outros" na Nova Demanda e no Atualizar | Bruno | Nova demanda com tipo "Outros" → envia. Em Atualizar (executor), trocar o tipo para "Outros" → aparece no histórico. | ☐ passou · ☐ não passou | | |
 
 > Fora deste quadro: a **2C (offline, fila "Pendentes de envio")** não foi implementada; o TC04 (offline) **não se aplica** e vai para a seção 18 como "adiado".
 
-### Bloco 3 — acessibilidade (7 itens)
+### Bloco 3 — acessibilidade (7 itens · 7 pendentes)
 | # | Item pendente | Quem | Como fazer | Resultado | Data | Observação |
 |---|---|---|---|---|---|---|
-| 3.1 | Edge só com teclado, olhando **cor e espessura** do contorno (o navegador embutido não permite conferir) | só pessoa | Tab em todas as telas: o contorno é verde, com 2 px, em botões, links, campos e selects; na barra lateral é verde-claro. | ☐ passou · ☐ não passou | | |
+| 3.1 | Edge só com teclado, olhando **cor e espessura** do contorno (o navegador embutido não permite conferir) | só pessoa | Tab em todas as telas: o contorno é verde, com 2 px, em botões, links, campos e selects; na barra lateral é verde-claro. | ☐ passou · ☐ não passou | | Parcial: o autor conferiu no Edge o skip link, as buscas e o contorno verde dos botões, com Tab, Enter e Shift+Tab (`evidencias/depois/RELATORIO_AXE_DEPOIS.md`). Falta percorrer todas as telas, inclusive as dos Blocos 4A a 4C. |
 | 3.2 | Leitor de tela no fluxo principal (TC10, CT-R14) | só pessoa | Seção 3.1. | ☐ passou · ☐ não passou | | |
 | 3.3 | Lighthouse (Acessibilidade) | Bruno | Seção 3.3. | ☐ passou · ☐ não passou | | |
 | 3.4 | Nova rodada do axe **pela equipe** (o "depois" atual foi feito pelo assistente) | Bruno | Seção 3.4. | ☐ passou · ☐ não passou | | |
@@ -53,14 +53,14 @@ Demandas do seed usadas abaixo:
 | 3.6 | Contraste dos itens do menu lateral em 360 px (o axe deixou "incompleto") | só pessoa | Modo celular, 360 px: "Demandas" e "Departamentos" legíveis. Se possível, meça com o seletor de cor do F12 (deve dar 4,5:1 ou mais). | ☐ passou · ☐ não passou | | |
 | 3.7 | Celular real | só pessoa | Seção 3.2. | ☐ passou · ☐ não passou | | |
 
-### Bloco 4A — aceite e recusa (3 itens)
+### Bloco 4A — aceite e recusa (3 itens · 3 pendentes)
 | # | Item pendente | Quem | Como fazer | Resultado | Data | Observação |
 |---|---|---|---|---|---|---|
 | 4A.1 | Aceite e recusa no Edge, só com teclado (CT-R05, CT-R13) | grupo | `user01` → DM-2001 → "Aceitar ou recusar". Aceitar sem prioridade dá erro e foco no select; com prioridade, pop-up → Esc devolve o foco → confirmar. Recusar sem motivo dá erro; com motivo, volta à lista. | ☐ passou · ☐ não passou | | |
 | 4A.2 | Leitor de tela nos pop-ups de aceite e recusa | só pessoa | Seção 3.1: ouvir título e texto do pop-up e as mensagens de erro. | ☐ passou · ☐ não passou | | |
 | 4A.3 | Setor que recusou perde o acesso; quem abriu vê "Setor atual: Gerenciamento" | Bruno | Depois do 4A.1 (recusa), `user01` abre `#demanda/DM-2001`: "não encontrada ou sem permissão". `user02` (quem abriu) vê o resumo com "Gerenciamento". | ☐ passou · ☐ não passou | | |
 
-### Bloco 4B — fila de triagem e atenção (4 itens)
+### Bloco 4B — fila de triagem e atenção (4 itens · 4 pendentes)
 | # | Item pendente | Quem | Como fazer | Resultado | Data | Observação |
 |---|---|---|---|---|---|---|
 | 4B.1 | Aba "Em triagem", aviso, selos e cards clicáveis no Edge | grupo | Roteiro da seção 2, passos 2 e 3. | ☐ passou · ☐ não passou | | |
@@ -68,10 +68,10 @@ Demandas do seed usadas abaixo:
 | 4B.3 | Leitor de tela: contagem da aba anunciada e selos lidos | só pessoa | Seção 3.1: clicar na aba "Em triagem" e ouvir "2 demandas exibidas". | ☐ passou · ☐ não passou | | |
 | 4B.4 | Ordem padrão × ordem escolhida no Edge | Bruno | Demandas com "Atenção primeiro": triagem e pendentes no topo. Trocar para "Mais recentes": essa ordem passa a valer. | ☐ passou · ☐ não passou | | |
 
-### Bloco 4C — ações da gerência (6 itens)
+### Bloco 4C — ações da gerência (6 itens · 6 pendentes)
 | # | Item pendente | Quem | Como fazer | Resultado | Data | Observação |
 |---|---|---|---|---|---|---|
-| 4C.1 | Triagem completa no Edge (redirecionar, Não aplicável, Cancelar), só com teclado | grupo | Roteiro da seção 2, passos 4 a 7. | ☐ passou · ☐ não passou | | |
+| 4C.1 | Triagem completa no Edge (redirecionar **com justificativa obrigatória**, Não aplicável, Cancelar), só com teclado | grupo | Roteiro da seção 2, passos 4 a 7. | ☐ passou · ☐ não passou | | |
 | 4C.2 | Prazo depois do redirecionamento no Edge: 24 h; nunca redirecionada: 48 h | Bruno | Redirecionar a DM-2013 e ver "Aceitar até" = agora + 24 h. Ver a DM-2001: criação + 48 h. | ☐ passou · ☐ não passou | | |
 | 4C.3 | O novo setor **aceita** depois do redirecionamento | Bruno | Depois do 4C.2, `user02` → DM-2013 → aceitar com prioridade → Em andamento. | ☐ passou · ☐ não passou | | |
 | 4C.4 | Leitor de tela nos pop-ups da triagem | só pessoa | Seção 3.1. | ☐ passou · ☐ não passou | | |
@@ -97,9 +97,10 @@ Preparação (1 min): `npm run dev`, Edge, `http://localhost:5173`, **Resetar da
 4. **Redirecionar (3 min):**
    - DM-2013 → "Triar demanda": aparecem o motivo e quem recusou;
    - Redirecionar sem setor e sem tipo: erros junto dos campos;
-   - escolha Hidráulica e "Vazamento" (setas do teclado) → pop-up com o prazo de 24 h;
+   - escolha Hidráulica e "Vazamento" (setas do teclado) → pop-up com o prazo de 24 h e o campo "Justificativa (obrigatória)";
+   - confirme vazio: aparece "Informe a justificativa." junto do campo;
    - Tab fica preso no pop-up e Esc fecha devolvendo o foco;
-   - reabra e confirme: volta à lista com o foco no h1.
+   - reabra, escreva a justificativa e confirme: volta à lista com o foco no h1. Como `user02`, a justificativa aparece no histórico; como `user03` (quem abriu), não.
 5. **Não aplicável (1 min):** DM-2007 → Triar → "Marcar como não aplicável" → confirmar vazio dá "Informe a justificativa." → escreva → confirme.
 6. **Setores (4 min):**
    - `user02`: DM-2013 em "Pendentes de aceite", "Aceitar até" = +24 h → aceitar sem prioridade (erro) → com prioridade (pop-up) → confirmar.

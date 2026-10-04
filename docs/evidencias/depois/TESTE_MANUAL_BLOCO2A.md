@@ -1,7 +1,8 @@
 # Teste manual — Bloco 2A (telas ligadas aos dados)
 
 - **Data:** 03/10/2026
-- **Executado por:** ____ (preencher o nome)
+- **Executado por:** Bruno Diogo (relato do autor)
+- **Prints:** guardados pelo autor, a anexar
 - **Ambiente:** Microsoft Edge, `npm run dev` (branch `feat/telas-nova-demanda`)
 - **Roteiro:** "Teste manual por tela" do relatório da 2A
 
@@ -22,4 +23,4 @@
 - **Como reproduzir (antes da correção):** entrar com `user01` → abrir a DM-2012 → "Atualizar demanda" → tentar escrever no campo de texto.
 - **Causa:** a caixa de texto era a "Descrição" da demanda, deixada só leitura porque o texto pertence a quem abriu a demanda.
 - **Correção:** no mesmo cartão (layout mantido), a descrição original aparece como texto e a caixa vira "Observação (opcional)", com rótulo associado, limite de 500 caracteres e contador. A observação vai para o histórico junto da mudança, com autor, perfil e data; sozinha, é salva como item próprio. Arquivos: `src/domain/acoes.js` (+ testes), `src/pages/AtualizarDemanda.jsx`.
-- **Reteste pela equipe no Edge:** ✅ passou (03/10/2026).
+- **Reteste no Edge:** ✅ passou (03/10/2026), feito pelo autor (Bruno Diogo), conforme relato do autor.
