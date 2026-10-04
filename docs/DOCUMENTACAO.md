@@ -293,9 +293,9 @@ Cobertura item a item em `docs/REQUISITOS_REGRAS_DE_NEGOCIO.md`, seção 11.
   - Feita no Bloco 3 (branch `fix/acessibilidade`), gerada **pelo assistente, em ambiente de nuvem, não pela equipe**.
   - **0 violações nas 26 combinações** (login + 6 rotas × 2 perfis, em 1280 e 360 px).
   - 12 itens "incompletos": contraste do menu lateral em 360 px, a conferir a mão.
-- **Testes manuais do autor:** `docs/evidencias/depois/TESTE_MANUAL_BLOCO1.md` e `TESTE_MANUAL_BLOCO2A.md`. O teste da 2B tem registro só no CHANGELOG, sem arquivo próprio. Prints guardados pelo autor, a anexar.
+- **Testes manuais do autor:** `docs/evidencias/depois/TESTE_MANUAL_BLOCO1.md` e `TESTE_MANUAL_BLOCO2A.md`. O teste da 2B tem registro escrito só no CHANGELOG, mas tem prints (tabela abaixo).
 
-**Evidências relatadas pelo autor (Bruno Diogo) em 04/10.** Os prints serão salvos por ele com os nomes abaixo. **Enquanto o arquivo não estiver na pasta, a evidência vale como "relato do autor".**
+**Evidências relatadas pelo autor (Bruno Diogo) em 04/10, com os prints que existem na pasta** (conferido em 04/10). Onde não há arquivo, está escrito.
 | Evidência | Resultado relatado | Arquivo esperado |
 |---|---|---|
 | Lighthouse, Visão Geral, `admin`, desktop | 100/100 | `docs/evidencias/depois/lighthouse_visao-geral_admin_desktop.png` |
@@ -303,9 +303,12 @@ Cobertura item a item em `docs/REQUISITOS_REGRAS_DE_NEGOCIO.md`, seção 11.
 | Leitor de tela: NVDA 2026.2 + Edge InPrivate | Testado 2 ou 3 vezes; resultado por tela a registrar | `docs/evidencias/depois/nvda_edge-inprivate_visao-geral.png`, `docs/evidencias/depois/nvda_edge-inprivate_nova-demanda.png` |
 | 360 px no DevTools (Samsung Galaxy A55) | Achados (menu com rolagem e itens cortados) corrigidos no PR #9; reteste pendente | `docs/evidencias/depois/devtools-360px_galaxy-a55_visao-geral.png`, `docs/evidencias/depois/devtools-360px_galaxy-a55_demandas.png` |
 | Zoom de 200% no Chrome (1920 × 1080, escala 100%) | OK | `docs/evidencias/depois/zoom-200_chrome_1920x1080_visao-geral.png` |
-| Celular real Android, pela rede Wi-Fi (`npm run dev -- --host`) | Visão Geral, Demandas, Departamentos e Nova Demanda funcionaram; achados corrigidos no PR #9 | `docs/evidencias/depois/celular-android_visao-geral.png`, `docs/evidencias/depois/celular-android_demandas.png`, `docs/evidencias/depois/celular-android_departamentos.png`, `docs/evidencias/depois/celular-android_nova-demanda.png` |
-| Falhas dos testes manuais dos Blocos 1, 2A e 2B (antes da correção) | Sair escondido em 360 px; campo travado no Atualizar; limite "2400/60" e "3072/500" | `docs/evidencias/antes/teste-manual_bloco1_sair-360px.png`, `docs/evidencias/antes/teste-manual_bloco2a_atualizar-sem-campo.png`, `docs/evidencias/antes/teste-manual_bloco2b_limite-titulo-2400-60.png`, `docs/evidencias/antes/teste-manual_bloco2b_limite-descricao-3072-500.png` |
-| axe | 0 violações nas 26 combinações, **na rodada antiga** (Bloco 3, assistente na nuvem). **Nova rodada no código atual: não executada** | `docs/evidencias/depois/RELATORIO_AXE_DEPOIS.md` (existe); para a nova: `docs/evidencias/depois/axe_rodada2_<data>.json` |
+| Celular real Android, pela rede Wi-Fi (`npm run dev -- --host`) | Visão Geral, Demandas, Departamentos e Nova Demanda funcionaram; achados corrigidos no PR #9 | `docs/evidencias/depois/celular-android_visao-geral.jpeg`, `docs/evidencias/depois/celular-android_demandas.jpeg`, `docs/evidencias/depois/celular-android_departamentos.jpeg`, `docs/evidencias/depois/celular-android_nova-demanda.jpeg` |
+| Falha do Bloco 1 (antes da correção) | Sair escondido em 360 px | **Sem print do estado anterior** (defeito corrigido; não reproduzível sem voltar o código). Registro escrito em `docs/evidencias/depois/TESTE_MANUAL_BLOCO1.md` |
+| Falhas dos Blocos 2A e 2B (antes da correção) | Campo travado no Atualizar; limite "2400/60" e "3072/500" | `docs/evidencias/antes/teste-manual_bloco2a_atualizar-sem-campo.png`, `docs/evidencias/antes/teste-manual_bloco2b_limite-titulo-2400-60.png`, `docs/evidencias/antes/teste-manual_bloco2b_limite-descricao-3072-500.png` |
+| axe | 0 violações nas 26 combinações, **na rodada antiga** (Bloco 3, assistente na nuvem). **Nova rodada no código atual: não executada** | `docs/evidencias/depois/RELATORIO_AXE_DEPOIS.md` e `axe_depois.json` (existem). Para a nova rodada, sugestão de nome: `docs/evidencias/depois/axe_rodada2_<data>.json` (ainda não existe) |
+
+> Os prints ficam só em `docs/evidencias/antes/` e `docs/evidencias/depois/`.
 
 - **Pendentes:** nova rodada do axe no código atual; Lighthouse nas outras telas e em mobile; resultado do NVDA por tela; comando de voz; reteste do PR #9. Roteiro em `docs/TESTES_PENDENTES.md`.
 

@@ -2,7 +2,7 @@
 
 - **Data:** 03/10/2026
 - **Executado por:** Bruno Diogo (relato do autor)
-- **Prints:** guardados pelo autor, a anexar
+- **Prints:** `docs/evidencias/antes/teste-manual_bloco2a_atualizar-sem-campo.png` (o defeito, antes da correção)
 - **Ambiente:** Microsoft Edge, `npm run dev` (branch `feat/telas-nova-demanda`)
 - **Roteiro:** "Teste manual por tela" do relatório da 2A
 
