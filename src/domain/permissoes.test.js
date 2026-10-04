@@ -10,6 +10,7 @@ import {
   podeVer,
   podeVerDetalhes,
   resumoParaSolicitante,
+  setorResponsavel,
 } from './permissoes.js'
 import { STATUS } from './status.js'
 
@@ -62,6 +63,51 @@ describe('visibilidade (RN02–RN04)', () => {
 
   it('admin vê completa a demanda que ele mesmo abriu', () => {
     expect(podeVerDetalhes(admin, demanda(STATUS.EM_ANDAMENTO, { origem: 'gerenciamento' }))).toBe(true)
+  })
+})
+
+describe('Em triagem pertence à gerência (decisão de 04/10, esclarece a RN11)', () => {
+  it('setor de destino NÃO vê a demanda em triagem, nem pela URL (podeVer falso)', () => {
+    const d = demanda(STATUS.EM_TRIAGEM)
+    expect(podeVer(eletrica, d)).toBe(false)
+    expect(podeVerDetalhes(eletrica, d)).toBe(false)
+  })
+
+  it('o destino continua gravado (auditoria), mas o setor responsável é a gerência', () => {
+    const d = demanda(STATUS.EM_TRIAGEM)
+    expect(d.destino).toBe('eletrica')
+    expect(setorResponsavel(d)).toBe('gerenciamento')
+  })
+
+  it('gerência vê a demanda completa', () => {
+    expect(podeVerDetalhes(admin, demanda(STATUS.EM_TRIAGEM))).toBe(true)
+  })
+
+  it('quem abriu continua vendo só o resumo, com setor atual Gerenciamento', () => {
+    const d = demanda(STATUS.EM_TRIAGEM)
+    expect(podeVer(hidraulica, d)).toBe(true)
+    expect(podeVerDetalhes(hidraulica, d)).toBe(false)
+    expect(resumoParaSolicitante(d).setorAtual).toBe('gerenciamento')
+  })
+
+  it('nos demais status nada muda: o setor de destino vê a demanda completa', () => {
+    const outros = [
+      STATUS.PENDENTE_ACEITE,
+      STATUS.EM_ANDAMENTO,
+      STATUS.AGUARDANDO,
+      STATUS.CONCLUIDA,
+      STATUS.NAO_APLICAVEL,
+      STATUS.CANCELADA,
+    ]
+    for (const status of outros) {
+      expect(podeVerDetalhes(eletrica, demanda(status))).toBe(true)
+      expect(setorResponsavel(demanda(status))).toBe('eletrica')
+    }
+  })
+
+  it('outro setor (TI) continua sem ver, em qualquer status', () => {
+    expect(podeVer(ti, demanda(STATUS.EM_TRIAGEM))).toBe(false)
+    expect(podeVer(ti, demanda(STATUS.EM_ANDAMENTO))).toBe(false)
   })
 })
 

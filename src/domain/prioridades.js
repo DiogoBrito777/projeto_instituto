@@ -13,6 +13,18 @@ export const PRAZO_EM_HORAS = {
   Baixa: 7 * 24,
 }
 
+// Texto do prazo para o pop-up de aceite ("O prazo será de [Y]"; MENSAGENS_VALIDACAO.md).
+const PRAZO_POR_EXTENSO = {
+  Urgente: '24 horas',
+  Alta: '48 horas',
+  Média: '72 horas',
+  Baixa: '7 dias',
+}
+
+export function descreverPrazo(prioridade) {
+  return PRAZO_POR_EXTENSO[prioridade] ?? null
+}
+
 export function ehPrioridadeValida(prioridade) {
   return PRIORIDADES.includes(prioridade)
 }
