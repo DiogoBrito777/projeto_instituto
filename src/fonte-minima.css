@@ -1,0 +1,341 @@
+/* Bloco 3, fase 2 — fonte mínima de 14 px nos textos (WCAG 1.4.4; teste manual da 2A).
+   Arquivo GERADO e ISOLADO de propósito: os CSS dos colegas não foram alterados para isso.
+   Para cada seletor que tinha texto abaixo de 14 px, repete todos os seus font-size, na mesma ordem
+   e no mesmo @media, como max(14px, valor original): o que já era 14 px ou mais continua igual.
+   Este arquivo é importado por último, em src/main.jsx, então vence com a mesma especificidade.
+   PARA DESFAZER: apague este arquivo e a linha "import './fonte-minima.css'" em src/main.jsx. */
+
+/* ---- components/Sidebar.css ---- */
+.nav-link {
+  font-size: max(14px, 10px);
+}
+.profile-avatar {
+  font-size: max(14px, 9px);
+}
+.profile-name {
+  font-size: max(14px, 9px);
+}
+.profile-role {
+  font-size: max(14px, 8px);
+}
+
+/* ---- pages/DetalhesDemanda.css ---- */
+.detail-breadcrumb {
+  font-size: max(14px, 9px);
+}
+.detail-eyebrow {
+  font-size: max(14px, 8px);
+}
+.detail-status {
+  font-size: max(14px, 8px);
+}
+.detail-summary-meta {
+  font-size: max(14px, 8px);
+}
+.detail-section-title {
+  font-size: max(14px, 10px);
+}
+.detail-field span {
+  font-size: max(14px, 7px);
+}
+.detail-field strong {
+  font-size: max(14px, 8px);
+}
+.detail-description p {
+  font-size: max(14px, 8px);
+}
+.detail-button {
+  font-size: max(14px, 9px);
+}
+.history-item strong {
+  font-size: max(14px, 8px);
+}
+.history-item time {
+  font-size: max(14px, 7px);
+}
+.detail-dialog-copy {
+  font-size: max(14px, 11px);
+}
+.detail-form-field {
+  font-size: max(14px, 10px);
+}
+.detail-form-field select {
+  font-size: max(14px, 11px);
+}
+.update-status-control select {
+  font-size: max(14px, 10px);
+}
+.update-field {
+  font-size: max(14px, 9px);
+}
+.update-field input, .update-field select {
+  font-size: max(14px, 12px);
+}
+.update-description-field textarea {
+  font-size: max(14px, 11px);
+}
+@media (min-width: 1100px) {
+  .detail-eyebrow, .detail-status {
+    font-size: max(14px, 11px);
+  }
+}
+@media (min-width: 1100px) {
+  .detail-summary-meta {
+    font-size: max(14px, 11px);
+  }
+}
+@media (min-width: 1100px) {
+  .detail-section-title {
+    font-size: max(14px, 14px);
+  }
+}
+@media (min-width: 1100px) {
+  .detail-field span {
+    font-size: max(14px, 10px);
+  }
+}
+@media (min-width: 1100px) {
+  .detail-field strong, .detail-description p {
+    font-size: max(14px, 12px);
+  }
+}
+@media (min-width: 1100px) {
+  .detail-button {
+    font-size: max(14px, 12px);
+  }
+}
+@media (min-width: 1100px) {
+  .history-item strong {
+    font-size: max(14px, 11px);
+  }
+}
+@media (min-width: 1100px) {
+  .history-item time {
+    font-size: max(14px, 10px);
+  }
+}
+@media (min-width: 1100px) {
+  .update-field {
+    font-size: max(14px, 10px);
+  }
+}
+@media (min-width: 1100px) {
+  .update-field input, .update-field select {
+    font-size: max(14px, 13px);
+  }
+}
+@media (min-width: 1100px) {
+  .update-description-field textarea {
+    font-size: max(14px, 12px);
+  }
+}
+@media (min-width: 1100px) {
+  .update-status-control select {
+    font-size: max(14px, 11px);
+  }
+}
+@media (max-width: 520px) {
+  .detail-breadcrumb {
+    font-size: max(14px, 8px);
+  }
+}
+@media (max-width: 520px) {
+  .detail-field strong, .detail-description p {
+    font-size: max(14px, 9px);
+  }
+}
+@media (max-width: 520px) {
+  .detail-actions .detail-button {
+    font-size: max(14px, 10px);
+  }
+}
+
+/* ---- pages/VisaoGeral.css ---- */
+.visao-geral .header__eyebrow {
+  font-size: max(14px, 12px);
+}
+.visao-geral .avatar {
+  font-size: max(14px, 13px);
+}
+.visao-geral .badge {
+  font-size: max(14px, 12px);
+}
+.visao-geral .tab__count {
+  font-size: max(14px, 12px);
+}
+.visao-geral .demand-card__ref {
+  font-size: max(14px, 13px);
+}
+.visao-geral .demand-card__desc {
+  font-size: max(14px, 13.5px);
+}
+.visao-geral .avatar--sm {
+  font-size: max(14px, 11px);
+}
+.visao-geral .demand-card__category {
+  font-size: max(14px, 13.5px);
+}
+.visao-geral .demand-card__time {
+  font-size: max(14px, 12px);
+}
+.visao-geral .btn-outline {
+  font-size: max(14px, 13px);
+}
+
+/* ---- App.css ---- */
+.topbar-action {
+  font-size: max(14px, 13px);
+}
+.form-notice {
+  font-size: max(14px, 13px);
+}
+.eyebrow {
+  font-size: max(14px, 9px);
+}
+.department-description {
+  font-size: max(14px, 12px);
+}
+.active-count {
+  font-size: max(14px, 10px);
+}
+.search-field input {
+  font-size: max(14px, 11px);
+}
+.sort-control {
+  font-size: max(14px, 10px);
+}
+.sort-control select {
+  font-size: max(14px, 10px);
+}
+.demand-tab {
+  font-size: max(14px, 12px);
+}
+.pending-title {
+  font-size: max(14px, 13px);
+}
+.form-error {
+  font-size: max(14px, 13px);
+}
+.update-observacao-label {
+  font-size: max(14px, 12px);
+}
+.form-counter {
+  font-size: max(14px, 11px);
+}
+.field-hint {
+  font-size: max(14px, 13px);
+}
+.field-error {
+  font-size: max(14px, 13px);
+}
+.form-limit {
+  font-size: max(14px, 12px);
+}
+.results-count {
+  font-size: max(14px, 10px);
+}
+.demand-id, .priority {
+  font-size: max(14px, 9px);
+}
+.demand-title {
+  font-size: max(14px, 12px);
+}
+.demand-meta {
+  font-size: max(14px, 9px);
+}
+.demand-card-footer {
+  font-size: max(14px, 9px);
+}
+.empty-state p {
+  font-size: max(14px, 12px);
+}
+.pagination {
+  font-size: max(14px, 10px);
+}
+.departments-intro p {
+  font-size: max(14px, 10px);
+}
+.department-search input {
+  font-size: max(14px, 10px);
+}
+.department-count {
+  font-size: max(14px, 8px);
+}
+.department-card h3 {
+  font-size: max(14px, 10px);
+}
+.department-card > p {
+  font-size: max(14px, 9px);
+}
+.department-card > a {
+  font-size: max(14px, 9px);
+}
+.department-card > a span {
+  font-size: max(14px, 13px);
+}
+.department-empty-state {
+  font-size: max(14px, 11px);
+}
+@media (max-width: 520px) {
+  .form-notice {
+    font-size: max(14px, 12px);
+  }
+}
+@media (max-width: 520px) {
+  .sort-control {
+    font-size: max(14px, 10px);
+  }
+}
+@media (max-width: 520px) {
+  .sort-control select {
+    font-size: max(14px, 10px);
+  }
+}
+@media (max-width: 520px) {
+  .results-count {
+    font-size: max(14px, 9px);
+  }
+}
+@media (max-width: 520px) {
+  .demand-id, .priority, .demand-meta, .demand-card-footer {
+    font-size: max(14px, 9px);
+  }
+}
+@media (max-width: 520px) {
+  .demand-title {
+    font-size: max(14px, 12px);
+  }
+}
+@media (max-width: 520px) {
+  .departments-intro p, .department-search input {
+    font-size: max(14px, 10px);
+  }
+}
+@media (max-width: 520px) {
+  .department-count {
+    font-size: max(14px, 8px);
+  }
+}
+@media (max-width: 520px) {
+  .department-card h3 {
+    font-size: max(14px, 11px);
+  }
+}
+@media (max-width: 520px) {
+  .department-card > p, .department-card > a {
+    font-size: max(14px, 9px);
+  }
+}
+
+/* ---- Ajuste manual, consequência da fonte maior ----
+   Na Visão Geral, a linha do topo do card (selo de status + número) não cabia em telas médias
+   (~800 px) com o selo "Aguardando (processamento interno)" a 14 px e empurrava o número para
+   fora, criando rolagem lateral. Aqui a linha pode quebrar e o selo também. */
+.visao-geral .demand-card__top {
+  flex-wrap: wrap;
+  gap: 6px 10px;
+}
+
+.visao-geral .demand-card__top .badge {
+  white-space: normal;
+}
