@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import departamentos from '../data/departamentos.json'
 import { useDemandas } from '../hooks/useDemandas.js'
 import { filtrarVisaoGeral, indicadoresVisaoGeral, ordenarDemandas } from '../domain/listas.js'
-import { ehGerencia, podeVer, podeVerDetalhes, resumoParaSolicitante } from '../domain/permissoes.js'
+import { ehGerencia, podeVer, podeVerDetalhes, resumoParaSolicitante, setorResponsavel } from '../domain/permissoes.js'
 import { STATUS, estaFinal } from '../domain/status.js'
 import { siglaDoSetor } from '../domain/setores.js'
 import { Carregando, ErroDados } from '../components/EstadoDados.jsx'
@@ -64,7 +64,8 @@ export default function VisaoGeral({ usuario }) {
     () =>
       demandas
         .filter((demanda) => podeVer(usuario, demanda))
-        .filter((demanda) => !gerencia || !setor || demanda.destino === setor),
+        // Em triagem a demanda é da gerência: não aparece sob o setor de destino.
+        .filter((demanda) => !gerencia || !setor || setorResponsavel(demanda) === setor),
     [demandas, usuario, gerencia, setor],
   )
 

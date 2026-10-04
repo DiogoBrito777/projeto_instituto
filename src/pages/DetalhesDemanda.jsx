@@ -1,5 +1,5 @@
 import { useDemandas } from '../hooks/useDemandas.js'
-import { podeVer, podeVerDetalhes, resumoParaSolicitante } from '../domain/permissoes.js'
+import { podeAceitar, podeVer, podeVerDetalhes, resumoParaSolicitante, setorResponsavel } from '../domain/permissoes.js'
 import { podeEditar } from '../domain/acoes.js'
 import { prazoResolucao } from '../domain/prazos.js'
 import { estaFinal } from '../domain/status.js'
@@ -88,7 +88,8 @@ function DetalhesDemanda({ id, usuario }) {
               {completa ? (
                 <>
                   <DetailField label="Departamento">{nomeDoSetor(demand.destino)}</DetailField>
-                  <DetailField label="Responsável (setor)">{nomeDoSetor(demand.destino)}</DetailField>
+                  {/* Em triagem, o responsável é a gerência; "Departamento" segue mostrando o destino. */}
+                  <DetailField label="Responsável (setor)">{nomeDoSetor(setorResponsavel(demand))}</DetailField>
                   <DetailField label="Prazo">{prazo ? formatarDataHora(prazo.toISOString()) : 'Definido no aceite'}</DetailField>
                 </>
               ) : (
@@ -102,10 +103,11 @@ function DetalhesDemanda({ id, usuario }) {
             <p>{exibida.descricao}</p>
           </section>
 
-          {completa && podeEditar(usuario, demand) && (
+          {/* Pendente de aceite: o executor vai à tela Atualizar para aceitar ou recusar (Bloco 4-A). */}
+          {completa && (podeEditar(usuario, demand) || podeAceitar(usuario, demand)) && (
             <div className="detail-actions">
               <button className="detail-button detail-button--outline" type="button" onClick={() => { window.location.hash = `#demanda/${demand.id}/editar` }}>
-                Atualizar demanda
+                {podeAceitar(usuario, demand) ? 'Aceitar ou recusar' : 'Atualizar demanda'}
               </button>
             </div>
           )}

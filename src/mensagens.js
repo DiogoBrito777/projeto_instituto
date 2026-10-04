@@ -20,6 +20,14 @@ export const MENSAGENS = {
   enviando: 'Enviando…',
   envioErro: 'Não foi possível enviar. Seus dados continuam salvos. Tente novamente.',
   envioSucesso: (id) => `Demanda ${id} enviada com sucesso.`,
+  // Aceite e recusa (Bloco 4-A). Textos do catálogo, seção "Aceite, recusa e encerramento".
+  aceiteSemPrioridade: 'Escolha a prioridade para aceitar a demanda.',
+  aceiteConfirmacao: (prioridade, prazo) =>
+    `Você vai aceitar com prioridade ${prioridade}. O prazo será de ${prazo}. A prioridade não poderá ser alterada depois. Confirmar?`,
+  recusaSemMotivo: 'Explique por que esta demanda não é do seu setor.',
+  // Propostas do Bloco 4-A (o catálogo não tinha texto para estes casos).
+  recusaDescricao: 'A demanda vai para a triagem do Gerenciamento, que decide o destino.',
+  motivoLongo: 'O motivo deve ter no máximo 500 caracteres.',
   // Aviso de limite dos campos de texto (proposta, correção do teste manual da 2B).
   limite: {
     atingido: (limite) => `Limite de ${limite} caracteres atingido.`,
