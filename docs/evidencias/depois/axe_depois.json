@@ -1,0 +1,370 @@
+{
+  "geradoEm": "2026-10-04T03:26:44.334Z",
+  "axe": "4.13.0",
+  "rotas": {
+    "login (sem sessão) @1280": {
+      "violacoes": [],
+      "passaram": 32,
+      "incompletas": 0,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 1280,
+        "clientW": 1280
+      },
+      "foco": {
+        "focaveis": 4,
+        "semIndicadorDetectado": []
+      }
+    },
+    "#visao-geral [user01] @1280": {
+      "violacoes": [],
+      "passaram": 36,
+      "incompletas": 0,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 1280,
+        "clientW": 1280
+      },
+      "foco": {
+        "focaveis": 19,
+        "semIndicadorDetectado": []
+      }
+    },
+    "#demandas [user01] @1280": {
+      "violacoes": [],
+      "passaram": 37,
+      "incompletas": 0,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 1280,
+        "clientW": 1280
+      },
+      "foco": {
+        "focaveis": 14,
+        "semIndicadorDetectado": []
+      }
+    },
+    "#nova-demanda [user01] @1280": {
+      "violacoes": [],
+      "passaram": 37,
+      "incompletas": 0,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 1280,
+        "clientW": 1280
+      },
+      "foco": {
+        "focaveis": 12,
+        "semIndicadorDetectado": []
+      }
+    },
+    "#departamentos [user01] @1280": {
+      "violacoes": [],
+      "passaram": 36,
+      "incompletas": 0,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 1280,
+        "clientW": 1280
+      },
+      "foco": {
+        "focaveis": 8,
+        "semIndicadorDetectado": []
+      }
+    },
+    "#demanda/DM-2006 [user01] @1280": {
+      "violacoes": [],
+      "passaram": 30,
+      "incompletas": 0,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 1280,
+        "clientW": 1280
+      },
+      "foco": {
+        "focaveis": 9,
+        "semIndicadorDetectado": []
+      }
+    },
+    "#demanda/DM-2006/editar [user01] @1280": {
+      "violacoes": [],
+      "passaram": 39,
+      "incompletas": 0,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 1280,
+        "clientW": 1280
+      },
+      "foco": {
+        "focaveis": 17,
+        "semIndicadorDetectado": []
+      }
+    },
+    "#visao-geral [admin] @1280": {
+      "violacoes": [],
+      "passaram": 37,
+      "incompletas": 0,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 1280,
+        "clientW": 1280
+      },
+      "foco": {
+        "focaveis": 26,
+        "semIndicadorDetectado": []
+      }
+    },
+    "#demandas [admin] @1280": {
+      "violacoes": [],
+      "passaram": 37,
+      "incompletas": 0,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 1280,
+        "clientW": 1280
+      },
+      "foco": {
+        "focaveis": 20,
+        "semIndicadorDetectado": []
+      }
+    },
+    "#nova-demanda [admin] @1280": {
+      "violacoes": [],
+      "passaram": 37,
+      "incompletas": 0,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 1280,
+        "clientW": 1280
+      },
+      "foco": {
+        "focaveis": 12,
+        "semIndicadorDetectado": []
+      }
+    },
+    "#departamentos [admin] @1280": {
+      "violacoes": [],
+      "passaram": 36,
+      "incompletas": 0,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 1280,
+        "clientW": 1280
+      },
+      "foco": {
+        "focaveis": 11,
+        "semIndicadorDetectado": []
+      }
+    },
+    "#demanda/DM-2006 [admin] @1280": {
+      "violacoes": [],
+      "passaram": 30,
+      "incompletas": 0,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 1280,
+        "clientW": 1280
+      },
+      "foco": {
+        "focaveis": 8,
+        "semIndicadorDetectado": []
+      }
+    },
+    "#demanda/DM-2006/editar [admin] @1280": {
+      "violacoes": [],
+      "passaram": 32,
+      "incompletas": 0,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 1280,
+        "clientW": 1280
+      },
+      "foco": {
+        "focaveis": 7,
+        "semIndicadorDetectado": []
+      }
+    },
+    "login (sem sessão) @360": {
+      "violacoes": [],
+      "passaram": 32,
+      "incompletas": 0,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 360,
+        "clientW": 360
+      },
+      "foco": {
+        "focaveis": 4,
+        "semIndicadorDetectado": []
+      }
+    },
+    "#visao-geral [user01] @360": {
+      "violacoes": [],
+      "passaram": 37,
+      "incompletas": 1,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 360,
+        "clientW": 360
+      },
+      "foco": {
+        "focaveis": 19,
+        "semIndicadorDetectado": []
+      }
+    },
+    "#demandas [user01] @360": {
+      "violacoes": [],
+      "passaram": 38,
+      "incompletas": 1,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 360,
+        "clientW": 360
+      },
+      "foco": {
+        "focaveis": 14,
+        "semIndicadorDetectado": []
+      }
+    },
+    "#nova-demanda [user01] @360": {
+      "violacoes": [],
+      "passaram": 38,
+      "incompletas": 1,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 360,
+        "clientW": 360
+      },
+      "foco": {
+        "focaveis": 12,
+        "semIndicadorDetectado": []
+      }
+    },
+    "#departamentos [user01] @360": {
+      "violacoes": [],
+      "passaram": 37,
+      "incompletas": 1,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 360,
+        "clientW": 360
+      },
+      "foco": {
+        "focaveis": 8,
+        "semIndicadorDetectado": []
+      }
+    },
+    "#demanda/DM-2006 [user01] @360": {
+      "violacoes": [],
+      "passaram": 31,
+      "incompletas": 1,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 360,
+        "clientW": 360
+      },
+      "foco": {
+        "focaveis": 9,
+        "semIndicadorDetectado": []
+      }
+    },
+    "#demanda/DM-2006/editar [user01] @360": {
+      "violacoes": [],
+      "passaram": 40,
+      "incompletas": 1,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 360,
+        "clientW": 360
+      },
+      "foco": {
+        "focaveis": 17,
+        "semIndicadorDetectado": []
+      }
+    },
+    "#visao-geral [admin] @360": {
+      "violacoes": [],
+      "passaram": 38,
+      "incompletas": 1,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 360,
+        "clientW": 360
+      },
+      "foco": {
+        "focaveis": 26,
+        "semIndicadorDetectado": []
+      }
+    },
+    "#demandas [admin] @360": {
+      "violacoes": [],
+      "passaram": 38,
+      "incompletas": 1,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 360,
+        "clientW": 360
+      },
+      "foco": {
+        "focaveis": 20,
+        "semIndicadorDetectado": []
+      }
+    },
+    "#nova-demanda [admin] @360": {
+      "violacoes": [],
+      "passaram": 38,
+      "incompletas": 1,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 360,
+        "clientW": 360
+      },
+      "foco": {
+        "focaveis": 12,
+        "semIndicadorDetectado": []
+      }
+    },
+    "#departamentos [admin] @360": {
+      "violacoes": [],
+      "passaram": 37,
+      "incompletas": 1,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 360,
+        "clientW": 360
+      },
+      "foco": {
+        "focaveis": 11,
+        "semIndicadorDetectado": []
+      }
+    },
+    "#demanda/DM-2006 [admin] @360": {
+      "violacoes": [],
+      "passaram": 31,
+      "incompletas": 1,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 360,
+        "clientW": 360
+      },
+      "foco": {
+        "focaveis": 8,
+        "semIndicadorDetectado": []
+      }
+    },
+    "#demanda/DM-2006/editar [admin] @360": {
+      "violacoes": [],
+      "passaram": 33,
+      "incompletas": 1,
+      "reflowHorizontal": false,
+      "reflow": {
+        "scrollW": 360,
+        "clientW": 360
+      },
+      "foco": {
+        "focaveis": 7,
+        "semIndicadorDetectado": []
+      }
+    }
+  }
+}
