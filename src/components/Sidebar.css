@@ -87,7 +87,7 @@
   flex: 0 0 27px;
   place-items: center;
   border-radius: 50%;
-  background: #17816e;
+  background: #167d6a;
   color: #effaf7;
   font-size: 9px;
   font-weight: 600;
@@ -111,15 +111,16 @@
 }
 
 .profile-role {
-  color: rgb(245 248 247 / 55%);
+  color: rgb(245 248 247 / 75%);
   font-size: 8px;
 }
 
 .logout-button {
   display: grid;
-  width: 22px;
+  /* Alvo mínimo de 24 × 24 px (WCAG 2.5.8); antes tinha 22 px de largura. */
+  width: 24px;
   height: 24px;
-  flex: 0 0 22px;
+  flex: 0 0 24px;
   place-items: center;
   padding: 0;
   border: 0;

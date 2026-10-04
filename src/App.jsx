@@ -18,15 +18,6 @@ function PlusIcon() {
   )
 }
 
-function SearchIcon() {
-  return (
-    <svg aria-hidden="true" viewBox="0 0 24 24" className="search-icon">
-      <circle cx="10.8" cy="10.8" r="6.8" />
-      <path d="m16 16 4.3 4.3" />
-    </svg>
-  )
-}
-
 function getPageFromHash(hash) {
   if (hash === '#login') return 'login'
   if (hash === '#visao-geral') return 'visao-geral' // NOVO
@@ -55,7 +46,6 @@ function App() {
   const activePage = getPageFromHash(hash)
   const idDemanda = idDaRota(hash)
   const { usuario, entrar, sair } = useSessao()
-  const searchInput = useRef(null)
   const tituloDaPagina = useRef(null)
   const hashAnterior = useRef(hash)
   const isHomePage = activePage === 'visao-geral' // NOVO
@@ -102,12 +92,9 @@ function App() {
   return (
     <div className="app-shell">
       {/* WCAG 2.4.1: pular o menu. É botão (e não link "#conteudo") porque com roteamento por
-          hash um link para "#conteudo" trocaria de tela. Só aparece quando recebe o foco. */}
-      <button
-        className="skip-link"
-        type="button"
-        onClick={() => document.getElementById('conteudo')?.focus()}
-      >
+          hash um link trocaria de tela. Leva o foco ao título da tela (h1), que mostra contorno
+          visível; antes ia ao <main>, sem contorno, e o Enter parecia não fazer nada. */}
+      <button className="skip-link" type="button" onClick={() => tituloDaPagina.current?.focus()}>
         Ir para o conteúdo
       </button>
 
@@ -117,13 +104,13 @@ function App() {
         onSair={sair}
       />
 
-      <main className="app-main" id="conteudo" tabIndex={-1}>
+      <main className="app-main">
         <header className="topbar">
           {/* O único h1 da tela; tabIndex -1 permite receber o foco por código, sem entrar no Tab. */}
           <h1 className="page-title" ref={tituloDaPagina} tabIndex={-1}>
             {pageTitle}
           </h1>
-          {isCreatePage ? (
+          {isCreatePage && (
             <button
               className="topbar-action"
               type="button"
@@ -132,16 +119,7 @@ function App() {
               <PlusIcon />
               <span>Criar</span>
             </button>
-          ) : !isHomePage && !isDepartmentsPage && !isDetailPage && !isUpdatePage ? (
-            <button
-              className="topbar-search"
-              type="button"
-              onClick={() => searchInput.current?.focus()}
-              aria-label="Buscar demandas"
-            >
-              <SearchIcon />
-            </button>
-          ) : null}
+          )}
         </header>
 
         {isCreatePage ? (
@@ -157,7 +135,6 @@ function App() {
         ) : (
           <Demandas
             key={setorDaRota(hash) ?? 'todos'}
-            searchInput={searchInput}
             usuario={usuario}
             setorInicial={setorDaRota(hash)}
           />

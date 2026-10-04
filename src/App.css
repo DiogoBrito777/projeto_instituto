@@ -127,7 +127,6 @@
   width: 100%;
   border: 1px solid #d0d0d0;
   border-radius: 999px;
-  outline: none;
   background: #fff;
   color: #1e2926;
   font: inherit;
@@ -209,35 +208,6 @@
    PESQUISA DA BARRA SUPERIOR
    ========================================================= */
 
-.topbar-search {
-  display: grid;
-  width: 34px;
-  height: 34px;
-  flex: 0 0 34px;
-  place-items: center;
-  padding: 0;
-  border: 1px solid #d2d2d2;
-  border-radius: 9px;
-  background: #fff;
-  color: #161c1b;
-  cursor: pointer;
-  transition: background-color 140ms ease, border-color 140ms ease;
-}
-
-.topbar-search:hover {
-  border-color: #9bb5af;
-  background: #f7faf9;
-}
-
-.search-icon {
-  width: 19px;
-  height: 19px;
-  fill: none;
-  stroke: currentColor;
-  stroke-linecap: round;
-  stroke-width: 1.9;
-}
-
 /* =========================================================
    PÁGINA DE DEMANDAS
    ========================================================= */
@@ -277,14 +247,14 @@
 
 .department-description {
   margin: 8px 0 0;
-  color: #788782;
+  color: #6b7874;
   font-size: 12px;
   line-height: 1.5;
 }
 
 .active-count {
   margin: 0 0 8px;
-  color: #71817d;
+  color: #697774;
   font-size: 10px;
   white-space: nowrap;
 }
@@ -298,8 +268,22 @@
 }
 
 .search-field {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   width: min(100%, 430px);
+  color: #5f6b68;
+}
+
+/* Lupa dentro da busca (antes era um botão separado no topo da tela). */
+.search-field svg {
+  width: 15px;
+  height: 15px;
+  flex: 0 0 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-width: 1.8;
 }
 
 .search-field input {
@@ -309,7 +293,6 @@
   padding: 6px 10px;
   border: 1px solid transparent;
   border-radius: 7px;
-  outline: none;
   background: transparent;
   color: #273b37;
   font: inherit;
@@ -318,7 +301,7 @@
 }
 
 .search-field input::placeholder {
-  color: #8a9693;
+  color: #6b7874;
   opacity: 1;
 }
 
@@ -332,7 +315,7 @@
   align-items: center;
   justify-content: flex-end;
   gap: 7px;
-  color: #83908d;
+  color: #6a7673;
   font-size: 10px;
   white-space: nowrap;
 }
@@ -341,7 +324,6 @@
   max-width: 170px;
   padding: 5px 18px 5px 0;
   border: 0;
-  outline: none;
   background: transparent;
   color: #344641;
   font: inherit;
@@ -361,7 +343,8 @@
 .demand-tab {
   min-height: 32px;
   padding: 0 14px;
-  border: 1px solid #c9d9d5;
+  /* Borda com 3:1 para a aba ser reconhecível como botão (WCAG 1.4.11). */
+  border: 1px solid #6d968c;
   border-radius: 999px;
   background: #fff;
   color: #344641;
@@ -456,7 +439,7 @@
 
 .results-count {
   margin: 14px 0 11px;
-  color: #82908c;
+  color: #6a7774;
   font-size: 10px;
   line-height: 1.4;
 }
@@ -474,13 +457,15 @@
   min-height: 170px;
   flex-direction: column;
   padding: 15px 17px 14px;
-  border: 1px solid transparent;
+  /* Bloco 3: a borda era transparente (no celular, #edf1ef, quase invisível); com 3:1 o limite
+     do card fica perceptível (WCAG 1.4.11). */
+  border: 1px solid #6d968c;
   border-radius: 9px;
   transition: border-color 140ms ease, background-color 140ms ease;
 }
 
 .demand-card:hover {
-  border-color: #e5ecea;
+  border-color: #1b7766;
   background: #fcfdfd;
 }
 
@@ -493,7 +478,7 @@
 
 .demand-id,
 .priority {
-  color: #7f8d89;
+  color: #6b7874;
   font-size: 9px;
   font-weight: 500;
   letter-spacing: 0.03em;
@@ -501,6 +486,8 @@
 }
 
 .demand-title {
+  /* Palavra longa sem espaço ("fsdfsadff…") quebra em vez de estourar o card. */
+  overflow-wrap: anywhere;
   display: -webkit-box;
   min-height: 34px;
   margin: 15px 0 10px;
@@ -531,7 +518,7 @@
 
 .demand-meta p span {
   margin-right: 4px;
-  color: #87938f;
+  color: #6b7773;
 }
 
 .demand-card-footer {
@@ -541,7 +528,7 @@
   gap: 9px;
   margin-top: auto;
   padding-top: 14px;
-  color: #86938f;
+  color: #6b7874;
   font-size: 9px;
   line-height: 1.3;
 }
@@ -582,7 +569,7 @@
 
 .empty-state p {
   margin: 0;
-  color: #7b8985;
+  color: #6b7874;
   font-size: 12px;
 }
 
@@ -592,7 +579,7 @@
   justify-content: flex-end;
   gap: 10px;
   margin-top: 10px;
-  color: #788782;
+  color: #6b7874;
   font-size: 10px;
 }
 
@@ -655,7 +642,7 @@
 
 .departments-intro p {
   margin: 3px 0 0;
-  color: #7b8491;
+  color: #6c7581;
   font-size: 10px;
   line-height: 1.4;
 }
@@ -670,7 +657,7 @@
   border: 1px solid #e7e9ed;
   border-radius: 6px;
   background: #fff;
-  color: #77818e;
+  color: #6c7682;
 }
 
 .department-search svg {
@@ -688,7 +675,6 @@
   min-width: 0;
   padding: 0;
   border: 0;
-  outline: 0;
   background: transparent;
   color: #25313f;
   font: inherit;
@@ -696,7 +682,7 @@
 }
 
 .department-search input::placeholder {
-  color: #99a1ad;
+  color: #6b7585;
   opacity: 1;
 }
 
@@ -789,7 +775,7 @@
 
 .department-count--verde {
   background: #ecfdf3;
-  color: #159447;
+  color: #12823e;
 }
 
 .department-count--roxo {
@@ -799,7 +785,7 @@
 
 .department-count--laranja {
   background: #fff4ec;
-  color: #ea580c;
+  color: #c1480a;
 }
 
 .department-card h3 {
@@ -812,7 +798,7 @@
 
 .department-card > p {
   margin: 0;
-  color: #858d99;
+  color: #6c7581;
   font-size: 9px;
   line-height: 1.4;
 }
@@ -845,7 +831,7 @@
   display: grid;
   min-height: 160px;
   place-items: center;
-  color: #78838f;
+  color: #6c7682;
   font-size: 11px;
   text-align: center;
 }
@@ -1047,7 +1033,7 @@
   .demand-card {
     min-height: 145px;
     padding: 14px 13px 12px;
-    border-color: #edf1ef;
+    border-color: #6d968c;
   }
 
   .demand-id,

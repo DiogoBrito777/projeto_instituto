@@ -34,21 +34,30 @@ textarea {
   font: inherit;
 }
 
-button:focus-visible,
-a:focus-visible {
-  outline: 2px solid #58a495;
-  outline-offset: 3px;
+/* Bloco 3, fase 2 — foco visível em TODO elemento focável (WCAG 2.4.7, 1.4.11).
+   Antes valia só para botões e links, em #58a495 (2,9:1 sobre branco); #1b7766 dá 5,4:1.
+   :focus-visible aparece no uso por teclado; o clique com mouse mantém o visual dos colegas. */
+:focus-visible {
+  outline: 2px solid #1b7766;
+  outline-offset: 2px;
+}
+
+/* Sobre o fundo escuro da barra lateral, contorno claro (contraste 8:1 com #0d302d). */
+.sidebar :focus-visible {
+  outline-color: #9fdccf;
 }
 
 #root {
   min-height: 100vh;
 }
 
-/* Bloco 3, fase 1 — skip link "Ir para o conteúdo" (WCAG 2.4.1): fora da tela até receber o foco. */
+/* Skip link "Ir para o conteúdo" (WCAG 2.4.1): fora da tela até receber o foco.
+   Fica no topo, centralizado sobre a faixa do cabeçalho; antes ficava em cima do link
+   "Demanda de aço" da barra lateral e parecia que o texto do link mudava sozinho. */
 .skip-link {
-  position: absolute;
+  position: fixed;
   top: 8px;
-  left: 8px;
+  left: 50%;
   z-index: 100;
   padding: 10px 16px;
   border: 0;
@@ -57,15 +66,42 @@ a:focus-visible {
   color: #fff;
   font-size: 16px;
   cursor: pointer;
-  transform: translateY(-200%);
+  transform: translate(-50%, -200%);
 }
 
 .skip-link:focus {
-  transform: none;
+  transform: translate(-50%, 0);
 }
 
-/* Elementos que só recebem foco por código (título da página e <main>) não precisam de contorno:
-   não são clicáveis nem entram no Tab. */
-[tabindex='-1']:focus {
-  outline: none;
+/* No celular a barra lateral vira uma faixa no topo, com a marca à esquerda: o skip link vai
+   para a direita, onde não cobre nada. */
+@media (max-width: 760px) {
+  .skip-link {
+    right: 8px;
+    left: auto;
+    transform: translateY(-200%);
+  }
+
+  .skip-link:focus {
+    transform: none;
+  }
+}
+
+/* O título recebe o foco por código (troca de rota e skip link). O contorno mostra onde o foco
+   caiu; antes ficava escondido e o Enter no skip link parecia não fazer nada. */
+.page-title:focus {
+  outline: 2px solid #1b7766;
+  outline-offset: 4px;
+}
+
+/* Menos movimento para quem pediu isso ao sistema (WCAG 2.3.3). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }

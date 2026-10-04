@@ -11,7 +11,8 @@
   align-items: center;
   gap: 8px;
   margin: 0 0 17px;
-  color: #77908a;
+  /* Sobre o fundo #f3f7f6 da página (não branco): #5e736f dá 4,7:1. */
+  color: #5e736f;
   font-size: 9px;
   line-height: 1.4;
 }
@@ -66,7 +67,7 @@
 
 .detail-eyebrow {
   margin: 0;
-  color: #839893;
+  color: #657974;
   font-size: 8px;
   font-weight: 550;
   letter-spacing: 0.09em;
@@ -86,7 +87,7 @@
   padding: 4px 8px;
   border-radius: 999px;
   background: #edf5ff;
-  color: #2876d5;
+  color: #256ec6;
   font-size: 8px;
   white-space: nowrap;
 }
@@ -111,7 +112,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  color: #91a09c;
+  color: #687874;
   font-size: 8px;
 }
 
@@ -131,7 +132,7 @@
   padding: 2px 5px;
   border-radius: 3px;
   background: #fff0ee;
-  color: #d95c54;
+  color: #ca362d;
 }
 
 .detail-specifications,
@@ -165,11 +166,21 @@
 }
 
 .detail-field span {
-  color: #8a9b97;
+  color: #667773;
   font-size: 7px;
   letter-spacing: 0.09em;
   line-height: 1.35;
   text-transform: uppercase;
+}
+
+/* Bloco 3: palavra longa sem espaço quebra dentro do espaço disponível, em vez de estourar a
+   largura ou ser cortada (título, campos, descrição, histórico e caminho no topo da página). */
+.detail-summary h2,
+.detail-field strong,
+.detail-description p,
+.history-item strong,
+.detail-breadcrumb span {
+  overflow-wrap: anywhere;
 }
 
 .detail-field strong {
@@ -183,7 +194,7 @@
 
 .detail-description p {
   margin: 8px 0 0;
-  color: #73837f;
+  color: #697874;
   font-size: 8px;
   line-height: 1.65;
 }
@@ -292,7 +303,7 @@
 }
 
 .history-item time {
-  color: #91a09c;
+  color: #687874;
   font-size: 7px;
   line-height: 1.35;
 }
@@ -341,7 +352,7 @@
 
 .detail-dialog-copy {
   margin: 0 0 19px;
-  color: #788984;
+  color: #687773;
   font-size: 11px;
 }
 
@@ -360,7 +371,6 @@
   padding: 0 10px;
   border: 1px solid #dbe6e3;
   border-radius: 8px;
-  outline: 0;
   background: #fff;
   color: #243d38;
   font: inherit;
@@ -391,7 +401,8 @@
 }
 
 .demand-card--link:focus-visible {
-  outline: 2px solid #58a495;
+  /* #58a495 dava 2,9:1 sobre branco; #1b7766 (5,4:1) é o mesmo contorno do resto do app. */
+  outline: 2px solid #1b7766;
   outline-offset: 2px;
 }
 
@@ -423,7 +434,6 @@
   padding: 3px 9px;
   border: 1px solid #d8e3e0;
   border-radius: 8px;
-  outline: 0;
   color: #183632;
   font: inherit;
   font-size: 20px;
@@ -445,9 +455,8 @@
   padding: 0 9px 0 20px;
   border: 1px solid #d8e7f5;
   border-radius: 999px;
-  outline: 0;
   background: #edf5ff;
-  color: #2876d5;
+  color: #256ec6;
   font: inherit;
   font-size: 10px;
   cursor: pointer;
@@ -460,12 +469,13 @@
 }
 
 .update-priority-control select {
+  /* Alvo mínimo de 24 px de altura (WCAG 2.5.8; apontado pelo axe "antes"). */
+  min-height: 24px;
   padding: 2px 7px;
   border: 1px solid #f1d6d2;
   border-radius: 4px;
-  outline: 0;
   background: #fff0ee;
-  color: #d95c54;
+  color: #ca362d;
   font: inherit;
   font-size: inherit;
   cursor: pointer;
@@ -483,7 +493,7 @@
   min-width: 0;
   flex-direction: column;
   gap: 5px;
-  color: #839893;
+  color: #657974;
   font-size: 9px;
   letter-spacing: 0.07em;
   text-transform: uppercase;
@@ -498,7 +508,6 @@
   padding: 0 11px;
   border: 1px solid #dfe8e6;
   border-radius: 7px;
-  outline: 0;
   background: #fff;
   color: #29443f;
   font: inherit;
@@ -523,7 +532,6 @@
   padding: 11px 12px;
   border: 1px solid #dfe8e6;
   border-radius: 9px;
-  outline: 0;
   color: #647771;
   font: inherit;
   font-size: 11px;

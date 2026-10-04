@@ -75,7 +75,8 @@ function descricaoDoPerfil(usuario) {
 function Sidebar({ activeItem, usuario, onSair }) {
   return (
     <aside className="sidebar">
-      <a className="sidebar-brand" href="#inicio">
+      {/* Antes "#inicio", rota que não existe (caía em Demandas); a página inicial é a Visão Geral. */}
+      <a className="sidebar-brand" href="#visao-geral">
         Demanda de aço
       </a>
 

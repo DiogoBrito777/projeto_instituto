@@ -69,7 +69,7 @@ function DemandCard({ demand, usuario }) {
   )
 }
 
-function Demandas({ searchInput, usuario, setorInicial }) {
+function Demandas({ usuario, setorInicial }) {
   const { carregando, demandas, erro, resetar } = useDemandas()
   const gerencia = ehGerencia(usuario)
   const abas = abasDoPerfil(usuario)
@@ -143,8 +143,12 @@ function Demandas({ searchInput, usuario, setorInicial }) {
       <div className="demands-toolbar">
         <label className="search-field">
           <span className="sr-only">Buscar por título, ID ou solicitante</span>
+          {/* Lupa dentro da busca, como em Departamentos e na Visão Geral (substitui o botão do topo). */}
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="10.8" cy="10.8" r="6.8" />
+            <path d="m16 16 4.3 4.3" />
+          </svg>
           <input
-            ref={searchInput}
             type="search"
             value={searchTerm}
             onChange={(event) => updateSearch(event.target.value)}
