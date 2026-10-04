@@ -9,6 +9,8 @@ export default function VisaoGeralFilterTabs({ ativo, onChange, contagens }) {
       label: 'Alta prioridade',
       count: contagens['alta-prioridade'],
     },
+    // Bloco 4B: só com o que o perfil vê (setor executor vê 0; quem abriu vê as suas).
+    { key: 'triagem', label: 'Em triagem', count: contagens.triagem },
     { key: 'concluidas', label: 'Concluídas' },
   ]
 
@@ -30,7 +32,7 @@ export default function VisaoGeralFilterTabs({ ativo, onChange, contagens }) {
           </button>
         ))}
       </div>
-      <span className="filters__sort">Ordenar: Recentes</span>
+      <span className="filters__sort">Ordenar: atenção primeiro, depois recentes</span>
     </section>
   )
 }

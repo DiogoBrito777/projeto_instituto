@@ -1127,3 +1127,31 @@
     font-size: 9px;
   }
 }
+
+/* Bloco 4B — selo de atenção nos cards da lista de Demandas.
+   O texto diz tudo sozinho ("Atrasada para aceite"); cor e borda são só reforço (WCAG 1.4.1).
+   Contraste: #7a4a00 sobre #fff4dc = 6,85:1; #a3271b sobre #fdecea = 6,41:1. Fonte já nasce com 14 px. */
+.attention-tag {
+  width: fit-content;
+  max-width: 100%;
+  margin: 8px 0 0;
+  padding: 3px 10px;
+  border: 1px solid #c99a3d;
+  border-radius: 999px;
+  background: #fff4dc;
+  color: #7a4a00;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* Bloco 4B — o filtro de status cabe "Aguardando (processamento interno)" sem cortar. */
+.sort-control select.status-filter {
+  max-width: 260px;
+}
+
+.attention-tag--late {
+  border-color: #d9796f;
+  background: #fdecea;
+  color: #a3271b;
+}

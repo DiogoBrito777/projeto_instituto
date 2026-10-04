@@ -1,8 +1,15 @@
 import { useMemo, useState } from 'react'
 import departamentos from '../data/departamentos.json'
 import { useDemandas } from '../hooks/useDemandas.js'
-import { filtrarVisaoGeral, indicadoresVisaoGeral, ordenarDemandas } from '../domain/listas.js'
+import {
+  avisoDeAtencao,
+  filtrarVisaoGeral,
+  indicadoresVisaoGeral,
+  linkDaLista,
+  ordenarPorAtencao,
+} from '../domain/listas.js'
 import { ehGerencia, podeVer, podeVerDetalhes, resumoParaSolicitante, setorResponsavel } from '../domain/permissoes.js'
+import { seloDeAtencao } from '../domain/atencao.js'
 import { STATUS, estaFinal } from '../domain/status.js'
 import { siglaDoSetor } from '../domain/setores.js'
 import { Carregando, ErroDados } from '../components/EstadoDados.jsx'
@@ -23,7 +30,8 @@ function chaveDeCor(status) {
 
 // Converte a demanda da base para o formato que o card da Visão Geral já usava.
 // Quem só abriu vê o resumo: sem histórico, então a data mostrada é a de criação (RN03).
-function paraCard(demanda, usuario) {
+// Bloco 4B: "selo" de atenção só para executor/gerência; o resumo de quem abriu não tem selo.
+function paraCard(demanda, usuario, agora) {
   if (podeVerDetalhes(usuario, demanda)) {
     const ultimoEvento = demanda.historico[demanda.historico.length - 1]
     return {
@@ -35,6 +43,7 @@ function paraCard(demanda, usuario) {
       categoria: demanda.tipo,
       responsavel: siglaDoSetor(demanda.destino),
       atualizadoEm: `Atualizada em ${formatarDataHora(ultimoEvento?.data ?? demanda.criadaEm)}`,
+      selo: seloDeAtencao(demanda, usuario, agora),
     }
   }
   const resumo = resumoParaSolicitante(demanda)
@@ -69,14 +78,22 @@ export default function VisaoGeral({ usuario }) {
     [demandas, usuario, gerencia, setor],
   )
 
+  // Bloco 4B: card de um único status vira link para Demandas já filtrada (com o setor da gerência).
   const indicadores = useMemo(
-    () => indicadoresVisaoGeral(base, usuario, agora, setor || null),
+    () =>
+      indicadoresVisaoGeral(base, usuario, agora, setor || null).map((indicador) => ({
+        ...indicador,
+        href: indicador.status ? linkDaLista(indicador.status, setor || null) : null,
+      })),
     [base, usuario, agora, setor],
   )
+
+  const aviso = useMemo(() => avisoDeAtencao(base, usuario, setor || null), [base, usuario, setor])
 
   const contagens = {
     pendentes: filtrarVisaoGeral(base, usuario, 'pendentes').length,
     'alta-prioridade': filtrarVisaoGeral(base, usuario, 'alta-prioridade').length,
+    triagem: filtrarVisaoGeral(base, usuario, 'triagem').length,
   }
 
   const demandasFiltradas = useMemo(() => {
@@ -89,8 +106,9 @@ export default function VisaoGeral({ usuario }) {
         demanda.tipo.toLowerCase().includes(termo) ||
         demanda.id.toLowerCase().includes(termo),
     )
-    return ordenarDemandas(filtradas, 'recentes').map((demanda) => paraCard(demanda, usuario))
-  }, [base, usuario, busca, filtroAtivo])
+    // Bloco 4B: triagem e pendentes primeiro (a mais antiga antes); o resto continua por "recentes".
+    return ordenarPorAtencao(filtradas, usuario, 'recentes').map((demanda) => paraCard(demanda, usuario, agora))
+  }, [base, usuario, busca, filtroAtivo, agora])
 
   function abrirNovaDemanda() {
     window.location.hash = '#nova-demanda'
@@ -124,6 +142,31 @@ export default function VisaoGeral({ usuario }) {
         <ErroDados erro={erro} onResetar={resetar} />
       ) : (
         <>
+          {/* Bloco 4B: só aparece quando há algo esperando ação de quem está logado. */}
+          {aviso.total > 0 && (
+            <section className="vg-aviso" aria-labelledby="vg-aviso-titulo">
+              <h2 id="vg-aviso-titulo" className="vg-aviso__titulo">
+                Precisa de atenção:
+              </h2>
+              <ul className="vg-aviso__lista">
+                {aviso.triagem > 0 && (
+                  <li>
+                    <a href={linkDaLista(STATUS.EM_TRIAGEM, setor || null)}>
+                      {aviso.triagem} aguardando triagem
+                    </a>
+                  </li>
+                )}
+                {aviso.pendentes > 0 && (
+                  <li>
+                    <a href={linkDaLista(STATUS.PENDENTE_ACEITE, setor || null)}>
+                      {aviso.pendentes} {aviso.pendentes === 1 ? 'pendente' : 'pendentes'} de aceite
+                    </a>
+                  </li>
+                )}
+              </ul>
+            </section>
+          )}
+
           <StatsCards indicadores={indicadores} />
 
           <SearchBar value={busca} onChange={setBusca} />
