@@ -322,3 +322,50 @@ Uma entrada por bloco/PR (formato em `docs/CONVENCOES.md`).
   - navegador embutido: com duas demandas criadas pela Nova Demanda (título de 60 caracteres + descrição de 500; título e descrição com uma palavra gigante sem espaço), os cards da Visão Geral ficaram com a mesma altura dos normais (274 px em 1280 e em 360 px), a descrição em 3 linhas com "…", a palavra gigante quebrando dentro do card, sem rolagem lateral nas duas larguras, texto completo no DOM e fonte de 14/16 px;
   - depois, "Resetar dados";
   - **não executado:** Edge, leitor de tela, celular real.
+
+### 2026-10-04 · Ajustes do teste manual (9 itens) · fix/ajustes-teste-manual
+Origem: bateria de testes manuais do autor (Bruno Diogo). Cada item foi feito separado; depois de cada um rodaram `npm test`, lint e build.
+
+1. **Todos os cards da Visão Geral são clicáveis.**
+   - `listas.js`: `FILTROS_DO_PAINEL` (Abertas, Recebidas abertas, A expirar, Vencidas, Aguardando > 7 dias, Solicitadas por mim em aberto), `filtrarPorPainel`, `filtroDoPainel` e `linkDoIndicador` (`#demandas?filtro=…`, mais `&aba=solicitadas` quando é o caso). O mesmo teste conta o card e filtra a lista.
+   - `App.jsx` lê `filtro` e `aba` do hash.
+   - `Demandas.jsx` mostra "Filtro da Visão Geral: X" com o botão "Limpar filtro".
+   - 6 testes. No navegador, os 7 cards do `admin` bateram com o "Exibindo N de N".
+2. **"Pendentes de aceite" repetido em todas as páginas.**
+   - **Não era intencional:** o grupo ficava fora da paginação (página 1 com 2 + 6, página 2 com 2 + 5: 15 de 13).
+   - **Decisão:** `paginarComPendentes` pagina a lista inteira, com o grupo primeiro; o título mostra o total do grupo.
+   - 4 testes. No navegador: 13 demandas em 3 páginas, sem repetição.
+3. **Busca única:** `combinaComBusca` procura em ID, título, descrição, tipo, solicitante e setor de origem, sem diferença de acento nem de maiúsculas. Todos esses campos estão no resumo de quem abriu (RN03). Demandas e Visão Geral usam a mesma regra. 4 testes; "lucas" acha a DM-2002 na Visão Geral.
+4. **Bordas e contraste (WCAG 1.4.11):**
+   - Busca de Demandas: sem foco tinha borda transparente; agora `#6d968c`, 3,29:1 sobre o branco. A fonte passou de 11 px (14 px pela fonte-minima) para 16 px.
+   - Selects de filtro: estavam sem borda; agora `#6d968c`, 3,29:1. Também perderam o `max-width: 170px` que cortava "Tecnologia da Informação (TI)".
+   - Visão Geral: `--color-border` foi de `#e7e7e4` (1,24:1) para `#868a85` (3,51:1) em busca, abas e cards.
+   - Departamentos: busca e cards foram de `#e7e9ed`/`#eceef1` (1,10 e 1,06:1 sobre `#f3f4f6`) para `#868a85` (3,19:1).
+   - Cards de Demandas: já tinham `#6d968c` (3,29:1); não mudaram.
+   - O anel duplo de foco foi mantido.
+   - Em tela estreita, os rótulos dos filtros ficam em coluna, alinhados, com o select na largura toda.
+   - Plural certo ("1 demanda ativa", "1 demanda aberta") com `quantidade()` em `formatos.js`; 2 testes.
+5. **Aviso "Limite de 500 caracteres atingido" que voltava.**
+   - Causa: o aviso não era reiniciado ao reabrir o pop-up, e uma colagem bloqueada no limite deixava guardado um tamanho "tentado" velho.
+   - Correção: `avisoDeLimite` ignora esse valor velho; o hook ganhou `reiniciar(valor)`, chamado ao abrir os pop-ups da triagem e da recusa; a colagem que não cabe avisa na hora.
+   - 3 testes, um deles reproduzindo o bug.
+6. **Menu em 360 px e com zoom alto:** os itens quebram linha em vez de virar uma faixa com rolagem. Sem itens cortados e sem rolagem lateral em 320, 360, 640 e 1280 px.
+7. **Nova Demanda:**
+   - rótulos "(obrigatório)"/"(obrigatória)", como nos pop-ups;
+   - `required` e `aria-required="true"`; o `noValidate` evita os balões do navegador;
+   - as mensagens e o foco no 1º erro continuam iguais.
+8. **Botão "Criar" do topo removido**, junto com `PlusIcon`, `.topbar-action`, `.button-icon` e a regra da fonte-minima. Nenhum teste dependia dele. Ordem do Tab: Origem → Destino → Título → Descrição → "Criar Nova Demanda"; o Tipo fica desativado até escolher o destino.
+9. **"Resetar dados" com confirmação:**
+   - pop-up acessível com o `Dialogo` (foco começa em "Voltar"; Esc e "Voltar" cancelam; o foco volta ao botão);
+   - confirmar restaura o seed e mostra "Dados de demonstração restaurados.";
+   - a regra fica em `src/services/reset.js`, com 3 testes que usam o storage de verdade.
+
+- **Verificação:**
+  - `npm test` 12 arquivos / **245** testes passaram (22 novos) · lint 0 avisos e 0 erros · build OK;
+  - navegador embutido, como `admin`: itens 1, 2, 3, 5, 6, 7, 8 e 9 conferidos.
+- **Limitações:**
+  - não há biblioteca de teste de interface (jsdom/Testing Library); por isso os testes cobrem as regras puras, não os cliques. Instalar exige baixar pacotes: decisão do grupo;
+  - o navegador embutido não emula menos de 320 px, então o zoom de 500% (256 px) não foi conferido. `index.css` tem `min-width: 320px` no `html`/`body` (código anterior), o que pode gerar rolagem da página inteira abaixo disso;
+  - a colagem real (item 5) não pôde ser feita, porque a área de transferência é bloqueada no navegador embutido;
+  - "Limpar filtro" limpa a lista, mas o `?filtro=` continua no endereço até a próxima navegação.
+- **Não executado:** Edge, leitor de tela, celular real, Lighthouse, axe.

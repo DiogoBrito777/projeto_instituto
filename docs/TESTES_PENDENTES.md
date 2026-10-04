@@ -80,10 +80,24 @@ Demandas do seed usadas abaixo:
 
 > **Fix visual "card gordo" (cards da Visão Geral limitados a 3 linhas):** conferido só pelo assistente no navegador embutido (1280 e 360 px). **Pendente:** Edge (ver os cards com título de 60 e descrição de 500 caracteres), leitor de tela (confirmar que lê o texto inteiro, não só as 3 linhas) e celular real.
 
+### Ajustes do teste manual — reteste necessário (9 itens · 9 pendentes)
+Corrigidos na branch `fix/ajustes-teste-manual` a partir da bateria manual do autor. Conferidos **só pelo assistente** no navegador embutido; falta o reteste do autor no Edge.
+| # | Item corrigido | Quem | Como retestar | Resultado | Data | Observação |
+|---|---|---|---|---|---|---|
+| R.1 | Todos os cards da Visão Geral levam a Demandas filtrada | Bruno | `admin`: clique em Abertas, A expirar, Vencidas e Aguardando; o "Exibindo N de N" bate com o card; o aviso "Filtro da Visão Geral" aparece; "Limpar filtro" volta a lista toda. Repita com `user01` em "Solicitadas por mim em aberto" (abre na aba Solicitadas). | ☐ passou · ☐ não passou | | Assistente: os 7 cards do `admin` bateram. |
+| R.2 | "Pendentes de aceite" não se repete entre as páginas | Bruno | `admin` → Demandas: página 1 com 2 pendentes + 4; páginas 2 e 3 sem o grupo; 13 demandas no total. | ☐ passou · ☐ não passou | | |
+| R.3 | Busca da Visão Geral acha pelo solicitante | Bruno | Visão Geral → "Lucas" → DM-2002. Em Demandas, uma palavra da descrição também acha. | ☐ passou · ☐ não passou | | |
+| R.4 | Bordas visíveis, select sem cortar, fonte da busca, rótulos alinhados, plural | Bruno | Ver a busca e os selects sem foco (borda visível); "Tecnologia da Informação (TI)" inteiro; em 360 px, rótulos em coluna; "1 demanda aberta" em Departamentos. | ☐ passou · ☐ não passou | | |
+| R.5 | Aviso de limite não volta ao reabrir o pop-up | Bruno | Triagem → Cancelar: cole um texto acima de 500, apague, feche, reabra e digite 1 caractere: nenhum aviso. | ☐ passou · ☐ não passou | | A colagem real não pôde ser feita no navegador embutido. |
+| R.6 | Menu em 360 px e com zoom de 400%/500% | só pessoa | Edge com Ctrl + até 400% e 500%: os itens do menu quebram linha, sem cortar e sem rolagem lateral. | ☐ passou · ☐ não passou | | 500% (256 px) não conferido: `min-width: 320px` no `html`/`body` pode causar rolagem da página. |
+| R.7 | Nova Demanda com "(obrigatório)" | Bruno + só pessoa | Ver os rótulos; enviar vazio (erros iguais, foco no Destino); com o leitor de tela, ouvir "obrigatório" nos campos. | ☐ passou · ☐ não passou | | |
+| R.8 | Sem o botão "Criar" no topo da Nova Demanda | Bruno | Abrir Nova Demanda: não há botão no topo; Tab: Origem → Destino → Título → Descrição → "Criar Nova Demanda". | ☐ passou · ☐ não passou | | |
+| R.9 | "Resetar dados" pede confirmação | Bruno | Login → "Resetar dados" → pop-up; Esc ou "Voltar" não apaga (crie uma demanda antes e confira que ela continua); "Resetar dados" no pop-up mostra "Dados de demonstração restaurados.". | ☐ passou · ☐ não passou | | |
+
 ---
 
 ## 2. Roteiro manual no Edge (15 a 20 minutos)
-Preparação (1 min): `npm run dev`, Edge, `http://localhost:5173`, **Resetar dados**.
+Preparação (1 min): `npm run dev`, Edge, `http://localhost:5173`, **Resetar dados** (desde os ajustes do teste manual, confirme no pop-up).
 
 1. **Login e teclado (2 min).**
    - Recarregue. O 1º Tab mostra "Ir para o conteúdo"; Enter leva o foco ao título (h1), com contorno.
