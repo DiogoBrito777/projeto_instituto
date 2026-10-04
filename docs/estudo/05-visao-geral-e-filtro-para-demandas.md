@@ -39,7 +39,7 @@
 3. Clique em "Limpar filtro" → volta a lista toda.
 4. Mostre o endereço no navegador: `#demandas?filtro=vencidas`.
 
-## (e) Perguntas prováveis
+## (e) Perguntas de revisão
 - **Como o filtro vem de outra tela?** Pelo endereço: o card é um link `#demandas?filtro=…`; o `App.jsx` lê e passa para a tela Demandas.
 - **Como garantem que o número do card bate com a lista?** O mesmo teste conta e filtra (`FILTROS_DO_PAINEL`); há testes automáticos para cada card.
 - **Por que no hash e não em `?` normal?** O app é de uma página só e troca de tela pelo hash; tudo o que muda a tela fica no hash.

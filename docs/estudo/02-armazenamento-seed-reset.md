@@ -29,7 +29,7 @@ Guarda as demandas no próprio navegador (`localStorage`), começando de uma lis
 3. Saia → "Resetar dados" → "Voltar": ela continua. "Resetar dados" → confirmar: aparece "Dados de demonstração restaurados." e ela some.
 4. F12 → Application → Local Storage: mostre a chave `demanda-de-aco:v1:demandas`.
 
-## (e) Perguntas prováveis
+## (e) Perguntas de revisão
 - **Por que `localStorage`?** O enunciado proíbe back-end e aceita "JSON ou equivalente". O JSON é só a semente; o `localStorage` guarda as mudanças (ADR-02).
 - **Por que as datas são "há X horas"?** Para sempre haver demandas no prazo, a expirar e vencidas no dia da apresentação.
 - **Por que os números mudam durante o dia?** Os prazos usam o relógio do navegador; com o tempo, uma demanda passa do prazo. Por isso: Resetar antes de demonstrar.

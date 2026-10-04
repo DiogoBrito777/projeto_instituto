@@ -26,7 +26,7 @@ Um único componente para todos os pop-ups: "Demanda enviada", aceite, recusa, t
 2. Aperte Tab várias vezes: o foco não sai do pop-up.
 3. Esc → o pop-up fecha e o foco volta ao botão "Resetar dados".
 
-## (e) Perguntas prováveis
+## (e) Perguntas de revisão
 - **Por que prender o foco?** Quem usa só teclado se perderia "atrás" do pop-up (WCAG 2.1.1 e 2.4.3).
 - **Por que devolver o foco?** Para a pessoa continuar de onde estava, e não voltar ao topo da página.
 - **Por que um componente só?** Para todos os pop-ups terem o mesmo comportamento; corrigir num lugar corrige em todos.

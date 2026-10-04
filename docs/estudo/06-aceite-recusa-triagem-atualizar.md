@@ -39,7 +39,7 @@ A demanda nasce "Pendente de aceite". O setor de destino **aceita**, escolhendo 
 2. `admin` → DM-2013 → "Triar demanda" → aparecem o motivo e quem recusou → redirecionar para Hidráulica, "Vazamento", com justificativa.
 3. `user02` → DM-2013 → "Aceitar até" = 24 h depois do redirecionamento.
 
-## (e) Perguntas prováveis
+## (e) Perguntas de revisão
 - **Quem define a prioridade?** O setor que executa, no aceite (RN10). A gerência não define (RN05).
 - **Por que a justificativa no redirecionamento?** Cada redirecionamento dá mais 24 h; sem motivo registrado, o prazo poderia ser esticado sem ninguém saber por quê.
 - **Uma demanda concluída pode ser reaberta?** Não (RN20). Reabrir com citação é trabalho futuro (RN24).

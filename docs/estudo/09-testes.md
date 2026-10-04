@@ -32,7 +32,7 @@ Rodar: `npm test` (script `vitest run` no `package.json`). Contagem em 04/10/202
 1. No CMD: `npm test` → "Test Files 12 passed, Tests 245 passed".
 2. Abra `src/domain/atencao.test.js` e leia um teste: "aceite: 47 h e exatamente 48 h NÃO estão atrasadas; 48 h e 1 min está".
 
-## (e) Perguntas prováveis
+## (e) Perguntas de revisão
 - **O que os testes NÃO cobrem?** Cliques, foco e o visual: não há biblioteca de teste de interface (jsdom/Testing Library). Isso foi testado à mão.
 - **Como testar um prazo de 24 h sem esperar 24 h?** A função recebe o "agora"; o teste monta uma demanda "de 24 h atrás".
 - **Como sabem que um setor não vê o que é de outro?** Há testes negativos, ex.: "TI NÃO recebe demanda entre Hidráulica e Elétrica em nenhuma aba".

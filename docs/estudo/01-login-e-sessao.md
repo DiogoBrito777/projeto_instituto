@@ -26,7 +26,7 @@ Só deixa usar o sistema quem entrou com um dos 5 usuários de teste, e cada usu
 3. Clique em Sair (no menu lateral) → volta ao login.
 4. Entre com `user03` → o menu mostra "Equipe Administrativa".
 
-## (e) Perguntas prováveis
+## (e) Perguntas de revisão
 - **Onde fica a senha?** Em `usuarios.json`, em texto. É simulação; num sistema real, ficaria guardada como hash, num servidor.
 - **Por que `sessionStorage` e não `localStorage`?** Para a sessão acabar ao fechar a aba. As demandas ficam no `localStorage` porque precisam continuar.
 - **Dá para burlar?** Sim: editando o `sessionStorage` pelo F12. Está documentado como limitação (DOCUMENTACAO, seção 20.4).

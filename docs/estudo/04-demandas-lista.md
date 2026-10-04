@@ -26,7 +26,7 @@ Mostra as demandas que o perfil pode ver, separadas em abas, com busca, filtros,
 3. "Ordenar por: Mais recentes" → a ordem muda.
 4. Vá até a página 2 → o grupo de pendentes não se repete.
 
-## (e) Perguntas prováveis
+## (e) Perguntas de revisão
 - **Como garantem que um setor não vê o que é de outro?** Toda lista passa primeiro por `podeVer` (`demandasDaAba`), e há testes para isso (`listas.test.js`, `permissoes.test.js`).
 - **Por que triagem e pendentes vêm primeiro?** Estão paradas, esperando alguém agir (proposta 13 da ata de 03/10).
 - **A busca mostra campos escondidos?** Não: só campos que quem abriu também vê. Há teste: "não procura em campos internos".

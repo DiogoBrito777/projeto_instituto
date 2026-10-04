@@ -1,14 +1,15 @@
 # Material de estudo — Demanda de Aço (LEIA PRIMEIRO)
 
-> Para quem **não escreveu o código** conseguir explicar na apresentação (terça, 06/10/2026, à noite).
+> Material de apoio da equipe para a apresentação (terça, 06/10/2026, à noite). A apresentação é conduzida pelo professor, que pode perguntar qualquer parte a qualquer integrante; por isso todos devem conhecer o projeto inteiro.
 > Tudo aqui cita arquivos e funções que existem de verdade no projeto (conferido em 04/10/2026). Se algo não estiver pronto, está escrito.
 
 ## Como usar este material
 1. Leia este arquivo inteiro (10 min).
-2. Escolha a parte que você vai apresentar e leia o arquivo dela (01 a 10).
-3. Rode o app e faça a "demonstração em 1 minuto" do seu arquivo.
-4. Leia as perguntas rápidas (`90-PERGUNTAS-RAPIDAS.md`) e as falhas conhecidas (`92-FALHAS-CONHECIDAS-PARA-FALAR.md`).
-5. Ensaie com o roteiro (`91-ROTEIRO-DA-APRESENTACAO.md`).
+2. Leia o `11-react-do-zero.md` (conceitos básicos de React) e depois os arquivos 01 a 16, todos.
+3. Rode o app e faça a "demonstração em 1 minuto" de cada arquivo que tiver uma.
+4. Leia as perguntas de revisão (`90-PERGUNTAS-RAPIDAS.md`) e as falhas conhecidas (`92-FALHAS-CONHECIDAS-PARA-FALAR.md`).
+5. Pratique a demonstração com o roteiro (`91-ROTEIRO-DA-APRESENTACAO.md`).
+6. Responda sozinho(a) ao guia de autoavaliação (`17-material-de-apresentacao.md`) até acertar todas.
 
 ## Índice
 | Arquivo | Assunto |
@@ -23,8 +24,15 @@
 | `08-acessibilidade.md` | O que foi feito de acessibilidade e as evidências |
 | `09-testes.md` | Testes automáticos (Vitest) e testes manuais |
 | `10-processo-git.md` | Branches, PRs, como o trabalho foi organizado |
-| `90-PERGUNTAS-RAPIDAS.md` | 26 perguntas prováveis com resposta curta |
-| `91-ROTEIRO-DA-APRESENTACAO.md` | Roteiro de 8 a 10 minutos |
+| `11-react-do-zero.md` | Conceitos básicos de React: componente, props, estado, hooks, JSX, glossário |
+| `12-fluxo-de-dados-e-json.md` | Os JSON, o caminho dos dados, quem lê e quem escreve, número DM-xxxx, reset |
+| `13-cores-e-estilos.md` | Onde ficam os CSS e as cores, cores de status, contraste, como mudar um botão |
+| `14-barras-de-filtro-e-busca.md` | Todos os controles de busca, filtro, ordenação e paginação, e a ordem em que são aplicados |
+| `15-filtro-da-visao-geral-e-destaques.md` | Como o card leva à lista filtrada (pela URL) e cada destaque (aviso, chips, selos) |
+| `16-caminho-do-usuario-e-navegacao.md` | Caminho do usuário, navegação por perfil, endereços válidos, máquina de estados |
+| `17-material-de-apresentacao.md` | Guia de autoavaliação (38 perguntas de revisão com resposta e onde conferir), como responder com honestidade, cola de uma página |
+| `90-PERGUNTAS-RAPIDAS.md` | 26 perguntas de revisão com resposta curta |
+| `91-ROTEIRO-DA-APRESENTACAO.md` | Roteiro de demonstração: preparação, ordem das telas e demonstrações avulsas |
 | `92-FALHAS-CONHECIDAS-PARA-FALAR.md` | Como falar das falhas e do que não foi feito |
 
 ## Mapa do projeto (pastas)

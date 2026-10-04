@@ -29,7 +29,7 @@ Qualquer perfil registra uma demanda para outro setor: a origem e a data são au
 2. Destino Elétrica → Tipo "Outros" → título e descrição → enviar → pop-up com o número.
 3. Abra `http://localhost:5173/?falha=1#nova-demanda` (o `?falha=1` vem **antes** do `#`), envie → mensagem de erro e formulário mantido.
 
-## (e) Perguntas prováveis
+## (e) Perguntas de revisão
 - **Por que não tem campo de prioridade?** Quem executa conhece a urgência real e define a prioridade no aceite (RN08, RN10).
 - **Como o leitor de tela sabe do erro?** O erro fica ligado ao campo (`aria-describedby`), o campo fica `aria-invalid` e recebe o foco.
 - **O que é o `?falha=1`?** Um gancho de teste para mostrar o estado de erro, já que não há servidor real que possa falhar.

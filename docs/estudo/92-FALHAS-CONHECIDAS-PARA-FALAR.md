@@ -1,6 +1,6 @@
 # 92 — Falhas conhecidas e o que não foi feito: como falar com honestidade
 
-> O professor disse que **não precisa entregar tudo**, mas que é preciso **justificar e saber explicar**. A regra do grupo: o que não foi testado é dito como "não testado", nunca como "funciona".
+> Orientação recebida para o trabalho: **não é preciso entregar tudo**, mas é preciso **justificar e saber explicar**. Regra da equipe: o que não foi testado é dito como "não testado", nunca como "funciona".
 > Tabela completa, com a origem no código: `docs/DOCUMENTACAO.md`, seção 23.
 
 ## Fala curta geral (30 segundos)
@@ -9,35 +9,35 @@
 ## Falhas encontradas
 **F1 — Envio trava no celular ("Enviando…")**
 - **O que é:** no celular real, acessando o app pelo IP da rede (`npm run dev -- --host`), o botão de envio da Nova Demanda fica em "Enviando…" para sempre. No computador funciona. Reproduzimos 2 vezes.
-- **Como explicar:** "A causa não foi investigada. Temos uma **hipótese, não confirmada**: o código gera um identificador com `crypto.randomUUID()`, e o navegador só oferece essa função em endereço seguro (HTTPS ou `localhost`). Pelo IP com `http`, ela não existiria, o envio quebraria no meio e o botão ficaria preso. Num sistema real, com HTTPS, isso não aconteceria, mas precisamos confirmar antes de afirmar."
+- **Como responder com honestidade:** "A causa não foi investigada. Temos uma **hipótese, não confirmada**: o código gera um identificador com `crypto.randomUUID()`, e o navegador só oferece essa função em endereço seguro (HTTPS ou `localhost`). Pelo IP com `http`, ela não existiria, o envio quebraria no meio e o botão ficaria preso. Se a hipótese estiver certa, com HTTPS o problema não deveria ocorrer, mas isso não foi verificado."
 - **Impacto:** alto no celular. As outras telas funcionaram no celular.
 
 **A13 — Erro antigo no campo Tipo**
 - **O que é:** depois de enviar vazio, a mensagem "Escolha primeiro o destino." pode continuar no Tipo mesmo depois de escolher o Destino.
-- **Como explicar:** "Não confirmamos se ainda ocorre. Pelo código, quando o Destino muda, só o erro do Destino é limpo."
+- **Como responder com honestidade:** "Não confirmamos se ainda ocorre. Pelo código, quando o Destino muda, só o erro do Destino é limpo."
 - **Impacto:** baixo.
 
 **A14 — Barra de busca com meia largura em tela larga**
-- **Como explicar:** "Escolha visual: em Demandas, a busca tem no máximo 430 px. Na Visão Geral e em Departamentos não investigamos."
+- **Como responder com honestidade:** "Escolha visual: em Demandas, a busca tem no máximo 430 px. Na Visão Geral e em Departamentos não investigamos."
 - **Impacto:** só visual.
 
 **A15 — "Não aceita pelo setor" confunde**
 - **O que é:** quem abriu a demanda vê "Não aceita pelo setor" enquanto ela ainda está esperando o aceite, o que parece recusa.
-- **Como explicar:** "É o texto da regra RN12. Propomos trocar por 'Aguardando aceite do setor'; precisa ir para a ata."
+- **Como responder com honestidade:** "É o texto da regra RN12. Propomos trocar por 'Aguardando aceite do setor'; precisa ir para a ata."
 
 **A16 — Select de status cortado na tela Atualizar**
-- **Como explicar:** "Mostra 'Pendente de aceit' porque a largura máxima do campo é 170 px com a fonte de 14 px."
+- **Como responder com honestidade:** "Mostra 'Pendente de aceit' porque a largura máxima do campo é 170 px com a fonte de 14 px."
 - **Impacto:** só visual.
 
 **A17 — Filtro do card continua ao trocar de aba**
 - **O que é:** vindo do card "Recebidas abertas" e indo para a aba Solicitadas, o filtro do card continua ativo.
-- **Como explicar:** "O botão 'Limpar filtro' resolve. A troca de aba não limpa o filtro, e isso seria uma correção pequena."
+- **Como responder com honestidade:** "O botão 'Limpar filtro' resolve. A troca de aba não limpa o filtro, e isso seria uma correção pequena."
 
 **O1 — Foco no campo Origem**
-- **Como explicar:** "A Origem é só leitura, mas continua recebendo o foco, para o leitor de tela poder lê-la; o navegador seleciona o texto. Efeito pequeno."
+- **Como responder com honestidade:** "A Origem é só leitura, mas continua recebendo o foco, para o leitor de tela poder lê-la; o navegador seleciona o texto. Efeito pequeno."
 
 ## Não executados (falta de tempo antes da apresentação)
-| Item | Como explicar |
+| Item | Como responder com honestidade |
 |---|---|
 | NVDA na rodada de reteste | "Usamos o NVDA antes, 2 ou 3 vezes; depois das correções não deu tempo de repetir." |
 | Nova rodada do axe | "A última (0 violações) foi em código anterior; não rodamos de novo no código atual." |

@@ -1,4 +1,6 @@
-# 90 — Perguntas rápidas (respostas curtas)
+# 90 — Perguntas de revisão (respostas curtas)
+
+> Para revisar sozinho(a). O guia completo, com o arquivo onde conferir cada resposta, está em `17-material-de-apresentacao.md`.
 
 1. **O que o sistema resolve?** Demandas chegavam por seis caminhos diferentes e se perdiam; agora há um lugar só para registrar, confirmar o envio e acompanhar.
 2. **Tem back-end?** Não. O enunciado proíbe; tudo roda no navegador.
@@ -23,6 +25,6 @@
 21. **Como funciona o pop-up acessível?** O foco entra, fica preso, o Esc fecha e o foco volta ao botão que abriu (`Dialogo.jsx`).
 22. **Quantos testes automáticos?** 245, em 12 arquivos (Vitest). Cobrem regras e armazenamento, não cliques.
 23. **O que ficou de fora e por quê?** Novo prazo, cobrança, modo offline, chat, reabrir, tema escuro. Motivo: prazo de 3 dias; prioridade ao fluxo principal e à acessibilidade (DOCUMENTACAO, seção 18).
-24. **Tem alguma falha conhecida?** Sim. A principal é a F1: no celular, pelo IP da rede, o envio trava em "Enviando…". Não deu tempo de investigar; está registrada (arquivo 92).
+24. **Tem alguma falha conhecida?** Sim. A principal é a F1: no celular, pelo IP da rede, o envio trava em "Enviando…". A causa não foi investigada; há só uma hipótese, e a falha está registrada (arquivo 92).
 25. **O que não foi testado?** NVDA no reteste, axe no código atual, Lighthouse nas outras telas, zoom de 400% e 500%, dados corrompidos pelo F12, aviso de limite ao reabrir, Voz de Acesso.
 26. **Como o trabalho foi organizado?** Em blocos, uma branch e um PR por bloco, CHANGELOG e um arquivo de explicação por bloco.

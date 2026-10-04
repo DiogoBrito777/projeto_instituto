@@ -29,7 +29,7 @@ O trabalho foi dividido em **blocos**, cada um numa branch e num PR (pull reques
 2. Abrir um PR e mostrar a descrição e os commits por tema.
 3. Abrir `docs/CHANGELOG.md` e mostrar uma entrada com "Verificação".
 
-## (e) Perguntas prováveis
+## (e) Perguntas de revisão
 - **Por que blocos pequenos?** Para revisar e testar aos poucos; se algo quebrar, sabemos em qual bloco foi.
 - **Usaram IA?** Sim, permitido pelo professor desde que todos expliquem (ADR-06). O código foi revisado e testado; o que não foi testado está escrito.
 - **Como evitaram perder trabalho?** Cada ferramenta parte do `main` atual e entrega em branch/PR (lição da seção 12 da DOCUMENTACAO).

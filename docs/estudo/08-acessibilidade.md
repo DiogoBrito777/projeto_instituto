@@ -34,7 +34,7 @@ O app foi ajustado para quem usa só teclado, leitor de tela, celular ou enxerga
 2. Tab pela Visão Geral: o contorno verde aparece em cada card e botão.
 3. F12 → modo celular, 360 px: o menu quebra em duas linhas e não há rolagem lateral.
 
-## (e) Perguntas prováveis
+## (e) Perguntas de revisão
 - **Como garantiram acessibilidade?** Auditoria automática (axe antes/depois, Lighthouse), teste só com teclado, leitor de tela (NVDA) e celular, além dos testes automáticos das regras. O que não foi feito está registrado.
 - **O axe garante tudo?** Não: ele acha só uma parte. Por exemplo, não pegou o skip link por cima da marca; o teste humano pegou.
 - **Por que um arquivo separado para a fonte?** Para não reescrever o CSS dos colegas; dá para desfazer apagando um arquivo e uma linha.
