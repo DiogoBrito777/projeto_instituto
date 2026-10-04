@@ -44,6 +44,7 @@ Um login por departamento nesta entrega. Responsável individual e grupos de ace
 
 **Triagem e encerramento**
 - **RN18 (R)** Só o **gerenciamento** redireciona (muda o destino; volta a Pendente de aceite e o prazo de aceite reinicia). Setor **nunca** envia direto a outro setor. "Atribuir responsável" vira "Redirecionar para outro departamento", só da gerência.
+  - *Nota (04/10): **proposta, a confirmar em ata** (proposta 15 do rascunho de 03/10). Depois do redirecionamento, o novo setor tem **24 h** para aceitar, contadas do redirecionamento, mas o prazo **nunca passa de 48 h desde a abertura**; se esse teto já venceu quando a gerência redireciona, o novo setor recebe **24 h cheias**. A gerência escolhe também o **tipo de atendimento** do novo setor (o tipo depende do setor). Implementado no Bloco 4C (`prazoDeAceite` em `src/domain/atencao.js`).*
 - **RN19 (R)** Só o gerenciamento marca **Não aplicável** (nenhum setor tem competência) ou **Cancelada**, sempre com justificativa. Setor não cancela.
 - **RN20 (R)** **Concluída, Não aplicável e Cancelada são finais**: nenhuma alteração por ninguém.
 - **RN21 (R)** A gerência pode **cobrar posição** escrevendo no histórico da demanda; o setor executor lê e responde no histórico.

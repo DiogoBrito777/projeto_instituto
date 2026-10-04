@@ -203,3 +203,58 @@ Uma entrada por bloco/PR (formato em `docs/CONVENCOES.md`).
     - 360 px: sem rolagem lateral em Demandas e Visão Geral; nenhum texto novo abaixo de 14 px.
   - Ajuste feito na conferência: o texto "Atenção primeiro (padrão)" cortava no select de 170 px; virou "Atenção primeiro", e o select de Status ganhou 260 px.
   - **Teste da equipe no Edge e com leitor de tela: não executado.**
+
+### 2026-10-04 · Bloco 4C — Ações da gerência sobre a demanda em triagem · feat/bloco4c-acoes-gerencia
+- **Domínio (funções puras, com testes):**
+  - `src/domain/acoes.js` (acréscimos):
+    - `redirecionarDemanda` (RN18): só a gerência e só Em triagem. Exige setor entre os 4 departamentos e tipo existente nesse setor. Leva a Pendente de aceite, grava `destino`, `tipo` e `redirecionadaEm`, e zera prioridade e prazos antigos. Histórico `redirecionamento` com `setor` e `tipoAtendimento`.
+    - `marcarNaoAplicavel` (só Em triagem) e `cancelarDemanda` (o que a seção 4 permite: Pendente, Andamento, Aguardando, Triagem). Justificativa obrigatória, até 500 caracteres (`LIMITE_JUSTIFICATIVA = LIMITE_MOTIVO`), com histórico `encerramento`.
+    - `motivoDaTriagem` devolve o último motivo de recusa e quem recusou.
+    - Erros novos: `setor-invalido`, `justificativa-ausente`, `justificativa-longa`.
+  - `src/domain/atencao.js`:
+    - `LIMITE_ACEITE_REDIRECIONADA_HORAS = 24`;
+    - `prazoAposRedirecionar` e `prazoDeAceite`: 24 h após o redirecionamento, com teto de criação + 48 h; teto vencido → 24 h cheias;
+    - `estaAtrasada` (pendente) passou a usar `prazoDeAceite`. Demanda nunca redirecionada continua em 48 h; os testes do 4B não mudaram.
+- **Interface:**
+  - `src/pages/DetalhesDemanda.jsx`: botão **"Triar demanda"** (só gerência, só Em triagem). Campo novo **"Aceitar até"** para pendentes (executor e gerência). O comentário antigo sobre o redirecionamento foi atualizado.
+  - `src/pages/TriagemDemanda.jsx` (novo), aberto pela tela Atualizar em "modo triagem":
+    - mostra o motivo da recusa e quem recusou;
+    - selects "Novo departamento" e "Tipo de atendimento" (o tipo depende do setor);
+    - botões Redirecionar, Marcar como não aplicável, Cancelar demanda e Voltar;
+    - pop-ups com o `Dialogo`, todos com "Voltar" para fechar; a justificativa tem contador e aviso de limite;
+    - depois de agir, vai para `#demandas` (o foco vai para o h1).
+  - `src/pages/AtualizarDemanda.jsx`: só o desvio para o modo triagem (`podeRedirecionar`).
+  - `src/mensagens.js`: textos do catálogo e propostas novas. Nenhum CSS novo: reaproveita as classes da tela Atualizar.
+- **Docs:**
+  - `docs/MENSAGENS_VALIDACAO.md` com a seção "Triagem pela gerência" (proposta);
+  - nota de proposta na RN18;
+  - proposta 15 no rascunho de 03/10 e atualização da 14;
+  - `docs/EXPLICACAO_BLOCO4C.md`.
+- **Seed:** não mudou.
+- **Atende:** RN18, RN19, RN20, RN22; RN02/RN03 (visibilidade depois do redirecionamento); RF-R09; CA-R05, CA-R07, CA-R11; CT-R06 (redirecionar), CT-R08.
+- **Verificação:**
+  - `npm test` 10 arquivos / **222** testes passaram (30 novos: 13 em `atencao.test.js`, 17 em `acoes.test.js`) · lint 0 avisos e 0 erros · build OK.
+  - Navegador embutido, depois de "Resetar dados":
+    - **`admin` na DM-2013 (aberta há 40 h):**
+      - "Triar demanda" por Tab/Enter; a tela mostrou o motivo e "Recusada por Equipe de Elétrica (Elétrica)";
+      - Redirecionar sem setor e sem tipo deu as mensagens junto dos campos, com o foco no campo;
+      - tipo escolhido pelas setas;
+      - o pop-up mostrou "até 04/10 11:12" (o teto de 48 h, porque faltavam 8 h);
+      - Tab ficou preso no pop-up e Esc devolveu o foco a "Redirecionar";
+      - a confirmação levou à lista com o foco no h1;
+      - nos Detalhes: Pendente de aceite, Hidráulica, tipo Vazamento, "Aceitar até 04/10 11:12" e o histórico de redirecionamento.
+    - **`user02` (novo setor):** a DM-2013 apareceu em "Pendentes de aceite" com "Aguardando aceite há menos de 1 hora" e o botão "Aceitar ou recusar". Recusou de novo e depois recebeu "não encontrada ou sem permissão" no `/editar`.
+    - **`admin` na DM-2007:**
+      - Não aplicável: justificativa vazia deu "Informe a justificativa." e o foco foi para o campo;
+      - com justificativa, a demanda ficou Não aplicável, sem botões, e o `/editar` mostrou "finalizada".
+    - **`admin` na DM-2013, em 360 px:** cancelou com justificativa (botões "Voltar" / "Confirmar cancelamento"). Ficou Cancelada, sem botões, com o histórico.
+    - **`user03` (quem abriu):** em triagem, só o resumo ("Setor atual: Gerenciamento"), sem botão; no `/editar`, "não há alterações disponíveis…".
+    - **`user04`:** a DM-2013 deu "não encontrada ou sem permissão" no detalhe e no `/editar`.
+    - **360 px:** sem rolagem lateral, nenhum texto da tela abaixo de 14 px, botões e selects com 38 px de altura.
+  - **Não executado:**
+    - teste no Edge;
+    - leitor de tela (NVDA/Narrador);
+    - celular real;
+    - nova rodada do axe;
+    - aceite pelo novo setor depois do redirecionamento (a regra do aceite é a do Bloco 4A, já testada);
+    - cancelamento pela tela fora de triagem (a tela não oferece).
