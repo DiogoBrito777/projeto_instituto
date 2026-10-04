@@ -3,12 +3,18 @@ import {
   ABAS,
   abasDoPerfil,
   abertasDoSetor,
+  avisoDeAtencao,
   demandasDaAba,
+  filtrarPorStatus,
   filtrarVisaoGeral,
   indicadoresVisaoGeral,
+  linkDaLista,
   ordenarDemandas,
+  ordenarPorAtencao,
   separarPendentes,
+  statusDoSlug,
 } from './listas.js'
+import { podeVer } from './permissoes.js'
 import { STATUS } from './status.js'
 
 const AGORA = new Date('2026-10-05T12:00:00Z')
@@ -165,5 +171,143 @@ describe('Em triagem pertence à gerência (decisão de 04/10)', () => {
 
   it('quem abriu continua vendo a demanda em Solicitadas', () => {
     expect(ids(demandasDaAba([emTriagem], hidraulica, ABAS.SOLICITADAS))).toEqual(['T'])
+  })
+})
+
+describe('Bloco 4B — fila de triagem e prioridade de atenção', () => {
+  const administrativo = { usuario: 'user03', perfil: 'departamento', departamento: 'administrativo' }
+  const comHistorico = (d, eventos) => ({ ...d, historico: eventos.map(([tipo, horas]) => ({ tipo, data: horasAntes(horas) })) })
+
+  // P1 pendente há 5 h, P2 pendente há 90 h (atrasada), T1 em triagem desde a recusa há 30 h,
+  // U urgente em andamento, M média em andamento. Todas criadas por Administrativo.
+  const FILA = [
+    comHistorico(demanda('U', 'administrativo', 'tecnologia', STATUS.EM_ANDAMENTO, { prioridade: 'Urgente', criadaEm: horasAntes(2) }), [['criacao', 2]]),
+    comHistorico(demanda('P1', 'administrativo', 'eletrica', STATUS.PENDENTE_ACEITE, { prioridade: 'Não definida', criadaEm: horasAntes(5) }), [['criacao', 5]]),
+    comHistorico(demanda('M', 'administrativo', 'eletrica', STATUS.EM_ANDAMENTO, { criadaEm: horasAntes(1) }), [['criacao', 1]]),
+    comHistorico(demanda('T1', 'administrativo', 'eletrica', STATUS.EM_TRIAGEM, { prioridade: 'Não definida', criadaEm: horasAntes(100) }), [['criacao', 100], ['recusa', 30]]),
+    comHistorico(demanda('P2', 'administrativo', 'eletrica', STATUS.PENDENTE_ACEITE, { prioridade: 'Não definida', criadaEm: horasAntes(90) }), [['criacao', 90]]),
+  ]
+
+  describe('ordem de atenção x ordem escolhida', () => {
+    it('padrão: triagem e pendentes primeiro, a mais antiga antes; depois prioridade e data', () => {
+      // T1 parada há 30 h, P2 há 90 h, P1 há 5 h → P2, T1, P1; depois U (Urgente) e M (Média).
+      expect(ids(ordenarPorAtencao(FILA, admin))).toEqual(['P2', 'T1', 'P1', 'U', 'M'])
+    })
+
+    it('na Visão Geral o resto segue "recentes"', () => {
+      expect(ids(ordenarPorAtencao(FILA, admin, 'recentes'))).toEqual(['P2', 'T1', 'P1', 'M', 'U'])
+    })
+
+    it('ordem escolhida pelo usuário vale: "Prioridade e data" e "Mais recentes" NÃO põem a fila primeiro', () => {
+      expect(ids(ordenarDemandas(FILA, 'padrao'))).toEqual(['U', 'M', 'P1', 'P2', 'T1'])
+      expect(ids(ordenarDemandas(FILA, 'recentes'))).toEqual(['M', 'U', 'P1', 'P2', 'T1'])
+    })
+
+    it('quem só abriu: a mais antiga é pela CRIAÇÃO (não conhece a data da recusa, RN03)', () => {
+      // Para Administrativo: T1 criada há 100 h vem antes de P2 (90 h).
+      expect(ids(ordenarPorAtencao(FILA, administrativo))).toEqual(['T1', 'P2', 'P1', 'U', 'M'])
+    })
+  })
+
+  describe('filtro de status (Demandas)', () => {
+    it('vazio = todos; com status, só aquele status', () => {
+      expect(filtrarPorStatus(FILA, '')).toHaveLength(FILA.length)
+      expect(ids(filtrarPorStatus(FILA, STATUS.PENDENTE_ACEITE))).toEqual(['P1', 'P2'])
+      expect(ids(filtrarPorStatus(FILA, STATUS.CANCELADA))).toEqual([])
+    })
+
+    it('nunca ultrapassa a permissão: Elétrica filtrando "Em triagem" em Recebidas não vê T1', () => {
+      expect(filtrarPorStatus(demandasDaAba(FILA, eletrica, ABAS.RECEBIDAS), STATUS.EM_TRIAGEM)).toEqual([])
+      expect(filtrarPorStatus(demandasDaAba(FILA, eletrica, ABAS.SOLICITADAS), STATUS.EM_TRIAGEM)).toEqual([])
+    })
+
+    it('setor sem relação não vê nada, com ou sem filtro', () => {
+      expect(filtrarPorStatus(demandasDaAba(FILA, ti, ABAS.SOLICITADAS), STATUS.PENDENTE_ACEITE)).toEqual([])
+      expect(ids(demandasDaAba(FILA, ti, ABAS.RECEBIDAS))).toEqual(['U'])
+    })
+
+    it('combina com o filtro de setor da gerência', () => {
+      expect(ids(filtrarPorStatus(demandasDaAba(FILA, admin, ABAS.RECEBIDAS, 'eletrica'), STATUS.PENDENTE_ACEITE))).toEqual(['P1', 'P2'])
+      // Em triagem é da gerência: não aparece sob a Elétrica.
+      expect(filtrarPorStatus(demandasDaAba(FILA, admin, ABAS.RECEBIDAS, 'eletrica'), STATUS.EM_TRIAGEM)).toEqual([])
+    })
+  })
+
+  describe('status na URL', () => {
+    it('ida e volta para todos os status', () => {
+      for (const status of Object.values(STATUS)) {
+        const slug = linkDaLista(status).split('status=')[1]
+        expect(statusDoSlug(slug)).toBe(status)
+      }
+    })
+
+    it('link com setor só quando informado', () => {
+      expect(linkDaLista(STATUS.EM_TRIAGEM)).toBe('#demandas?status=em-triagem')
+      expect(linkDaLista(STATUS.PENDENTE_ACEITE, 'eletrica')).toBe('#demandas/eletrica?status=pendente-de-aceite')
+    })
+
+    it('slug inválido vira "todos" (sem erro)', () => {
+      expect(statusDoSlug('xyz')).toBe('')
+      expect(statusDoSlug(null)).toBe('')
+    })
+  })
+
+  describe('aba rápida "Em triagem" (Visão Geral)', () => {
+    const visiveis = (usuario) => FILA.filter((d) => podeVer(usuario, d))
+
+    it('gerência vê as demandas em triagem', () => {
+      expect(ids(filtrarVisaoGeral(visiveis(admin), admin, 'triagem'))).toEqual(['T1'])
+    })
+
+    it('setor executor (destino) vê 0', () => {
+      expect(filtrarVisaoGeral(visiveis(eletrica), eletrica, 'triagem')).toEqual([])
+    })
+
+    it('quem abriu vê as suas', () => {
+      expect(ids(filtrarVisaoGeral(visiveis(administrativo), administrativo, 'triagem'))).toEqual(['T1'])
+    })
+
+    it('setor sem relação vê 0', () => {
+      expect(filtrarVisaoGeral(visiveis(ti), ti, 'triagem')).toEqual([])
+    })
+  })
+
+  describe('aviso do topo', () => {
+    it('gerência: triagem e pendentes de todos', () => {
+      expect(avisoDeAtencao(FILA, admin)).toEqual({ triagem: 1, pendentes: 2, total: 3 })
+    })
+
+    it('gerência com filtro de setor: triagem fica fora (é da gerência)', () => {
+      expect(avisoDeAtencao(FILA, admin, 'eletrica')).toEqual({ triagem: 0, pendentes: 2, total: 2 })
+      expect(avisoDeAtencao(FILA, admin, 'hidraulica').total).toBe(0)
+    })
+
+    it('setor executor: só as pendentes que ele recebeu; triagem sempre 0', () => {
+      expect(avisoDeAtencao(FILA, eletrica)).toEqual({ triagem: 0, pendentes: 2, total: 2 })
+    })
+
+    it('quem só abriu NÃO conta nada no aviso (não é ele quem age)', () => {
+      expect(avisoDeAtencao(FILA, administrativo).total).toBe(0)
+    })
+
+    it('setor sem permissão NÃO conta', () => {
+      expect(avisoDeAtencao(FILA, ti).total).toBe(0)
+    })
+  })
+
+  describe('cards da Visão Geral viram link só quando são de um status', () => {
+    it('gerência: pendentes, triagem e concluídas têm status; os demais não', () => {
+      const comStatus = indicadoresVisaoGeral(FILA, admin, AGORA).filter((i) => i.status).map((i) => i.chave)
+      expect(comStatus).toEqual(['pendentes', 'triagem', 'concluidas'])
+    })
+
+    it('setor: pendentes e resolvidas', () => {
+      const comStatus = indicadoresVisaoGeral(FILA, eletrica, AGORA).filter((i) => i.status).map((i) => i.chave)
+      expect(comStatus).toEqual(['pendentes', 'resolvidas'])
+    })
+
+    it('selo do card de pendentes vem da constante (48 h)', () => {
+      expect(indicadoresVisaoGeral(FILA, admin, AGORA).find((i) => i.chave === 'pendentes').badge).toBe('48 h para aceitar')
+    })
   })
 })
