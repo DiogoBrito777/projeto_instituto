@@ -8,16 +8,8 @@ import AtualizarDemanda from './pages/AtualizarDemanda.jsx'
 import VisaoGeral from './pages/VisaoGeral.jsx' // NOVO
 import Login from './pages/Login.jsx'
 import { useSessao } from './hooks/useSessao.js'
-import { statusDoSlug } from './domain/listas.js'
+import { ABAS, filtroDoPainel, statusDoSlug } from './domain/listas.js'
 import './App.css'
-
-function PlusIcon() {
-  return (
-    <svg aria-hidden="true" viewBox="0 0 24 24" className="button-icon">
-      <path d="M12 5v14M5 12h14" />
-    </svg>
-  )
-}
 
 function getPageFromHash(hash) {
   if (hash === '#login') return 'login'
@@ -44,10 +36,23 @@ function setorDaRota(hash) {
 
 // "#demandas?status=em-triagem" → "Em triagem" (cards e aviso da Visão Geral; Bloco 4B).
 // Com roteamento por hash, o filtro vai depois do "?" dentro do próprio hash.
+function parametrosDaRota(hash) {
+  if (!hash.startsWith('#demandas')) return new URLSearchParams()
+  return new URLSearchParams(hash.split('?')[1] ?? '')
+}
+
 function statusDaRota(hash) {
-  if (!hash.startsWith('#demandas')) return ''
-  const consulta = hash.split('?')[1] ?? ''
-  return statusDoSlug(new URLSearchParams(consulta).get('status'))
+  return statusDoSlug(parametrosDaRota(hash).get('status'))
+}
+
+// "#demandas?filtro=vencidas" → "vencidas" (cards da Visão Geral que não são um status).
+function filtroDaRota(hash) {
+  return filtroDoPainel(parametrosDaRota(hash).get('filtro'))
+}
+
+// "&aba=solicitadas" → abre Demandas já na aba Solicitadas ("Solicitadas por mim em aberto").
+function abaDaRota(hash) {
+  return parametrosDaRota(hash).get('aba') === ABAS.SOLICITADAS ? ABAS.SOLICITADAS : ABAS.RECEBIDAS
 }
 
 function App() {
@@ -120,16 +125,8 @@ function App() {
           <h1 className="page-title" ref={tituloDaPagina} tabIndex={-1}>
             {pageTitle}
           </h1>
-          {isCreatePage && (
-            <button
-              className="topbar-action"
-              type="button"
-              onClick={() => document.getElementById('destino')?.focus()}
-            >
-              <PlusIcon />
-              <span>Criar</span>
-            </button>
-          )}
+          {/* O botão "Criar" que ficava aqui saiu (ajustes do teste manual, item 8): só movia o foco
+              para o Destino e parecia enviar a demanda. O envio é o botão do fim do formulário. */}
         </header>
 
         {isCreatePage ? (
@@ -144,10 +141,12 @@ function App() {
           <AtualizarDemanda key={idDemanda} id={idDemanda} usuario={usuario} />
         ) : (
           <Demandas
-            key={`${setorDaRota(hash) ?? 'todos'}|${statusDaRota(hash)}`}
+            key={`${setorDaRota(hash) ?? 'todos'}|${statusDaRota(hash)}|${filtroDaRota(hash)}|${abaDaRota(hash)}`}
             usuario={usuario}
             setorInicial={setorDaRota(hash)}
             statusInicial={statusDaRota(hash)}
+            filtroInicial={filtroDaRota(hash)}
+            abaInicial={abaDaRota(hash)}
           />
         )}
       </main>
