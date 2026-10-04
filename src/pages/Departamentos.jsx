@@ -76,6 +76,11 @@ function Departamentos({ usuario }) {
         />
       </label>
 
+      {/* Anuncia o resultado da busca ao leitor de tela. */}
+      <p className="sr-only" role="status">
+        {setoresFiltrados.length} {setoresFiltrados.length === 1 ? 'setor encontrado' : 'setores encontrados'}
+      </p>
+
       {carregando ? (
         <Carregando />
       ) : erro ? (

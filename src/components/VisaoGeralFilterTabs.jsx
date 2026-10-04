@@ -18,7 +18,9 @@ export default function VisaoGeralFilterTabs({ ativo, onChange, contagens }) {
         {tabs.map((tab) => (
           <button
             key={tab.key}
+            type="button"
             className={`tab ${ativo === tab.key ? 'tab--active' : ''}`}
+            aria-pressed={ativo === tab.key}
             onClick={() => onChange(tab.key)}
           >
             {tab.label}
