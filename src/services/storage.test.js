@@ -103,15 +103,28 @@ describe('gravações', () => {
 
   it('atualizar altera só a demanda pedida', async () => {
     const storage = novoStorage(criarBackendFalso())
-    const resultado = await storage.atualizarDemanda('DM-2002', (d) => ({ ...d, titulo: 'Alterada' }))
+    const resultado = await storage.atualizarDemanda('DM-2002', (d) => ({ ok: true, dados: { ...d, titulo: 'Alterada' } }))
     expect(resultado.ok).toBe(true)
     const titulos = storage.carregarDemandas().dados.map((d) => d.titulo)
     expect(titulos).toEqual(['Primeira', 'Alterada'])
   })
 
+  it('se a regra recusar a alteração, nada é gravado', async () => {
+    const backend = criarBackendFalso({ [CHAVES.demandas]: JSON.stringify(SEMENTE) })
+    const antes = backend.dados[CHAVES.demandas]
+    const resultado = await novoStorage(backend).atualizarDemanda('DM-2002', () => ({ ok: false, erro: 'sem-permissao' }))
+    expect(resultado).toEqual({ ok: false, erro: 'sem-permissao' })
+    expect(backend.dados[CHAVES.demandas]).toBe(antes)
+  })
+
   it('atualizar demanda inexistente devolve erro', async () => {
-    const resultado = await novoStorage(criarBackendFalso()).atualizarDemanda('DM-0000', (d) => d)
+    const resultado = await novoStorage(criarBackendFalso()).atualizarDemanda('DM-0000', (d) => ({ ok: true, dados: d }))
     expect(resultado).toEqual({ ok: false, erro: ERROS.NAO_ENCONTRADA })
+  })
+
+  it('lerDemandas devolve o mesmo resultado da carga (com espera curta)', async () => {
+    const storage = novoStorage(criarBackendFalso(), { atrasoLeituraMs: 0 })
+    expect(await storage.lerDemandas()).toEqual({ ok: true, dados: SEMENTE })
   })
 })
 

@@ -1,5 +1,9 @@
 import { useMemo, useState } from 'react'
 import departamentos from '../data/departamentos.json'
+import { useDemandas } from '../hooks/useDemandas.js'
+import { abertasDoSetor } from '../domain/listas.js'
+import { ehGerencia } from '../domain/permissoes.js'
+import { Carregando, ErroDados } from '../components/EstadoDados.jsx'
 
 function IconeDepartamento({ tipo }) {
   if (tipo === 'tecnologia') {
@@ -36,16 +40,20 @@ function IconeDepartamento({ tipo }) {
   )
 }
 
-function Departamentos() {
+function Departamentos({ usuario }) {
   const [termoBusca, setTermoBusca] = useState('')
+  const { carregando, demandas, erro, resetar } = useDemandas()
   const setoresFiltrados = useMemo(() => {
     const termo = termoBusca.trim().toLocaleLowerCase('pt-BR')
-    return departamentos.filter((departamento) =>
-      `${departamento.nome} ${departamento.descricao}`
-        .toLocaleLowerCase('pt-BR')
-        .includes(termo),
-    )
-  }, [termoBusca])
+    return departamentos
+      // Departamentos são independentes (RN02): um setor vê só o próprio card; a gerência vê todos.
+      .filter((departamento) => ehGerencia(usuario) || departamento.id === usuario.departamento)
+      .filter((departamento) =>
+        `${departamento.nome} ${departamento.descricao}`
+          .toLocaleLowerCase('pt-BR')
+          .includes(termo),
+      )
+  }, [termoBusca, usuario])
 
   return (
     <section className="departments-page" aria-labelledby="departments-heading">
@@ -68,7 +76,11 @@ function Departamentos() {
         />
       </label>
 
-      {setoresFiltrados.length > 0 ? (
+      {carregando ? (
+        <Carregando />
+      ) : erro ? (
+        <ErroDados erro={erro} onResetar={resetar} />
+      ) : setoresFiltrados.length > 0 ? (
         <div className="departments-grid">
           {setoresFiltrados.map((departamento) => (
             <article className="department-card" key={departamento.id}>
@@ -77,12 +89,12 @@ function Departamentos() {
                   <IconeDepartamento tipo={departamento.icone} />
                 </span>
                 <span className={`department-count department-count--${departamento.cor}`}>
-                  {departamento.demandasAbertas} demandas abertas
+                  {abertasDoSetor(demandas, departamento.id)} demandas abertas
                 </span>
               </div>
               <h3>{departamento.nome}</h3>
               <p>{departamento.descricao}</p>
-              <a href="#demandas" aria-label={`Acessar setor ${departamento.nome}`}>
+              <a href={`#demandas/${departamento.id}`} aria-label={`Acessar setor ${departamento.nome}`}>
                 Acessar setor <span aria-hidden="true">›</span>
               </a>
             </article>

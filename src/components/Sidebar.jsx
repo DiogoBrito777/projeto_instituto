@@ -1,4 +1,5 @@
 import departamentos from '../data/departamentos.json'
+import { iniciais } from '../formatos.js'
 import './Sidebar.css'
 
 const navigation = [
@@ -69,17 +70,6 @@ function Icon({ name }) {
 function descricaoDoPerfil(usuario) {
   if (usuario.perfil === 'gerenciamento') return 'Gerenciamento'
   return departamentos.find((item) => item.id === usuario.departamento)?.nome ?? 'Departamento'
-}
-
-const CONECTIVOS = ['de', 'da', 'do', 'e']
-
-function iniciais(nome) {
-  return nome
-    .split(' ')
-    .filter((parte) => !CONECTIVOS.includes(parte))
-    .slice(0, 2)
-    .map((parte) => parte[0].toUpperCase())
-    .join('')
 }
 
 function Sidebar({ activeItem, usuario, onSair }) {

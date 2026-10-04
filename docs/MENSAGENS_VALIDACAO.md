@@ -11,6 +11,13 @@ Princípios: dizer **o que fazer**, não só "inválido"; texto junto ao campo (
 | Título | Resuma em até 60 caracteres. | "Informe um título." / "O título deve ter no máximo 60 caracteres." |
 | Descrição | Conte o que aconteceu e onde. Até 500 caracteres. | "Descreva a demanda para que o setor possa atender." / "A descrição deve ter no máximo 500 caracteres." |
 
+Acréscimos do Bloco 2B (**proposta** — revisar em grupo):
+- Origem: a instrução ganhou a frase "Data e hora são registradas no envio." (RN07: data automática).
+- Destino igual ao próprio setor: "Escolha um departamento diferente do seu." (a lista já não oferece o próprio setor; a mensagem cobre a regra no domínio).
+- Título e Descrição mostram o contador "N/60 caracteres" e "N/500 caracteres".
+- Campos travados no limite (Título 60, Descrição 500, Observação 500), com aviso anunciado (`role="status"`): ao chegar ao limite, "Limite de N caracteres atingido."; ao colar texto maior que o espaço, "Limite de N caracteres atingido. O texto foi cortado."
+- Botão durante o envio: "Enviando…". Pop-up de sucesso: título "Demanda enviada" + "Demanda DM-XXXX enviada com sucesso." com os botões "Ver demanda" e "Criar outra".
+
 ## Login
 | Situação | Mensagem |
 |---|---|
@@ -26,6 +33,16 @@ Princípios: dizer **o que fazer**, não só "inválido"; texto junto ao campo (
 | Armazenamento indisponível | "Não foi possível acessar os dados deste aparelho. Verifique se o navegador permite armazenamento local." |
 | Reset concluído | "Dados de demonstração restaurados." |
 | Reset falhou | "Não foi possível resetar os dados. Recarregue a página e tente de novo." |
+
+## Atualizar demanda (**proposta, Bloco 2A** — revisar em grupo)
+| Situação | Mensagem |
+|---|---|
+| Perfil sem ação disponível naquele status | "Você pode consultar esta demanda, mas não há alterações disponíveis para o seu perfil neste status." |
+| Salvar sem mudar nada | "Nenhuma alteração para salvar." |
+| Erro ao salvar | "Não foi possível salvar. Suas alterações continuam no formulário. Tente novamente." |
+| Botão durante a gravação | "Salvando…" |
+| Observação (instrução visível) | Rótulo "Observação (opcional)" + contador "N/500 caracteres" |
+| Observação acima do limite | "A observação deve ter no máximo 500 caracteres." |
 
 ## Aceite, recusa e encerramento
 | Situação | Mensagem |

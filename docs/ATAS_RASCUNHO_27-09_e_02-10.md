@@ -100,6 +100,8 @@ Sem camada de dados; Detalhe e Atualizar fixos na DM-2048; sem login/perfis; "Sa
 7. **Dashboard** para todos os perfis, filtrado; lista com abas Recebidas/Solicitadas.
 8. **Adiado (futuro):** chat, reabrir com citação, "visualizada", responsável individual.
 9. **Entrega em blocos**, um PR por bloco, com revisão por pares e CHANGELOG.
+10. **Tipo de atendimento "Outros"** no fim da lista de cada um dos 4 setores, para pedidos que não se encaixam nos tipos existentes (já implementado no Bloco 2; aplicado no código antes da votação).
+11. **Limitação a 4 setores** (TI, Hidráulica, Administrativo, Elétrica). Pedido de uma área fora deles segue o fluxo existente: o setor devolve à triagem e a gerência redireciona ou marca "Não aplicável" com justificativa. Cadastro de novos setores é melhoria futura.
 
 ## Pendências
 ☐ Quem revisa cada PR · ☐ Responsável pelo login (Ata 29/09: Pedro, "se der tempo") · ☐ Limites de caracteres · ☐ Horário da apresentação (terça, 06/10, à noite).

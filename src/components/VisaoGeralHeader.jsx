@@ -1,14 +1,18 @@
 import { Plus } from 'lucide-react'
 
-const dataFormatada = new Date(2026, 5, 16)
-  .toLocaleDateString('pt-BR', {
-    weekday: 'long',
-    day: '2-digit',
-    month: 'long',
-  })
-  .toUpperCase()
+// Data de hoje (antes era fixa em 16/06/2026).
+function dataDeHoje() {
+  return new Date()
+    .toLocaleDateString('pt-BR', {
+      weekday: 'long',
+      day: '2-digit',
+      month: 'long',
+    })
+    .toUpperCase()
+}
 
-export default function VisaoGeralHeader({ onNovaDemanda, usuario = 'MA' }) {
+export default function VisaoGeralHeader({ onNovaDemanda, usuario }) {
+  const dataFormatada = dataDeHoje()
   return (
     <header className="header">
       <div>

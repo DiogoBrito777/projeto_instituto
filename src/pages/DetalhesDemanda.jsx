@@ -1,24 +1,17 @@
-import { useState } from 'react'
-import data from '../data/demandas.json'
-import departamentos from '../data/departamentos.json'
+import { useDemandas } from '../hooks/useDemandas.js'
+import { podeVer, podeVerDetalhes, resumoParaSolicitante } from '../domain/permissoes.js'
+import { podeEditar } from '../domain/acoes.js'
+import { prazoResolucao } from '../domain/prazos.js'
+import { estaFinal } from '../domain/status.js'
+import { nomeDoSetor } from '../domain/setores.js'
+import { Carregando, ErroDados, SemPermissao } from '../components/EstadoDados.jsx'
+import { MENSAGENS } from '../mensagens.js'
+import { formatarData, formatarDataHora } from '../formatos.js'
 import './DetalhesDemanda.css'
 
-const demand = data.demandas.find((item) => item.id === 'DM-2048')
-const defaultAssignee = 'Infraestrutura e Serviços'
-function getSavedDemand() {
-  try {
-    return JSON.parse(window.localStorage.getItem('demanda-DM-2048') || 'null')
-  } catch {
-    return null
-  }
-}
-
-const history = [
-  { title: 'Demanda em andamento', date: '18 Jun, 2025 às 14:32', current: true },
-  { title: 'Em análise técnica', date: '18 Jun, 2025 às 11:40' },
-  { title: 'Demanda recebida', date: '18 Jun, 2025 às 08:30' },
-  { title: 'Demanda criada', date: '18 Jun, 2025 às 08:30' },
-]
+// O botão "Atribuir responsável" e o diálogo dele saíram no Bloco 2A: gravavam direto no
+// localStorage e permitiam trocar o setor sem regra. Voltam no Bloco 4 como "Redirecionar para
+// outro departamento", só da gerência, em triagem e com justificativa (RN18).
 
 function DetailField({ label, children }) {
   return (
@@ -29,137 +22,113 @@ function DetailField({ label, children }) {
   )
 }
 
-function Dialog({ mode, onClose, onSave, assignee, status }) {
-  const [nextAssignee, setNextAssignee] = useState(assignee)
-  const [nextStatus, setNextStatus] = useState(status)
+function DetalhesDemanda({ id, usuario }) {
+  const { carregando, demandas, erro, resetar } = useDemandas()
 
-  function submit(event) {
-    event.preventDefault()
-    onSave({ assignee: nextAssignee, status: nextStatus })
+  if (carregando || erro) {
+    return (
+      <section className="detail-page" aria-label="Detalhes da demanda">
+        {carregando ? <Carregando /> : <ErroDados erro={erro} onResetar={resetar} />}
+      </section>
+    )
   }
 
-  return (
-    <div className="detail-dialog-backdrop" onMouseDown={(event) => event.target === event.currentTarget && onClose()}>
-      <section className="detail-dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-title">
-        <button className="detail-dialog-close" type="button" onClick={onClose} aria-label="Fechar">×</button>
-        <p className="detail-eyebrow">DM-2048</p>
-        <h2 id="dialog-title">{mode === 'assign' ? 'Atribuir responsável' : 'Atualizar demanda'}</h2>
-        <p className="detail-dialog-copy">Manutenção do ar-condicionado</p>
-        <form onSubmit={submit}>
-          <label className="detail-form-field">
-            <span>Departamento responsável</span>
-            <select value={nextAssignee} onChange={(event) => setNextAssignee(event.target.value)}>
-              <option value={defaultAssignee}>{defaultAssignee}</option>
-              {departamentos.map((departamento) => (
-                <option key={departamento.id} value={departamento.nome}>{departamento.nome}</option>
-              ))}
-            </select>
-          </label>
-          {mode === 'update' && (
-            <label className="detail-form-field">
-              <span>Status</span>
-              <select value={nextStatus} onChange={(event) => setNextStatus(event.target.value)}>
-                <option>Em andamento</option>
-                <option>Pendente</option>
-                <option>Concluído</option>
-              </select>
-            </label>
-          )}
-          <div className="detail-dialog-actions">
-            <button className="detail-button detail-button--outline" type="button" onClick={onClose}>Cancelar</button>
-            <button className="detail-button detail-button--primary" type="submit">Salvar alterações</button>
-          </div>
-        </form>
+  const demand = demandas.find((item) => item.id === id)
+  // RN04: inexistente e sem permissão dão a mesma resposta.
+  if (!demand || !podeVer(usuario, demand)) {
+    return (
+      <section className="detail-page" aria-label="Detalhes da demanda">
+        <SemPermissao />
       </section>
-    </div>
-  )
-}
+    )
+  }
 
-function DetalhesDemanda() {
-  const savedDemand = getSavedDemand()
-  const savedAssignee = savedDemand?.responsavel
-  const knownDepartment = [defaultAssignee, ...departamentos.map((departamento) => departamento.nome)]
-    .includes(savedAssignee) ? savedAssignee : defaultAssignee
-  const [assignee, setAssignee] = useState(knownDepartment)
-  const status = savedDemand?.status || demand.status
-  const [dialog, setDialog] = useState(null)
-
-  const statusLabel = status === 'Concluído' ? 'Concluída' : status
-  const title = savedDemand?.titulo || demand.titulo
+  // RN02/RN03: quem só abriu a demanda vê o resumo, nunca histórico, prazo ou prioridade.
+  const completa = podeVerDetalhes(usuario, demand)
+  const exibida = completa ? demand : resumoParaSolicitante(demand)
+  const setorDoCaminho = completa ? demand.destino : exibida.setorAtual
+  const prazo = completa ? prazoResolucao(demand) : null
+  const historico = completa ? [...demand.historico].reverse() : []
 
   return (
     <section className="detail-page" aria-label="Detalhes da demanda">
       <nav className="detail-breadcrumb" aria-label="Você está em">
         <a href="#demandas">Demandas</a><span>›</span>
-        <a href="#departamentos">Infraestrutura e Serviços</a><span>›</span>
-        <span aria-current="page">{title}</span>
+        <a href={`#demandas/${setorDoCaminho}`}>{nomeDoSetor(setorDoCaminho)}</a><span>›</span>
+        <span aria-current="page">{exibida.titulo}</span>
       </nav>
 
       <div className="detail-layout">
         <div className="detail-main-column">
           <section className="detail-card detail-summary">
             <div className="detail-summary-top">
-              <p className="detail-eyebrow">Código: <span>{demand.id}</span></p>
-              <span className="detail-status"><i />{statusLabel}</span>
+              <p className="detail-eyebrow">Código: <span>{exibida.id}</span></p>
+              <span className="detail-status"><i />{exibida.status}</span>
             </div>
-            <h2>{title}</h2>
+            <h2>{exibida.titulo}</h2>
             <div className="detail-summary-meta">
-              <span>Criado em: <strong>18 de junho, 2025</strong></span>
-              <span className="detail-meta-divider" />
-              <span>Prioridade: <strong className="detail-priority">{savedDemand?.prioridade || demand.prioridade}</strong></span>
+              <span>Criado em: <strong>{formatarData(exibida.criadaEm)}</strong></span>
+              {completa && (
+                <>
+                  <span className="detail-meta-divider" />
+                  <span>Prioridade: <strong className="detail-priority">{demand.prioridade}</strong></span>
+                </>
+              )}
             </div>
           </section>
 
           <section className="detail-card detail-specifications">
             <h3 className="detail-section-title">Especificações da Demanda</h3>
             <div className="detail-fields-grid">
-              <DetailField label="Categoria">{savedDemand?.categoria || 'Manutenção'}</DetailField>
-              <DetailField label="Departamento">{savedDemand?.departamento || 'Infraestrutura e Serviços'}</DetailField>
-              <DetailField label="Origem">{savedDemand?.origem || demand.origem}</DetailField>
-              <DetailField label="Solicitante (departamento)">{savedDemand?.departamentoSolicitante || savedDemand?.origem || demand.origem}</DetailField>
-              <DetailField label="Responsável (setor)">{assignee}</DetailField>
-              <DetailField label="Prazo">{savedDemand?.prazo ? new Date(`${savedDemand.prazo}T12:00:00`).toLocaleDateString('pt-BR') : '23/06/2025'}</DetailField>
+              <DetailField label="Tipo de atendimento">{exibida.tipo}</DetailField>
+              <DetailField label="Origem">{nomeDoSetor(exibida.origem)}</DetailField>
+              <DetailField label="Solicitante (departamento)">
+                {exibida.solicitante} ({nomeDoSetor(exibida.origem)})
+              </DetailField>
+              {completa ? (
+                <>
+                  <DetailField label="Departamento">{nomeDoSetor(demand.destino)}</DetailField>
+                  <DetailField label="Responsável (setor)">{nomeDoSetor(demand.destino)}</DetailField>
+                  <DetailField label="Prazo">{prazo ? formatarDataHora(prazo.toISOString()) : 'Definido no aceite'}</DetailField>
+                </>
+              ) : (
+                <DetailField label="Setor atual">{nomeDoSetor(exibida.setorAtual)}</DetailField>
+              )}
             </div>
           </section>
 
           <section className="detail-card detail-description">
             <h3 className="detail-section-title">Descrição</h3>
-            <p>{savedDemand?.descricao || 'O sistema de ar-condicionado do 3º andar parou de funcionar de repente. Precisamos da manutenção com urgência para que os colaboradores possam continuar trabalhando.'}</p>
+            <p>{exibida.descricao}</p>
           </section>
 
-          <div className="detail-actions">
-            <button className="detail-button detail-button--primary" type="button" onClick={() => setDialog('assign')}>Atribuir responsável</button>
-            <button className="detail-button detail-button--outline" type="button" onClick={() => { window.location.hash = '#demanda/DM-2048/editar' }}>Atualizar demanda</button>
-          </div>
+          {completa && podeEditar(usuario, demand) && (
+            <div className="detail-actions">
+              <button className="detail-button detail-button--outline" type="button" onClick={() => { window.location.hash = `#demanda/${demand.id}/editar` }}>
+                Atualizar demanda
+              </button>
+            </div>
+          )}
+          {completa && estaFinal(demand.status) && <p>{MENSAGENS.finalizada}</p>}
         </div>
 
-        <aside className="detail-card detail-history">
-          <h3 className="detail-section-title">Histórico de Atualizações</h3>
-          <ol className="history-list">
-            {history.map((item) => (
-              <li className={item.current ? 'history-item history-item--current' : 'history-item'} key={item.title}>
-                <span className="history-marker" />
-                <div><strong>{item.title}</strong><time>{item.date}</time></div>
-              </li>
-            ))}
-          </ol>
-        </aside>
+        {completa && (
+          <aside className="detail-card detail-history">
+            <h3 className="detail-section-title">Histórico de Atualizações</h3>
+            <ol className="history-list">
+              {historico.map((item, index) => (
+                <li className={index === 0 ? 'history-item history-item--current' : 'history-item'} key={item.id}>
+                  <span className="history-marker" />
+                  <div>
+                    <strong>{item.texto}</strong>
+                    <time dateTime={item.data}>{formatarDataHora(item.data)} · {item.autor}</time>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </aside>
+        )}
       </div>
-
-      {dialog && (
-        <Dialog
-          mode={dialog}
-          assignee={assignee}
-          status={status}
-          onClose={() => setDialog(null)}
-          onSave={({ assignee: nextAssignee }) => {
-            setAssignee(nextAssignee)
-            const latest = JSON.parse(window.localStorage.getItem('demanda-DM-2048') || '{}')
-            window.localStorage.setItem('demanda-DM-2048', JSON.stringify({ ...latest, responsavel: nextAssignee }))
-            setDialog(null)
-          }}
-        />
-      )}
     </section>
   )
 }

@@ -27,18 +27,33 @@ function SearchIcon() {
   )
 }
 
-function getPageFromHash() {
-  if (window.location.hash === '#login') return 'login'
-  if (window.location.hash === '#visao-geral') return 'visao-geral' // NOVO
-  if (window.location.hash === '#nova-demanda') return 'nova-demanda'
-  if (window.location.hash === '#departamentos') return 'departamentos'
-  if (window.location.hash.startsWith('#demanda/') && window.location.hash.endsWith('/editar')) return 'atualizar-demanda'
-  if (window.location.hash.startsWith('#demanda/')) return 'detalhes-demanda'
+function getPageFromHash(hash) {
+  if (hash === '#login') return 'login'
+  if (hash === '#visao-geral') return 'visao-geral' // NOVO
+  if (hash === '#nova-demanda') return 'nova-demanda'
+  if (hash === '#departamentos') return 'departamentos'
+  if (hash.startsWith('#demanda/') && hash.endsWith('/editar')) return 'atualizar-demanda'
+  if (hash.startsWith('#demanda/')) return 'detalhes-demanda'
   return 'demandas'
 }
 
+// "#demanda/DM-2003" e "#demanda/DM-2003/editar" → "DM-2003" (RF-R05).
+function idDaRota(hash) {
+  const encontrado = hash.match(/^#demanda\/([^/]+)/)
+  return encontrado ? decodeURIComponent(encontrado[1]) : null
+}
+
+// "#demandas/hidraulica" → "hidraulica" ("Acessar setor" em Departamentos).
+function setorDaRota(hash) {
+  const encontrado = hash.match(/^#demandas\/([^/]+)/)
+  return encontrado ? decodeURIComponent(encontrado[1]) : null
+}
+
 function App() {
-  const [activePage, setActivePage] = useState(getPageFromHash)
+  // O endereço inteiro fica no estado: assim a tela muda também quando só o id muda.
+  const [hash, setHash] = useState(() => window.location.hash)
+  const activePage = getPageFromHash(hash)
+  const idDemanda = idDaRota(hash)
   const { usuario, entrar, sair } = useSessao()
   const searchInput = useRef(null)
   const isHomePage = activePage === 'visao-geral' // NOVO
@@ -50,7 +65,7 @@ function App() {
 
   useEffect(() => {
     function handleHashChange() {
-      setActivePage(getPageFromHash())
+      setHash(window.location.hash)
     }
 
     window.addEventListener('hashchange', handleHashChange)
@@ -88,7 +103,7 @@ function App() {
             <button
               className="topbar-action"
               type="button"
-              onClick={() => document.getElementById('origem')?.focus()}
+              onClick={() => document.getElementById('destino')?.focus()}
             >
               <PlusIcon />
               <span>Criar</span>
@@ -106,17 +121,22 @@ function App() {
         </header>
 
         {isCreatePage ? (
-          <NovaDemanda />
+          <NovaDemanda usuario={usuario} />
         ) : isHomePage ? (
-          <VisaoGeral />
+          <VisaoGeral usuario={usuario} />
         ) : isDepartmentsPage ? (
-          <Departamentos />
+          <Departamentos usuario={usuario} />
         ) : isDetailPage ? (
-          <DetalhesDemanda />
+          <DetalhesDemanda key={idDemanda} id={idDemanda} usuario={usuario} />
         ) : isUpdatePage ? (
-          <AtualizarDemanda />
+          <AtualizarDemanda key={idDemanda} id={idDemanda} usuario={usuario} />
         ) : (
-          <Demandas searchInput={searchInput} />
+          <Demandas
+            key={setorDaRota(hash) ?? 'todos'}
+            searchInput={searchInput}
+            usuario={usuario}
+            setorInicial={setorDaRota(hash)}
+          />
         )}
       </main>
     </div>
