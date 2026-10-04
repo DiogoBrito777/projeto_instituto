@@ -102,6 +102,7 @@ Sem camada de dados; Detalhe e Atualizar fixos na DM-2048; sem login/perfis; "Sa
 9. **Entrega em blocos**, um PR por bloco, com revisão por pares e CHANGELOG.
 10. **Tipo de atendimento "Outros"** no fim da lista de cada um dos 4 setores, para pedidos que não se encaixam nos tipos existentes (já implementado no Bloco 2; aplicado no código antes da votação).
 11. **Limitação a 4 setores** (TI, Hidráulica, Administrativo, Elétrica). Pedido de uma área fora deles segue o fluxo existente: o setor devolve à triagem e a gerência redireciona ou marca "Não aplicável" com justificativa. Cadastro de novos setores é melhoria futura.
+12. **Em triagem pertence à gerência (esclarece a RN11)** — ☐ a confirmar. Quando o setor recusa, a demanda vai para "Em triagem" e passa a ser da gerência: sai das listas, dos contadores e do acesso do setor que recusou (inclusive pela URL), e aparece para a gerência. O campo destino não muda (auditoria e futuro redirecionamento). Quem abriu continua vendo status e "Setor atual: Gerenciamento". Já implementado no Bloco 4, parte A, antes da votação.
 
 ## Pendências
 ☐ Quem revisa cada PR · ☐ Responsável pelo login (Ata 29/09: Pedro, "se der tempo") · ☐ Limites de caracteres · ☐ Horário da apresentação (terça, 06/10, à noite).
