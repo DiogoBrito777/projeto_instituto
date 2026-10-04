@@ -78,6 +78,8 @@ Demandas do seed usadas abaixo:
 | 4C.5 | Celular real na tela de triagem | só pessoa | Seção 3.2. | ☐ passou · ☐ não passou | | |
 | 4C.6 | axe nas telas novas (triagem, aviso, filtro) | Bruno | Seção 3.4, incluindo `#demanda/DM-2013/editar` como `admin`. | ☐ passou · ☐ não passou | | |
 
+> **Fix visual "card gordo" (cards da Visão Geral limitados a 3 linhas):** conferido só pelo assistente no navegador embutido (1280 e 360 px). **Pendente:** Edge (ver os cards com título de 60 e descrição de 500 caracteres), leitor de tela (confirmar que lê o texto inteiro, não só as 3 linhas) e celular real.
+
 ---
 
 ## 2. Roteiro manual no Edge (15 a 20 minutos)

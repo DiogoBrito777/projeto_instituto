@@ -370,6 +370,14 @@
 .visao-geral .demand-card__title,
 .visao-geral .demand-card__desc {
   overflow-wrap: anywhere;
+  /* "Card gordo": com título de 60 e descrição de 500 caracteres o card ficava muito mais alto.
+     No máximo 3 linhas cada, com reticências. É só visual: o texto inteiro continua no HTML (o
+     leitor de tela lê tudo) e aparece completo nos Detalhes. */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
 }
 
 .visao-geral .demand-card__title {

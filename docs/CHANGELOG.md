@@ -314,3 +314,11 @@ Uma entrada por bloco/PR (formato em `docs/CONVENCOES.md`).
     - `user02`: no histórico dos Detalhes, "Redirecionada para Hidráulica (Vazamento): <justificativa>.";
     - `user03` (quem abriu): só o resumo ("Não aceita pelo setor", "Setor atual: Hidráulica"), sem histórico nem o texto da justificativa.
   - **Não executado:** Edge, leitor de tela, celular real, axe (ver `docs/TESTES_PENDENTES.md`).
+
+### 2026-10-04 · Fix visual — "card gordo" · fix/visual-cards
+- **Mudança:** `src/pages/VisaoGeral.css`: nos cards da Visão Geral, título e descrição ficam com no máximo 3 linhas cada, com reticências (`line-clamp`), além do `overflow-wrap: anywhere` que já existia. Só CSS: o texto inteiro continua no HTML, o leitor de tela lê tudo e os Detalhes mostram o texto completo. Demandas já limitava o título a 2 linhas (código dos colegas) e Departamentos só tem texto fixo dos setores; nos dois, nada mudou.
+- **Verificação:**
+  - lint 0 avisos e 0 erros · build OK · `npm test` 223 passaram;
+  - navegador embutido: com duas demandas criadas pela Nova Demanda (título de 60 caracteres + descrição de 500; título e descrição com uma palavra gigante sem espaço), os cards da Visão Geral ficaram com a mesma altura dos normais (274 px em 1280 e em 360 px), a descrição em 3 linhas com "…", a palavra gigante quebrando dentro do card, sem rolagem lateral nas duas larguras, texto completo no DOM e fonte de 14/16 px;
+  - depois, "Resetar dados";
+  - **não executado:** Edge, leitor de tela, celular real.
