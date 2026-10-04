@@ -362,7 +362,7 @@ Origem: bateria de testes manuais do autor (Bruno Diogo). Cada item foi feito se
 
 - **Verificação:**
   - `npm test` 12 arquivos / **245** testes passaram (22 novos) · lint 0 avisos e 0 erros · build OK;
-  - navegador embutido, como `admin`: itens 1, 2, 3, 5, 6, 7, 8 e 9 conferidos.
+  - navegador embutido, como `admin`: itens 1 a 9 conferidos. O item 4 inclui as bordas medidas em 1280 px e os rótulos dos filtros em 320 px.
 - **Limitações:**
   - não há biblioteca de teste de interface (jsdom/Testing Library); por isso os testes cobrem as regras puras, não os cliques. Instalar exige baixar pacotes: decisão do grupo;
   - o navegador embutido não emula menos de 320 px, então o zoom de 500% (256 px) não foi conferido. `index.css` tem `min-width: 320px` no `html`/`body` (código anterior), o que pode gerar rolagem da página inteira abaixo disso;
@@ -394,3 +394,22 @@ Origem: bateria de testes manuais do autor (Bruno Diogo). Cada item foi feito se
   - o Bloco 1 está registrado como "sem print do estado anterior (defeito corrigido; não reproduzível sem voltar o código)".
 - Arquivos: `docs/DOCUMENTACAO.md` (seção 19), `docs/TESTES_PENDENTES.md`, `docs/evidencias/depois/TESTE_MANUAL_BLOCO1.md`, `docs/evidencias/depois/TESTE_MANUAL_BLOCO2A.md` e este CHANGELOG.
 - Os prints ficam só em `docs/evidencias/antes/` e `docs/evidencias/depois/`.
+
+### 2026-10-04 · Registro final de testes, falhas conhecidas e material de estudo · fix/ajustes-teste-manual
+- **Só documentação**; nenhum arquivo de `src/` mudou. Decisão do autor: nenhuma correção de código antes da apresentação (06/10).
+- **Rodada final do autor (04/10/2026), manual:**
+  - passaram: retestes 1 a 12 do PR #9 (o passo 1 do reteste 10 está sem print), Bloco A, Bloco B (por relato, sem print de cada passo), Bloco C partes 1 e 2 (com prints);
+  - Bloco D, parte 1 (celular Android real): as telas abrem, mas **o envio da Nova Demanda falhou** (F1);
+  - **não executados** por falta de tempo: NVDA no reteste, axe no código atual, Lighthouse nas demais telas, zoom de 400% e 500%, dados corrompidos pelo F12, reabrir o aviso de limite, Voz de Acesso.
+  - Registro completo em `docs/TESTES_PENDENTES.md`, seção 0.
+- **Falhas conhecidas** (`docs/DOCUMENTACAO.md`, seção 23, nova): F1 (envio trava no celular pelo IP da rede; causa não investigada, com uma hipótese não confirmada), A13 a A17 e O1, com a origem no código encontrada por leitura, sem alterar nada.
+- **Inconsistências corrigidas:**
+  - CT-R11 desmarcado nos requisitos, coerente com o item 1.5;
+  - DOCUMENTACAO §20.6: zoom de 400%/500% registrado como não executado;
+  - DOCUMENTACAO §6, "Registrar rápido": agora 🟡, por causa da F1;
+  - o CHANGELOG do PR #9 agora inclui o item 4 nas conferências;
+  - TESTES §3.3 usa o padrão real de nome do Lighthouse;
+  - CT-R03 marcado como evidência fraca;
+  - 4C.5 ligado ao 3.7.
+- `docs/evidencias/depois/NAO_EXECUTADO_AINDA.md` atualizado com a lista final.
+- **Material de estudo** para o grupo em `docs/estudo/` (14 arquivos): índice, funcionalidades, perguntas rápidas, roteiro da apresentação e falhas para falar.
