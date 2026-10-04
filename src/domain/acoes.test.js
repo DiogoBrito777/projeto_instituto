@@ -1,15 +1,20 @@
 import { describe, expect, it } from 'vitest'
 import {
   ERROS_ACAO,
+  LIMITE_JUSTIFICATIVA,
   LIMITE_MOTIVO,
   LIMITE_OBSERVACAO,
   aceitarDemanda,
+  cancelarDemanda,
+  marcarNaoAplicavel,
+  motivoDaTriagem,
   podeEditar,
   recusarDemanda,
+  redirecionarDemanda,
   salvarAtualizacao,
   statusParaEdicao,
 } from './acoes.js'
-import { podeDefinirPrioridade, resumoParaSolicitante } from './permissoes.js'
+import { podeAceitar, podeDefinirPrioridade, podeVer, podeVerDetalhes, resumoParaSolicitante } from './permissoes.js'
 import { STATUS } from './status.js'
 
 const AGORA = new Date('2026-10-05T12:00:00Z')
@@ -312,5 +317,150 @@ describe('recusarDemanda (RN11, CA-R04)', () => {
 
   it('NÃO recusa demanda final (RN20)', () => {
     expect(recusarDemanda(demanda(STATUS.CONCLUIDA), 'Motivo', eletrica, contexto()).erro).toBe(ERROS_ACAO.FINALIZADA)
+  })
+})
+
+describe('Bloco 4C — ações da gerência em triagem (RN18, RN19, RN20)', () => {
+  // Hidráulica abriu para a Elétrica; a Elétrica recusou; está com a gerência.
+  const administrativo = { usuario: 'user03', nome: 'Equipe Administrativa', perfil: 'departamento', departamento: 'administrativo' }
+  const emTriagem = () =>
+    demanda(STATUS.EM_TRIAGEM, {
+      prioridade: 'Não definida',
+      criadaEm: '2026-10-04T12:00:00Z',
+      historico: [
+        { id: 'h1', tipo: 'criacao', texto: 'Demanda criada.', autor: 'Equipe de Hidráulica', data: '2026-10-04T12:00:00Z' },
+        { id: 'h2', tipo: 'recusa', texto: 'Recusada: não é da Elétrica.', autor: 'Equipe de Elétrica', data: '2026-10-04T20:00:00Z' },
+      ],
+    })
+  const destinoAdm = { setor: 'administrativo', tipo: 'Compras e materiais' }
+
+  describe('redirecionar', () => {
+    it('gerência redireciona: Pendente de aceite, novo destino e tipo, histórico com setor e tipo', () => {
+      const resultado = redirecionarDemanda(emTriagem(), destinoAdm, admin, contexto())
+      expect(resultado.ok).toBe(true)
+      const nova = resultado.dados
+      expect(nova.status).toBe(STATUS.PENDENTE_ACEITE)
+      expect(nova.destino).toBe('administrativo')
+      expect(nova.tipo).toBe('Compras e materiais')
+      expect(nova.redirecionadaEm).toBe(AGORA.toISOString())
+      expect(nova.prioridade).toBe('Não definida')
+      const ultimo = nova.historico[nova.historico.length - 1]
+      expect(ultimo).toMatchObject({
+        tipo: 'redirecionamento',
+        setor: 'administrativo',
+        tipoAtendimento: 'Compras e materiais',
+        autor: 'Gerenciamento',
+        perfil: 'gerenciamento',
+        data: AGORA.toISOString(),
+      })
+      expect(ultimo.texto).toBe('Redirecionada para Administrativo, tipo "Compras e materiais".')
+      // Histórico só cresce: os itens antigos continuam iguais.
+      expect(nova.historico.slice(0, 2)).toEqual(emTriagem().historico)
+    })
+
+    it('pode escolher de novo o setor que recusou (sem regra nova)', () => {
+      expect(redirecionarDemanda(emTriagem(), { setor: 'eletrica', tipo: 'Outros' }, admin, contexto()).ok).toBe(true)
+    })
+
+    it('demanda devolvida já aceita: prioridade e prazos antigos não passam ao novo setor', () => {
+      const devolvida = { ...emTriagem(), prioridade: 'Alta', aceitaEm: '2026-10-04T13:00:00Z', prazo: '2026-10-06T13:00:00Z', aguardandoDesde: '2026-10-04T14:00:00Z' }
+      const nova = redirecionarDemanda(devolvida, destinoAdm, admin, contexto()).dados
+      expect([nova.prioridade, nova.aceitaEm, nova.prazo, nova.aguardandoDesde]).toEqual(['Não definida', null, null, null])
+    })
+
+    it('visibilidade depois: o novo setor recebe; quem recusou não vê; quem abriu vê só o resumo com o novo setor', () => {
+      const nova = redirecionarDemanda(emTriagem(), destinoAdm, admin, contexto()).dados
+      expect(podeAceitar(administrativo, nova)).toBe(true)
+      expect(podeVer(eletrica, nova)).toBe(false)
+      expect(podeVerDetalhes(hidraulica, nova)).toBe(false)
+      expect(resumoParaSolicitante(nova).setorAtual).toBe('administrativo')
+      expect(resumoParaSolicitante(nova).status).toBe('Não aceita pelo setor')
+    })
+
+    it('NÃO redireciona: setor comum (o que recusou, quem abriu, outro)', () => {
+      for (const usuario of [eletrica, hidraulica, administrativo]) {
+        expect(redirecionarDemanda(emTriagem(), destinoAdm, usuario, contexto()).erro).toBe(ERROS_ACAO.SEM_PERMISSAO)
+      }
+    })
+
+    it('NÃO redireciona fora de Em triagem (pendente, em andamento, aguardando)', () => {
+      for (const status of [STATUS.PENDENTE_ACEITE, STATUS.EM_ANDAMENTO, STATUS.AGUARDANDO]) {
+        expect(redirecionarDemanda(demanda(status), destinoAdm, admin, contexto()).erro).toBe(ERROS_ACAO.TRANSICAO_INVALIDA)
+      }
+    })
+
+    it('NÃO redireciona demanda final (RN20)', () => {
+      for (const status of [STATUS.CONCLUIDA, STATUS.NAO_APLICAVEL, STATUS.CANCELADA]) {
+        expect(redirecionarDemanda(demanda(status), destinoAdm, admin, contexto()).erro).toBe(ERROS_ACAO.FINALIZADA)
+      }
+    })
+
+    it('NÃO redireciona para setor inválido: vazio, inventado ou "gerenciamento"', () => {
+      for (const setor of ['', undefined, 'financeiro', 'gerenciamento']) {
+        expect(redirecionarDemanda(emTriagem(), { setor, tipo: 'Outros' }, admin, contexto()).erro).toBe(ERROS_ACAO.SETOR_INVALIDO)
+      }
+    })
+
+    it('NÃO redireciona com tipo que não existe no novo setor (nem vazio)', () => {
+      expect(redirecionarDemanda(emTriagem(), { setor: 'administrativo', tipo: 'Iluminação' }, admin, contexto()).erro).toBe(ERROS_ACAO.TIPO_INVALIDO)
+      expect(redirecionarDemanda(emTriagem(), { setor: 'administrativo', tipo: '' }, admin, contexto()).erro).toBe(ERROS_ACAO.TIPO_INVALIDO)
+    })
+  })
+
+  describe('não aplicável e cancelar', () => {
+    it('gerência marca Não aplicável com justificativa; histórico registra', () => {
+      const resultado = marcarNaoAplicavel(emTriagem(), '  Nenhum setor atende isso.  ', admin, contexto())
+      expect(resultado.dados.status).toBe(STATUS.NAO_APLICAVEL)
+      expect(resultado.dados.historico.at(-1)).toMatchObject({ tipo: 'encerramento', texto: 'Não aplicável: Nenhum setor atende isso.', autor: 'Gerenciamento' })
+    })
+
+    it('gerência cancela com justificativa; histórico registra', () => {
+      const resultado = cancelarDemanda(emTriagem(), 'Pedido duplicado.', admin, contexto())
+      expect(resultado.dados.status).toBe(STATUS.CANCELADA)
+      expect(resultado.dados.historico.at(-1)).toMatchObject({ tipo: 'encerramento', texto: 'Cancelada: Pedido duplicado.' })
+    })
+
+    it('justificativa vazia, só espaços ou acima de 500 caracteres: bloqueia', () => {
+      for (const acao of [marcarNaoAplicavel, cancelarDemanda]) {
+        expect(acao(emTriagem(), '', admin, contexto()).erro).toBe(ERROS_ACAO.JUSTIFICATIVA_AUSENTE)
+        expect(acao(emTriagem(), '   ', admin, contexto()).erro).toBe(ERROS_ACAO.JUSTIFICATIVA_AUSENTE)
+        expect(acao(emTriagem(), 'x'.repeat(LIMITE_JUSTIFICATIVA + 1), admin, contexto()).erro).toBe(ERROS_ACAO.JUSTIFICATIVA_LONGA)
+        expect(acao(emTriagem(), 'x'.repeat(LIMITE_JUSTIFICATIVA), admin, contexto()).ok).toBe(true)
+      }
+      expect(LIMITE_JUSTIFICATIVA).toBe(500)
+    })
+
+    it('setor comum NÃO marca nem cancela', () => {
+      for (const usuario of [eletrica, hidraulica, administrativo]) {
+        expect(marcarNaoAplicavel(emTriagem(), 'J', usuario, contexto()).erro).toBe(ERROS_ACAO.SEM_PERMISSAO)
+        expect(cancelarDemanda(emTriagem(), 'J', usuario, contexto()).erro).toBe(ERROS_ACAO.SEM_PERMISSAO)
+      }
+    })
+
+    it('Não aplicável só a partir de Em triagem (seção 4)', () => {
+      for (const status of [STATUS.PENDENTE_ACEITE, STATUS.EM_ANDAMENTO, STATUS.AGUARDANDO]) {
+        expect(marcarNaoAplicavel(demanda(status), 'J', admin, contexto()).erro).toBe(ERROS_ACAO.TRANSICAO_INVALIDA)
+      }
+    })
+
+    it('Cancelar: o domínio permite o que a seção 4 permite (Pendente, Andamento, Aguardando, Triagem)', () => {
+      for (const status of [STATUS.PENDENTE_ACEITE, STATUS.EM_ANDAMENTO, STATUS.AGUARDANDO, STATUS.EM_TRIAGEM]) {
+        expect(cancelarDemanda(demanda(status), 'J', admin, contexto()).ok).toBe(true)
+      }
+    })
+
+    it('estado final não muda (RN20): nenhuma ação passa, nem da gerência', () => {
+      const encerrada = marcarNaoAplicavel(emTriagem(), 'J', admin, contexto()).dados
+      expect(cancelarDemanda(encerrada, 'J', admin, contexto()).erro).toBe(ERROS_ACAO.FINALIZADA)
+      expect(marcarNaoAplicavel(encerrada, 'J', admin, contexto()).erro).toBe(ERROS_ACAO.FINALIZADA)
+      expect(redirecionarDemanda(encerrada, destinoAdm, admin, contexto()).erro).toBe(ERROS_ACAO.FINALIZADA)
+      const cancelada = cancelarDemanda(emTriagem(), 'J', admin, contexto()).dados
+      expect(redirecionarDemanda(cancelada, destinoAdm, admin, contexto()).erro).toBe(ERROS_ACAO.FINALIZADA)
+    })
+  })
+
+  it('motivoDaTriagem: último motivo de recusa e quem recusou', () => {
+    expect(motivoDaTriagem(emTriagem())).toEqual({ texto: 'não é da Elétrica.', autor: 'Equipe de Elétrica', data: '2026-10-04T20:00:00Z' })
+    expect(motivoDaTriagem(demanda(STATUS.EM_TRIAGEM))).toBeNull()
   })
 })

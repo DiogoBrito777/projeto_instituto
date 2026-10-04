@@ -1,11 +1,14 @@
 import { describe, expect, it } from 'vitest'
 import {
   LIMITE_ACEITE_HORAS,
+  LIMITE_ACEITE_REDIRECIONADA_HORAS,
   LIMITE_TRIAGEM_HORAS,
   compararPorAtencao,
   estaAtrasada,
   formatarTempoParado,
   marcoDeAtencao,
+  prazoAposRedirecionar,
+  prazoDeAceite,
   seloDeAtencao,
   tempoParado,
 } from './atencao.js'
@@ -151,6 +154,87 @@ describe('selo conforme quem olha', () => {
 
   it('demanda fora da fila não tem selo', () => {
     expect(seloDeAtencao({ ...pendente(90), status: STATUS.EM_ANDAMENTO }, admin, AGORA)).toBeNull()
+  })
+})
+
+describe('Bloco 4C — prazo de aceite depois do redirecionamento (24 h, teto de 48 h desde a abertura)', () => {
+  // Aberta às 08h de 01/10 (horário de Brasília = 11h UTC).
+  const ABERTURA = new Date('2026-10-01T11:00:00Z')
+  const depois = (horas) => new Date(ABERTURA.getTime() + horas * UMA_HORA)
+  const horasEntre = (a, b) => (b - a) / UMA_HORA
+
+  function redirecionada(redirecionadaHorasDepois) {
+    return {
+      status: STATUS.PENDENTE_ACEITE,
+      criadaEm: ABERTURA.toISOString(),
+      historico: [
+        { tipo: 'criacao', data: ABERTURA.toISOString() },
+        { tipo: 'recusa', data: depois(1).toISOString() },
+        { tipo: 'redirecionamento', data: depois(redirecionadaHorasDepois).toISOString() },
+      ],
+    }
+  }
+
+  it('constante separada: 24 h', () => {
+    expect(LIMITE_ACEITE_REDIRECIONADA_HORAS).toBe(24)
+  })
+
+  it('aberta 08h, redirecionada 11h do mesmo dia → vence em 24 h', () => {
+    expect(horasEntre(depois(3), prazoDeAceite(redirecionada(3)))).toBe(24)
+  })
+
+  it('redirecionada 24 h após a abertura → 24 h (bate no teto de 48 h)', () => {
+    expect(horasEntre(depois(24), prazoDeAceite(redirecionada(24)))).toBe(24)
+  })
+
+  it('redirecionada 36 h após a abertura → 12 h (o teto de 48 h corta)', () => {
+    expect(horasEntre(depois(36), prazoDeAceite(redirecionada(36)))).toBe(12)
+  })
+
+  it('redirecionada 50 h após a abertura (teto já vencido) → 24 h cheias, não nasce atrasada', () => {
+    const demanda = redirecionada(50)
+    expect(horasEntre(depois(50), prazoDeAceite(demanda))).toBe(24)
+    expect(estaAtrasada(demanda, depois(50))).toBe(false)
+  })
+
+  it('redirecionada exatamente nas 48 h → 24 h cheias (teto vencendo no mesmo instante)', () => {
+    expect(horasEntre(depois(48), prazoDeAceite(redirecionada(48)))).toBe(24)
+  })
+
+  it('caso-limite: redirecionada com 47 h 59 min → sobra 1 minuto (regra aplicada como está)', () => {
+    const minutos = (prazoDeAceite(redirecionada(47 + 59 / 60)) - depois(47 + 59 / 60)) / 60000
+    expect(Math.round(minutos)).toBe(1)
+  })
+
+  it('limite exato NÃO é atraso; 1 minuto depois é', () => {
+    const demanda = redirecionada(36) // prazo = 48 h após a abertura
+    expect(estaAtrasada(demanda, depois(48))).toBe(false)
+    expect(estaAtrasada(demanda, depois(48 + 1 / 60))).toBe(true)
+  })
+
+  it('selo usa o prazo daquela demanda: redirecionada às 36 h está atrasada às 49 h (antes seria 48 h desde o redirecionamento)', () => {
+    expect(seloDeAtencao(redirecionada(36), admin, depois(49))).toEqual({ texto: 'Atrasada para aceite', atrasada: true })
+    expect(seloDeAtencao(redirecionada(36), admin, depois(40)).texto).toBe('Aguardando aceite há 4 horas')
+  })
+
+  it('vários redirecionamentos: vale o último, com o mesmo teto da abertura', () => {
+    const demanda = redirecionada(10)
+    demanda.historico.push({ tipo: 'recusa', data: depois(20).toISOString() })
+    demanda.historico.push({ tipo: 'redirecionamento', data: depois(30).toISOString() })
+    expect(horasEntre(ABERTURA, prazoDeAceite(demanda))).toBe(48)
+  })
+
+  it('nunca redirecionada: continua criação + 48 h', () => {
+    expect(prazoDeAceite(pendente(5)).toISOString()).toBe(new Date(AGORA.getTime() + 43 * UMA_HORA).toISOString())
+  })
+
+  it('dado antigo sem item no histórico: usa o campo redirecionadaEm', () => {
+    const demanda = { status: STATUS.PENDENTE_ACEITE, criadaEm: ABERTURA.toISOString(), redirecionadaEm: depois(36).toISOString(), historico: [] }
+    expect(horasEntre(ABERTURA, prazoDeAceite(demanda))).toBe(48)
+  })
+
+  it('prazoAposRedirecionar (usado no pop-up) dá o mesmo resultado', () => {
+    expect(horasEntre(depois(36), prazoAposRedirecionar(ABERTURA, depois(36)))).toBe(12)
   })
 })
 
