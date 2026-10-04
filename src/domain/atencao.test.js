@@ -157,7 +157,7 @@ describe('selo conforme quem olha', () => {
   })
 })
 
-describe('Bloco 4C — prazo de aceite depois do redirecionamento (24 h, teto de 48 h desde a abertura)', () => {
+describe('Bloco 4C — prazo de aceite depois do redirecionamento (sempre 24 h)', () => {
   // Aberta às 08h de 01/10 (horário de Brasília = 11h UTC).
   const ABERTURA = new Date('2026-10-01T11:00:00Z')
   const depois = (horas) => new Date(ABERTURA.getTime() + horas * UMA_HORA)
@@ -183,45 +183,32 @@ describe('Bloco 4C — prazo de aceite depois do redirecionamento (24 h, teto de
     expect(horasEntre(depois(3), prazoDeAceite(redirecionada(3)))).toBe(24)
   })
 
-  it('redirecionada 24 h após a abertura → 24 h (bate no teto de 48 h)', () => {
-    expect(horasEntre(depois(24), prazoDeAceite(redirecionada(24)))).toBe(24)
+  it('redirecionada 24 h, 36 h ou 50 h após a abertura → sempre 24 h a partir do redirecionamento', () => {
+    for (const horas of [24, 36, 50]) {
+      expect(horasEntre(depois(horas), prazoDeAceite(redirecionada(horas)))).toBe(24)
+    }
   })
 
-  it('redirecionada 36 h após a abertura → 12 h (o teto de 48 h corta)', () => {
-    expect(horasEntre(depois(36), prazoDeAceite(redirecionada(36)))).toBe(12)
+  it('redirecionada depois das 48 h da abertura NÃO nasce atrasada', () => {
+    expect(estaAtrasada(redirecionada(50), depois(50))).toBe(false)
   })
 
-  it('redirecionada 50 h após a abertura (teto já vencido) → 24 h cheias, não nasce atrasada', () => {
-    const demanda = redirecionada(50)
-    expect(horasEntre(depois(50), prazoDeAceite(demanda))).toBe(24)
-    expect(estaAtrasada(demanda, depois(50))).toBe(false)
+  it('limite exato (24 h após o redirecionamento) NÃO é atraso; 1 minuto depois é', () => {
+    const demanda = redirecionada(36) // prazo = 36 h + 24 h = 60 h após a abertura
+    expect(estaAtrasada(demanda, depois(60))).toBe(false)
+    expect(estaAtrasada(demanda, depois(60 + 1 / 60))).toBe(true)
   })
 
-  it('redirecionada exatamente nas 48 h → 24 h cheias (teto vencendo no mesmo instante)', () => {
-    expect(horasEntre(depois(48), prazoDeAceite(redirecionada(48)))).toBe(24)
+  it('selo usa o prazo daquela demanda: redirecionada às 36 h está no prazo às 59 h e atrasada às 61 h', () => {
+    expect(seloDeAtencao(redirecionada(36), admin, depois(59)).texto).toBe('Aguardando aceite há 23 horas')
+    expect(seloDeAtencao(redirecionada(36), admin, depois(61))).toEqual({ texto: 'Atrasada para aceite', atrasada: true })
   })
 
-  it('caso-limite: redirecionada com 47 h 59 min → sobra 1 minuto (regra aplicada como está)', () => {
-    const minutos = (prazoDeAceite(redirecionada(47 + 59 / 60)) - depois(47 + 59 / 60)) / 60000
-    expect(Math.round(minutos)).toBe(1)
-  })
-
-  it('limite exato NÃO é atraso; 1 minuto depois é', () => {
-    const demanda = redirecionada(36) // prazo = 48 h após a abertura
-    expect(estaAtrasada(demanda, depois(48))).toBe(false)
-    expect(estaAtrasada(demanda, depois(48 + 1 / 60))).toBe(true)
-  })
-
-  it('selo usa o prazo daquela demanda: redirecionada às 36 h está atrasada às 49 h (antes seria 48 h desde o redirecionamento)', () => {
-    expect(seloDeAtencao(redirecionada(36), admin, depois(49))).toEqual({ texto: 'Atrasada para aceite', atrasada: true })
-    expect(seloDeAtencao(redirecionada(36), admin, depois(40)).texto).toBe('Aguardando aceite há 4 horas')
-  })
-
-  it('vários redirecionamentos: vale o último, com o mesmo teto da abertura', () => {
+  it('vários redirecionamentos: vale o último', () => {
     const demanda = redirecionada(10)
     demanda.historico.push({ tipo: 'recusa', data: depois(20).toISOString() })
     demanda.historico.push({ tipo: 'redirecionamento', data: depois(30).toISOString() })
-    expect(horasEntre(ABERTURA, prazoDeAceite(demanda))).toBe(48)
+    expect(horasEntre(depois(30), prazoDeAceite(demanda))).toBe(24)
   })
 
   it('nunca redirecionada: continua criação + 48 h', () => {
@@ -230,11 +217,11 @@ describe('Bloco 4C — prazo de aceite depois do redirecionamento (24 h, teto de
 
   it('dado antigo sem item no histórico: usa o campo redirecionadaEm', () => {
     const demanda = { status: STATUS.PENDENTE_ACEITE, criadaEm: ABERTURA.toISOString(), redirecionadaEm: depois(36).toISOString(), historico: [] }
-    expect(horasEntre(ABERTURA, prazoDeAceite(demanda))).toBe(48)
+    expect(horasEntre(depois(36), prazoDeAceite(demanda))).toBe(24)
   })
 
   it('prazoAposRedirecionar (usado no pop-up) dá o mesmo resultado', () => {
-    expect(horasEntre(depois(36), prazoAposRedirecionar(ABERTURA, depois(36)))).toBe(12)
+    expect(horasEntre(depois(36), prazoAposRedirecionar(depois(36)))).toBe(24)
   })
 })
 

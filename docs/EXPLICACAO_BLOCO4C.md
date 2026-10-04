@@ -35,28 +35,20 @@ Todas começam pelas mesmas três perguntas (`conferirGerencia`): **está finali
 | Situação | Prazo para aceitar |
 |---|---|
 | Nunca redirecionada | abertura + **48 h** (como no Bloco 4B) |
-| Redirecionada | redirecionamento + **24 h**, mas **nunca depois de abertura + 48 h** (o "teto") |
-| Redirecionada com o teto já vencido | redirecionamento + **24 h cheias** (não nasce atrasada) |
+| Redirecionada | último redirecionamento + **24 h**, sempre |
 
-Exemplos (todos viraram teste):
-- aberta às 08h e redirecionada às 11h → 24 h;
-- redirecionada 24 h depois da abertura → 24 h (bate exatamente no teto);
-- redirecionada 36 h depois → **12 h** (o teto corta);
-- redirecionada 50 h depois → 24 h cheias.
+Exemplos (viraram teste): aberta às 08h e redirecionada às 11h → 24 h; redirecionada 24 h, 36 h ou 50 h depois da abertura → também 24 h, contadas do redirecionamento. Assim o novo setor nunca "nasce atrasado".
 
 Exatamente no prazo **não** é atraso; 1 minuto depois, é.
 
 ```js
-export function prazoAposRedirecionar(criadaEm, redirecionadaEm) {
-  const teto = criação + 48 h
-  const cheio = redirecionamento + 24 h
-  if (teto <= redirecionamento) return cheio // teto já venceu: 24 h cheias
-  return o menor entre cheio e teto
+export function prazoAposRedirecionar(redirecionadaEm) {
+  return redirecionamento + 24 h
 }
 ```
 (trecho simplificado; o código usa datas em milissegundos.)
 
-- **Caso-limite:** redirecionada com 47 h 59 min desde a abertura, o novo setor fica com **1 minuto**. É o que a regra diz; está registrado no relatório e na proposta 15 para o grupo decidir.
+- *Histórico da decisão:* a primeira versão do 4C tinha um teto de 48 h desde a abertura. O dono do projeto retirou o teto (04/10), porque com ele o novo setor podia ficar com poucos minutos.
 - O selo "Aguardando aceite há X" / "Atrasada para aceite" e o campo **"Aceitar até"** dos Detalhes usam esse prazo.
 - O pop-up do redirecionamento já mostra até quando o novo setor terá para aceitar.
 
@@ -79,8 +71,8 @@ export function prazoAposRedirecionar(criadaEm, redirecionadaEm) {
 ## 7. Perguntas que o professor pode fazer
 1. **Quem pode redirecionar?** Só a gerência e só em triagem (RN18). O setor nunca envia direto a outro setor.
 2. **Por que a gerência escolhe o tipo junto com o setor?** Cada setor tem os seus tipos; sem isso, a demanda chegaria com um tipo que não existe no novo setor.
-3. **Como fica o prazo de aceite depois do redirecionamento?** 24 h, sem passar de 48 h desde a abertura; se essas 48 h já passaram, 24 h cheias.
-4. **Por que o teto de 48 h?** Para a demanda não ficar parada indefinidamente sendo passada de setor em setor.
+3. **Como fica o prazo de aceite depois do redirecionamento?** Sempre 24 h, contadas do redirecionamento. A demanda que nunca foi redirecionada continua com 48 h.
+4. **Por que 24 h e não 48 h depois do redirecionamento?** A demanda já perdeu tempo na recusa e na triagem; 24 h é o mínimo justo para o novo setor e evita que ela fique parada mais tempo.
 5. **Qual a diferença entre Não aplicável e Cancelada?** Não aplicável: nenhum setor tem competência. Cancelada: o pedido não deve ser atendido (duplicado, desistência…). Os dois exigem justificativa e são finais (RN19, RN20).
 6. **Dá para cancelar uma demanda em andamento?** Pela regra (seção 4), sim, e o domínio permite. Pela tela, por enquanto só em triagem (decisão de 04/10).
 7. **O que impede alguém de triar pelo DevTools?** A regra roda de novo no storage, com a demanda lida na hora de gravar; para quem não é gerência a resposta é "sem permissão". Há teste para isso.

@@ -103,8 +103,8 @@ export default function FormularioTriagem({ demand, usuario }) {
       campoTipo.current.focus()
       return
     }
-    // Prazo mostrado no pop-up: o mesmo cálculo que valerá depois (24 h, teto de 48 h da abertura).
-    setPrazoPrevisto(prazoAposRedirecionar(demand.criadaEm, new Date()))
+    // Prazo mostrado no pop-up: o mesmo cálculo que valerá depois (24 h a partir de agora).
+    setPrazoPrevisto(prazoAposRedirecionar(new Date()))
     setDialogo('redirecionar')
   }
 

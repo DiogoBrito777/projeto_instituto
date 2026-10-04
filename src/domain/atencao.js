@@ -70,17 +70,11 @@ export function estaAtrasada(demanda, agora) {
 }
 
 // PROPOSTA de 04/10 (Bloco 4C, proposta 15 do rascunho de 03/10; RN18): depois de um redirecionamento
-// o novo setor tem 24 h, contadas do redirecionamento, mas nunca além do teto de 48 h desde a ABERTURA.
-// Se o teto já venceu (ou vence no mesmo instante) quando a gerência redireciona, o novo setor recebe
-// 24 h cheias, para não "nascer atrasado".
+// o novo setor tem SEMPRE 24 h, contadas do redirecionamento. Nunca redirecionada: 48 h da criação.
 export const LIMITE_ACEITE_REDIRECIONADA_HORAS = 24
 
-export function prazoAposRedirecionar(criadaEm, redirecionadaEm) {
-  const teto = new Date(criadaEm).getTime() + LIMITE_ACEITE_HORAS * UMA_HORA
-  const redirecionamento = new Date(redirecionadaEm).getTime()
-  const cheio = redirecionamento + LIMITE_ACEITE_REDIRECIONADA_HORAS * UMA_HORA
-  if (teto <= redirecionamento) return new Date(cheio)
-  return new Date(Math.min(cheio, teto))
+export function prazoAposRedirecionar(redirecionadaEm) {
+  return new Date(new Date(redirecionadaEm).getTime() + LIMITE_ACEITE_REDIRECIONADA_HORAS * UMA_HORA)
 }
 
 // Data do último redirecionamento: pelo histórico (RN22) ou, em dado antigo, pelo campo gravado.
@@ -98,7 +92,7 @@ export function prazoDeAceite(demanda) {
   if (!redirecionamento) {
     return new Date(new Date(demanda.criadaEm).getTime() + LIMITE_ACEITE_HORAS * UMA_HORA)
   }
-  return prazoAposRedirecionar(demanda.criadaEm, redirecionamento)
+  return prazoAposRedirecionar(redirecionamento)
 }
 
 // Texto do selo, conforme quem está olhando (decisão de 04/10):

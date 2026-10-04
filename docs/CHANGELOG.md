@@ -213,7 +213,7 @@ Uma entrada por bloco/PR (formato em `docs/CONVENCOES.md`).
     - Erros novos: `setor-invalido`, `justificativa-ausente`, `justificativa-longa`.
   - `src/domain/atencao.js`:
     - `LIMITE_ACEITE_REDIRECIONADA_HORAS = 24`;
-    - `prazoAposRedirecionar` e `prazoDeAceite`: 24 h após o redirecionamento, com teto de criação + 48 h; teto vencido → 24 h cheias;
+    - `prazoAposRedirecionar` e `prazoDeAceite`: 24 h após o redirecionamento (*a versão com teto de 48 h desde a abertura foi retirada no ajuste abaixo*);
     - `estaAtrasada` (pendente) passou a usar `prazoDeAceite`. Demanda nunca redirecionada continua em 48 h; os testes do 4B não mudaram.
 - **Interface:**
   - `src/pages/DetalhesDemanda.jsx`: botão **"Triar demanda"** (só gerência, só Em triagem). Campo novo **"Aceitar até"** para pendentes (executor e gerência). O comentário antigo sobre o redirecionamento foi atualizado.
@@ -239,7 +239,7 @@ Uma entrada por bloco/PR (formato em `docs/CONVENCOES.md`).
       - "Triar demanda" por Tab/Enter; a tela mostrou o motivo e "Recusada por Equipe de Elétrica (Elétrica)";
       - Redirecionar sem setor e sem tipo deu as mensagens junto dos campos, com o foco no campo;
       - tipo escolhido pelas setas;
-      - o pop-up mostrou "até 04/10 11:12" (o teto de 48 h, porque faltavam 8 h);
+      - o pop-up mostrou "até 04/10 11:12" (pela regra com teto, retirada no ajuste abaixo);
       - Tab ficou preso no pop-up e Esc devolveu o foco a "Redirecionar";
       - a confirmação levou à lista com o foco no h1;
       - nos Detalhes: Pendente de aceite, Hidráulica, tipo Vazamento, "Aceitar até 04/10 11:12" e o histórico de redirecionamento.
@@ -258,3 +258,25 @@ Uma entrada por bloco/PR (formato em `docs/CONVENCOES.md`).
     - nova rodada do axe;
     - aceite pelo novo setor depois do redirecionamento (a regra do aceite é a do Bloco 4A, já testada);
     - cancelamento pela tela fora de triagem (a tela não oferece).
+
+### 2026-10-04 · Bloco 4C — ajuste: prazo de aceite após redirecionar sem teto · feat/bloco4c-acoes-gerencia
+- **Decisão do dono do projeto:** depois do redirecionamento, o novo setor tem **sempre 24 h**, contadas do redirecionamento. O teto de 48 h desde a abertura e a regra das "24 h cheias quando o teto venceu" deixaram de existir. Com isso some o caso-limite de sobrar só alguns minutos. A demanda nunca redirecionada continua com 48 h.
+- **Código:**
+  - `src/domain/atencao.js`: `prazoAposRedirecionar(redirecionadaEm)` agora é só redirecionamento + 24 h (recebe um parâmetro a menos), e `prazoDeAceite` a usa. Sem código morto.
+  - `src/pages/TriagemDemanda.jsx`: o pop-up chama a função nova.
+  - Comentários atualizados em `src/domain/acoes.js` e `src/pages/DetalhesDemanda.jsx`.
+- **Testes** (`src/domain/atencao.test.js`):
+  - o bloco do 4C foi reescrito: os redirecionamentos às 24 h, 36 h e 50 h dão sempre 24 h;
+  - limite exato (24 h após o redirecionamento) não é atraso;
+  - redirecionada depois das 48 h não nasce atrasada;
+  - vários redirecionamentos: vale o último;
+  - a demanda nunca redirecionada continua com 48 h;
+  - saíram os testes do teto (12 h, "24 h cheias" e o caso de 1 minuto). Eram 13 testes no bloco, agora são 10.
+- **Docs:** nota da RN18, proposta 15 ("Depois do redirecionamento pela gerência, o novo setor tem 24h para aceitar; antes eram 48h") e `docs/EXPLICACAO_BLOCO4C.md`.
+- **Verificação:**
+  - `npm test` 10 arquivos / **219** testes passaram · lint 0 avisos e 0 erros · build OK.
+  - Navegador embutido, depois de "Resetar dados":
+    - `admin`: a DM-2001, nunca redirecionada, mostrou "Aceitar até" = criação + 48 h;
+    - a DM-2013 (aberta há 40 h) foi redirecionada às 05:09; o pop-up e os Detalhes mostraram "até 05/10 05:09" (24 h; pela regra antiga seriam 8 h);
+    - `user02`: a DM-2013 em Pendentes de aceite, "Aguardando aceite há menos de 1 hora", "Aceitar até 05/10 05:09".
+  - **Não executado:** Edge, leitor de tela, celular real, axe.

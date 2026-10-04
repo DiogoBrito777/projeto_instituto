@@ -100,7 +100,7 @@ function DetalhesDemanda({ id, usuario }) {
                   {/* Em triagem, o responsável é a gerência; "Departamento" segue mostrando o destino. */}
                   <DetailField label="Responsável (setor)">{nomeDoSetor(setorResponsavel(demand))}</DetailField>
                   <DetailField label="Prazo">{prazo ? formatarDataHora(prazo.toISOString()) : 'Definido no aceite'}</DetailField>
-                  {/* Bloco 4C: pendente mostra até quando aceitar (48 h, ou 24 h com teto após redirecionar). */}
+                  {/* Bloco 4C: pendente mostra até quando aceitar (48 h, ou 24 h após redirecionar). */}
                   {demand.status === STATUS.PENDENTE_ACEITE && (
                     <DetailField label="Aceitar até">{formatarDataHora(prazoDeAceite(demand).toISOString())}</DetailField>
                   )}

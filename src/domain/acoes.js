@@ -200,7 +200,7 @@ function conferirJustificativa(justificativa) {
 // RN18: só a gerência redireciona, e só em triagem (a transição Em triagem → Pendente de aceite só
 // existe para ela). O tipo de atendimento depende do setor, então vem junto e precisa existir no novo
 // setor (decisão de 04/10). O setor que recusou pode ser escolhido de novo (sem regra nova).
-// O prazo de aceite reinicia (atencao.js → prazoDeAceite: 24 h, com teto de 48 h desde a abertura).
+// O prazo de aceite reinicia (atencao.js → prazoDeAceite: 24 h contadas do redirecionamento).
 export function redirecionarDemanda(demanda, { setor, tipo }, usuario, contexto) {
   const conferencia = conferirGerencia(demanda, usuario, STATUS.PENDENTE_ACEITE)
   if (!conferencia.ok) return conferencia
