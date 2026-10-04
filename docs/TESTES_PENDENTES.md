@@ -42,16 +42,17 @@ Demandas do seed usadas abaixo:
 
 > Fora deste quadro: a **2C (offline, fila "Pendentes de envio")** não foi implementada; o TC04 (offline) **não se aplica** e vai para a seção 18 como "adiado".
 
-### Bloco 3 — acessibilidade (7 itens · 7 pendentes)
+### Bloco 3 — acessibilidade (8 itens · 8 pendentes; 3.2, 3.3 e 3.7 já executados em parte pelo autor)
 | # | Item pendente | Quem | Como fazer | Resultado | Data | Observação |
 |---|---|---|---|---|---|---|
 | 3.1 | Edge só com teclado, olhando **cor e espessura** do contorno (o navegador embutido não permite conferir) | só pessoa | Tab em todas as telas: o contorno é verde, com 2 px, em botões, links, campos e selects; na barra lateral é verde-claro. | ☐ passou · ☐ não passou | | Parcial: o autor conferiu no Edge o skip link, as buscas e o contorno verde dos botões, com Tab, Enter e Shift+Tab (`evidencias/depois/RELATORIO_AXE_DEPOIS.md`). Falta percorrer todas as telas, inclusive as dos Blocos 4A a 4C. |
-| 3.2 | Leitor de tela no fluxo principal (TC10, CT-R14) | só pessoa | Seção 3.1. | ☐ passou · ☐ não passou | | |
-| 3.3 | Lighthouse (Acessibilidade) | Bruno | Seção 3.3. | ☐ passou · ☐ não passou | | |
-| 3.4 | Nova rodada do axe **pela equipe** (o "depois" atual foi feito pelo assistente) | Bruno | Seção 3.4. | ☐ passou · ☐ não passou | | |
-| 3.5 | Zoom de 400% (WCAG 1.4.10), nunca testado | Bruno | Edge em 1280 px, Ctrl + até 400%: sem rolagem lateral e nada cortado em Visão Geral, Demandas e Detalhes. | ☐ passou · ☐ não passou | | |
+| 3.2 | Leitor de tela no fluxo principal (TC10, CT-R14) | só pessoa | Seção 3.1. | ☐ passou · ☐ não passou | não registrada | **Executado pelo autor**: NVDA 2026.2 + Edge InPrivate, 2 ou 3 vezes (relato do autor). O resultado por tela ainda não foi registrado, por isso não está marcado. Prints esperados: `evidencias/depois/nvda_edge-inprivate_*.png`. |
+| 3.3 | Lighthouse (Acessibilidade) | Bruno | Seção 3.3. | ☐ passou · ☐ não passou | não registrada | Parcial: **100/100 em Visão Geral e Nova Demanda, `admin`, desktop** (relato do autor; prints `evidencias/depois/lighthouse_visao-geral_admin_desktop.png` e `lighthouse_nova-demanda_admin_desktop.png`). Faltam Login, Demandas, Detalhes, Atualizar e mobile. |
+| 3.4 | Nova rodada do axe **pela equipe** (o "depois" atual foi feito pelo assistente) | Bruno | Seção 3.4. | ☐ passou · ☐ não passou | | **Não executada no código atual.** A rodada antiga (Bloco 3) deu 0 violações em 26 combinações. |
+| 3.5 | Zoom de 400% (WCAG 1.4.10), nunca testado | Bruno | Edge em 1280 px, Ctrl + até 400%: sem rolagem lateral e nada cortado em Visão Geral, Demandas e Detalhes. | ☐ passou · ☐ não passou | | Zoom de **200% no Chrome (1920 × 1080, escala 100%): OK** (relato do autor; print `evidencias/depois/zoom-200_chrome_1920x1080_visao-geral.png`). 400%: o menu foi corrigido no PR #9; reteste em R.6. |
 | 3.6 | Contraste dos itens do menu lateral em 360 px (o axe deixou "incompleto") | só pessoa | Modo celular, 360 px: "Demandas" e "Departamentos" legíveis. Se possível, meça com o seletor de cor do F12 (deve dar 4,5:1 ou mais). | ☐ passou · ☐ não passou | | |
-| 3.7 | Celular real | só pessoa | Seção 3.2. | ☐ passou · ☐ não passou | | |
+| 3.7 | Celular real | só pessoa | Seção 3.2. | ☐ passou · ☐ não passou | não registrada | **Executado pelo autor** (relato do autor): Android pela rede Wi-Fi, Visão Geral, Demandas, Departamentos e Nova Demanda funcionaram. Houve achados (menu, entre outros), corrigidos no PR #9; fica desmarcado até o reteste (R.1 a R.9). Também 360 px no DevTools (Samsung Galaxy A55). Prints `evidencias/depois/celular-android_*.png` e `devtools-360px_galaxy-a55_*.png`. A tela de triagem no celular está em 4C.5. |
+| 3.8 | Comando de voz (ex.: Voz de Acesso do Windows) | só pessoa | Windows: Configurações → Acessibilidade → Fala → Voz de Acesso. Diga "clicar Nova demanda", "clicar Destino", "digitar…" e confira se cada controle é encontrado pelo nome visível. | ☐ passou · ☐ não passou | | **Não executado.** |
 
 ### Bloco 4A — aceite e recusa (3 itens · 3 pendentes)
 | # | Item pendente | Quem | Como fazer | Resultado | Data | Observação |
@@ -136,7 +137,8 @@ Anote quem fez, a data e o que falhou. Depois marque os itens 1.x, 2.x, 4A.x, 4B
 
 ## 3. Testes que precisam de uma pessoa ou ferramenta
 
-### 3.1 Leitor de tela (Narrador do Windows)
+### 3.1 Leitor de tela (Narrador do Windows ou NVDA)
+> O autor já usou o **NVDA 2026.2 com o Edge InPrivate** (2 ou 3 vezes). Os passos abaixo valem para os dois leitores; anote o resultado de cada passo.
 1. Ligue e desligue com **Ctrl + Windows + Enter**. Com o Narrador ligado, use Tab e Enter normalmente; **Caps Lock + seta** lê o texto.
 2. No login: o nome de cada campo é lido; o erro de senha é lido.
 3. Na Visão Geral: o título é lido a cada troca de tela; ao clicar na aba "Em triagem", é lido "N demandas exibidas".

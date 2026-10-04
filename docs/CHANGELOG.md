@@ -369,3 +369,19 @@ Origem: bateria de testes manuais do autor (Bruno Diogo). Cada item foi feito se
   - a colagem real (item 5) não pôde ser feita, porque a área de transferência é bloqueada no navegador embutido;
   - "Limpar filtro" limpa a lista, mas o `?filtro=` continua no endereço até a próxima navegação.
 - **Não executado:** Edge, leitor de tela, celular real, Lighthouse, axe.
+
+### 2026-10-04 · Documentação: limitações, personas e evidências · fix/ajustes-teste-manual
+- **Só documentação**; nenhum arquivo de `src/` mudou.
+- `docs/DOCUMENTACAO.md`:
+  - **matriz (seção 6)** com a coluna "Em 04/10" ao lado do diagnóstico de 03/10;
+  - **retrospectiva (14)** em rascunho, a partir dos registros;
+  - **entregue × adiado (18)** com a justificativa de cada item;
+  - **evidências (19)** com os resultados relatados pelo autor e os nomes de arquivo esperados para os prints;
+  - seções novas: **20** (simulação sem back-end: dados, chaves de armazenamento, "Resetar dados", `?falha=1`, segurança, o que um back-end substituiria, limites, tema escuro como trabalho futuro), **21** (personas × atendimento) e **22** (o aviso "Precisa de atenção" para a apresentação);
+  - remissão na seção 11.
+- `docs/TESTES_PENDENTES.md`:
+  - 3.2 (NVDA), 3.3 (Lighthouse 100/100 em 2 telas), 3.5 (zoom de 200% OK) e 3.7 (celular real) com o relato do autor, **sem marcar "passou"** onde falta resultado ou reteste;
+  - novo item 3.8: comando de voz, não executado;
+  - nota sobre o NVDA na seção 3.1.
+- **Evidências relatadas pelo autor e ainda sem arquivo na pasta:** Lighthouse, NVDA, 360 px no DevTools (Galaxy A55), zoom de 200% e celular Android. Os nomes esperados estão na seção 19 da DOCUMENTACAO.
+- **Não executado:** nova rodada do axe no código atual, comando de voz, Lighthouse nas outras telas, zoom de 500%.
