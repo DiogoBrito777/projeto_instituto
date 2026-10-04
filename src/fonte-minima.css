@@ -339,3 +339,13 @@
 .visao-geral .demand-card__top .badge {
   white-space: normal;
 }
+/* Em Detalhes, a linha do topo (código + selo de status) também não cabia em 360 px com o selo
+   "Aguardando (processamento interno)" a 14 px (o selo tem white-space: nowrap) e criava rolagem
+   lateral (axe "depois", DM-2006). Em telas largas a linha cabe e nada muda. */
+.detail-summary-top {
+  flex-wrap: wrap;
+}
+
+.detail-status {
+  white-space: normal;
+}

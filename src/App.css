@@ -569,7 +569,9 @@
 
 .empty-state p {
   margin: 0;
-  color: #6b7874;
+  /* Também aparece sobre fundos cinza (#f3f7f6 em Detalhes/Atualizar, #f3f4f6 em Departamentos):
+     #6b7874 dava 4,26:1 ali (axe "depois"); #65716d dá 4,61 a 4,70 (e 5,08 no branco). */
+  color: #65716d;
   font-size: 12px;
 }
 
@@ -642,7 +644,8 @@
 
 .departments-intro p {
   margin: 3px 0 0;
-  color: #6c7581;
+  /* Sobre o fundo #f3f4f6 da página: #6c7581 dava 4,24:1 (axe "depois"); #666f7a dá 4,63. */
+  color: #666f7a;
   font-size: 10px;
   line-height: 1.4;
 }
@@ -831,7 +834,8 @@
   display: grid;
   min-height: 160px;
   place-items: center;
-  color: #6c7682;
+  /* Sobre o fundo #f3f4f6: #6c7682 dava 4,19:1; #656e7a dá 4,69. */
+  color: #656e7a;
   font-size: 11px;
   text-align: center;
 }

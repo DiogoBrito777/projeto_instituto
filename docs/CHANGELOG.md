@@ -107,3 +107,16 @@ Uma entrada por bloco/PR (formato em `docs/CONVENCOES.md`).
     - em 6 telas e 4 larguras (360, 800, 1024, 1280 px), sem rolagem lateral e sem texto visível abaixo de 14 px.
   - **Limitação:** o navegador embutido força o próprio estilo de foco (3 px na cor do texto, até num `<div>` de teste sem regra nossa); por isso a **cor e a espessura do contorno não puderam ser conferidas ali**.
   - **Teste no Edge (teclado, contorno e leitor de tela): não executado.**
+- **Correções da auditoria axe "depois" (rodada pela equipe na branch publicada, 04/10):**
+  - **Contraste em fundos cinza** — `src/App.css`. As cores da Fase 2 tinham sido calculadas contra branco, e três regras ficam direto sobre o fundo da página:
+    - `.departments-intro p`: `#6c7581` → `#666f7a` (4,24 → 4,63:1 sobre `#f3f4f6`);
+    - `.department-empty-state`: `#6c7682` → `#656e7a` (4,19 → 4,69:1);
+    - `.empty-state p` (mensagens "Você pode consultar…", "Demanda não encontrada…", carregando e erro): `#6b7874` → `#65716d` (4,26 → 4,70:1 sobre `#f3f7f6`, 4,61 sobre `#f3f4f6`, 5,08 no branco).
+    - As demais regras com essas cores ficam em cards brancos ou na tela Demandas (branca) e já passavam.
+  - **Rolagem lateral em 360 px em Detalhes (DM-2006)** — `src/fonte-minima.css`. A causa **não era o menu**: os itens do menu estão dentro do `.sidebar-nav`, que tem rolagem própria (`overflow-x: auto`), e por isso aparecem na lista de elementos "fora da tela" sem alargar a página. O culpado era o selo `.detail-status` "Aguardando (processamento interno)": com `white-space: nowrap` e 14 px ele ficou com 274 px, numa linha flex sem quebra (`.detail-summary-top`), levando a página a 382 px. Só a DM-2006 tem esse status, e a conferência anterior tinha usado a DM-2003. O skip link medido em 374 px era efeito colateral: no modo celular, a área visível se alarga junto com o conteúdo. Correção no arquivo isolado da fonte (some se a fonte for desfeita): a linha pode quebrar e o selo também; em telas largas a linha cabe e nada muda.
+  - **Verificação:**
+    - `npm test` 124 passaram · lint 0 avisos e 0 erros · build OK.
+    - Navegador embutido, como `admin` e como `user01`: Visão Geral, Demandas, Departamentos, Nova Demanda e as 12 demandas em Detalhes e Atualizar (28 telas), em 360, 800, 1024 e 1280 px. **Nenhuma rolagem lateral** nas 224 combinações.
+    - Cores renderizadas: 4,63:1 (Departamentos) e 4,70:1 (mensagem em Detalhes).
+    - Em 1280 px o selo da DM-2006 continua na mesma linha do código.
+    - **Nova rodada do axe pela equipe: não executado.**
