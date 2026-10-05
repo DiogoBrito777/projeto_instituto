@@ -171,10 +171,14 @@ function localStorageDoNavegador() {
 
 export function obterStorage() {
   if (!instancia) {
+    // ?falha=1 simula erro nas gravações; ?lento=1 deixa leitura e gravação em 2 s, para a
+    // demonstração mostrar "Carregando demandas…" e "Enviando…" com calma. Sem eles, nada muda.
+    const params = new URLSearchParams(window.location.search)
     instancia = criarStorage({
       backend: localStorageDoNavegador(),
       gerarSemente: () => criarSemente(new Date()),
-      falhaSimulada: new URLSearchParams(window.location.search).get('falha') === '1',
+      falhaSimulada: params.get('falha') === '1',
+      ...(params.get('lento') === '1' ? { atrasoMs: 2000, atrasoLeituraMs: 2000 } : {}),
     })
   }
   return instancia
