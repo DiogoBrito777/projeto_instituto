@@ -62,7 +62,7 @@ Detalhes e critérios: `docs/REQUISITOS_REGRAS_DE_NEGOCIO.md`.
 
 ### O projeto e as escolhas
 - **Qual problema o sistema resolve?** Demandas entre setores chegavam por vários caminhos e se perdiam. Agora há um lugar só para registrar, enviar e acompanhar. *(README e DOCUMENTACAO, seção 1.)*
-- **Por que React?** Pela reutilização de componentes. O domínio de React no grupo era limitado; por isso a estrutura inicial foi gerada com IA em 29/09, para haver um projeto visível. Depois, as implementações seguiram na mesma stack. *(ADR-01.)*
+- **Por que React?** Pela reutilização de componentes. O domínio de React no grupo era limitado; por isso a estrutura inicial foi montada com auxílio de IA em 29/09, a partir dos wireframes do Figma Design e dos documentos que o grupo já tinha, para haver um projeto visível. Depois, as implementações seguiram na mesma stack. *(ADR-01.)*
 - **Por que não há back-end?** O enunciado pede dados simulados em JSON ou equivalente. *(DOCUMENTACAO, ADR-02 e seção 20.)*
 - **Onde ficam os dados?** O JSON é a semente. A partir da primeira carga, tudo é lido e gravado no `localStorage` do navegador, só por `src/services/storage.js`. Cada navegador tem os seus dados; "Resetar dados" volta ao início.
 
@@ -79,7 +79,7 @@ Detalhes e critérios: `docs/REQUISITOS_REGRAS_DE_NEGOCIO.md`.
 ### Limites, sem esconder
 - **O que acontece se a internet cair ao enviar?** Hoje o app não trata queda de internet: ele grava no navegador e não depende da rede. O aviso de conexão e a fila "Pendentes de envio" foram especificados e adiados (RF10, RNF03). Se o envio falha, o formulário continua preenchido; se a página recarrega, o que foi digitado se perde.
 - **O que ficou de fora?** Login real, histórico interno do setor, aviso offline, e a revisão por pares ainda está pendente. *(DOCUMENTACAO, seções 3 e 18; `docs/estudo/92-FALHAS-CONHECIDAS-PARA-FALAR.md`.)*
-- **Vocês usaram IA?** Sim, e está declarado: ferramentas de IA geraram a base e ajudaram nas regras e nas correções. Todos devem saber explicar o que está no código. *(ADR-06.)*
+- **Vocês usaram IA?** Sim, e está declarado: ferramentas de IA ajudaram a montar a base, a partir do que o grupo já tinha, e depois nas regras e nas correções. Todos devem saber explicar o que está no código. *(ADR-06.)*
 
 ## 10. Como estudar em 1 hora
 1. Rode o app (`npm install`, `npm run dev`) e entre com os 5 usuários.
