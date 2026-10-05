@@ -56,17 +56,30 @@ Detalhes e critérios: `docs/REQUISITOS_REGRAS_DE_NEGOCIO.md`.
 - Cada commit liga a um requisito (RF/RN/CA). O `CHANGELOG` conta o que mudou e por quê.
 - Uso de IA: registrar no PR (ferramenta usada e quem revisou).
 
-## 9. Perguntas prováveis (e respostas curtas)
-1. **Por que React?** Decidido por votação (Ata 29/09): componentes reutilizáveis e domínio da equipe.
-2. **Por que localStorage e não só o JSON?** O navegador não grava no arquivo; o JSON é a semente e o localStorage guarda as alterações. É a "solução equivalente" a um banco, permitida pelo enunciado.
-3. **Isso é seguro?** Não: é simulação para o MVP; perfil e dados são editáveis no navegador. Com back-end, a autenticação e a autorização passam a ser do servidor.
-4. **Como o sistema sabe o que cada usuário pode ver?** Pelo perfil e setor da sessão, passando por `podeVer`/`resumoParaSolicitante` em `src/domain/permissoes.js`; a rota também consulta essa função.
-5. **O que acontece se a internet cair ao enviar?** O formulário vai para "Pendentes de envio" e é enviado quando a conexão volta; o rascunho não se perde.
-6. **Como o prazo é calculado?** Pela prioridade escolhida no aceite (24 h/48 h/72 h/7 dias), a partir do aceite; funções puras recebem o "agora" por parâmetro.
-7. **Por que o setor não pode mandar a demanda direto a outro setor?** Departamentos são independentes; só a gerência redireciona, para ninguém ver a operação interna do outro.
-8. **O que é acessibilidade na prática aqui?** Navegação por teclado, foco visível, contraste, rótulos, anúncios por `aria-live`, foco gerenciado em rotas e diálogos.
-9. **Como vocês verificaram?** Auditoria automática com axe (antes e depois), teste manual de teclado e leitor de tela, e testes automáticos das regras (`npm test`). **Só diga o que foi de fato executado.**
-10. **O que ficou de fora e por quê?** Chat, reabrir com citação, "visualizada", responsável individual: especificados, não implementados por prazo (ver `DOCUMENTACAO.md`, seção 18).
+## 9. Perguntas que podem aparecer (por assunto)
+
+> Não é roteiro para decorar. Cada resposta diz **onde conferir no código**. Se você não souber, diga "não tenho certeza, mas posso abrir o arquivo e mostrar". A lista completa de perguntas curtas está em `docs/estudo/90-PERGUNTAS-RAPIDAS.md`.
+
+### O projeto e as escolhas
+- **Qual problema o sistema resolve?** Demandas entre setores chegavam por vários caminhos e se perdiam. Agora há um lugar só para registrar, enviar e acompanhar. *(README e DOCUMENTACAO, seção 1.)*
+- **Por que React?** Pela reutilização de componentes. O domínio de React no grupo era limitado; por isso a estrutura inicial foi gerada com IA em 29/09, para haver um projeto visível. Depois, as implementações seguiram na mesma stack. *(ADR-01.)*
+- **Por que não há back-end?** O enunciado pede dados simulados em JSON ou equivalente. *(DOCUMENTACAO, ADR-02 e seção 20.)*
+- **Onde ficam os dados?** O JSON é a semente. A partir da primeira carga, tudo é lido e gravado no `localStorage` do navegador, só por `src/services/storage.js`. Cada navegador tem os seus dados; "Resetar dados" volta ao início.
+
+### Regras do sistema
+- **Quem pode ver e fazer o quê?** Depende do papel na demanda (solicitante, executor ou gerência). A regra fica em `src/domain/permissoes.js`; as telas só consultam.
+- **O que acontece quando o setor recusa?** A demanda vai para a triagem e passa a ser da gerência, que redireciona, marca como Não aplicável ou cancela, sempre com justificativa. Setor nenhum manda direto para outro. *(`status.js`, `acoes.js`.)*
+- **Como o prazo é calculado?** Depois do aceite, pela prioridade: Urgente 24 h, Alta 48 h, Média 72 h, Baixa 7 dias *(`prioridades.js`)*. Para aceitar, o app usa 48 h, e 24 h depois de um redirecionamento *(`atencao.js`)*. Esses números são propostas ainda sem voto, e os documentos antigos (RN09, RN17) dizem 72 h.
+
+### Qualidade
+- **Como vocês testaram?** 245 testes automáticos (Vitest, 12 arquivos) das regras e do armazenamento, não dos cliques. Houve também verificação automática de acessibilidade com axe-core e testes manuais. *(`npm test`.)*
+- **E a acessibilidade?** Fonte mínima de 14 px, e o axe-core não apontou violações nas telas verificadas. Lighthouse (100/100 em 2 telas) e NVDA são registros do grupo, no `CHANGELOG`. Ferramenta automática não cobre tudo.
+- **Os estados de tela do enunciado existem?** Sim: carregando, vazio, sucesso e erro. O "Carregando" é uma espera curta simulada, e o erro pode ser mostrado com `?falha=1`.
+
+### Limites, sem esconder
+- **O que acontece se a internet cair ao enviar?** Hoje o app não trata queda de internet: ele grava no navegador e não depende da rede. O aviso de conexão e a fila "Pendentes de envio" foram especificados e adiados (RF10, RNF03). Se o envio falha, o formulário continua preenchido; se a página recarrega, o que foi digitado se perde.
+- **O que ficou de fora?** Login real, histórico interno do setor, aviso offline, e a revisão por pares ainda está pendente. *(DOCUMENTACAO, seções 3 e 18; `docs/estudo/92-FALHAS-CONHECIDAS-PARA-FALAR.md`.)*
+- **Vocês usaram IA?** Sim, e está declarado: ferramentas de IA geraram a base e ajudaram nas regras e nas correções. Todos devem saber explicar o que está no código. *(ADR-06.)*
 
 ## 10. Como estudar em 1 hora
 1. Rode o app (`npm install`, `npm run dev`) e entre com os 5 usuários.
