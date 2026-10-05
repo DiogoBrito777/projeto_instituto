@@ -28,6 +28,18 @@ export const MENSAGENS = {
   // Propostas do Bloco 4-A (o catálogo não tinha texto para estes casos).
   recusaDescricao: 'A demanda vai para a triagem do Gerenciamento, que decide o destino.',
   motivoLongo: 'O motivo deve ter no máximo 500 caracteres.',
+  // Triagem pela gerência (Bloco 4C). Do catálogo: redirecionarSemSetor e justificativaAusente.
+  // As demais são PROPOSTAS (o catálogo não tinha texto para estes casos).
+  redirecionarSemSetor: 'Escolha o departamento que deve receber a demanda.',
+  redirecionarSemTipo: 'Escolha o tipo de atendimento do novo departamento.',
+  justificativaAusente: 'Informe a justificativa.',
+  justificativaLonga: 'A justificativa deve ter no máximo 500 caracteres.',
+  // Proposta (ajuste do 4C): o redirecionamento passou a pedir justificativa, que fica no histórico.
+  redirecionarConfirmacao: (setor, tipo, prazo) =>
+    `A demanda vai para ${setor}, com o tipo "${tipo}", e volta a Pendente de aceite. O setor terá até ${prazo} para aceitar. Explique o motivo: ele fica no histórico.`,
+  naoAplicavelDescricao:
+    'A demanda será encerrada como "Não aplicável" (nenhum setor tem competência) e não poderá mais ser alterada.',
+  cancelarDescricao: 'A demanda será cancelada e não poderá mais ser alterada.',
   // Aviso de limite dos campos de texto (proposta, correção do teste manual da 2B).
   limite: {
     atingido: (limite) => `Limite de ${limite} caracteres atingido.`,

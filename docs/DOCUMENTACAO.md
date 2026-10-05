@@ -1,6 +1,11 @@
 # Demanda de Aço — Documentação do Produto (PBL Problema 1)
 
-> **Documento vivo — kit final de 03/10/2026.** Base analisada: repositório do GitHub (`main`) com as telas Visão Geral, Detalhes e Atualizar (React 19 + Vite, 6 rotas por hash). Diagnóstico da seção 7 vem da **leitura do código**; `npm run lint` e `npm run build` passam. O app **não foi aberto no navegador** e **nenhuma auditoria (Lighthouse/axe) ou teste manual foi executado**.
+> **Documento vivo — kit final de 03/10/2026.** Base analisada: repositório do GitHub (`main`) com as telas Visão Geral, Detalhes e Atualizar (React 19 + Vite, 6 rotas por hash). Diagnóstico da seção 7 vem da **leitura do código**; `npm run lint` e `npm run build` passam. *Quando o kit foi escrito (03/10)*, o app não tinha sido aberto no navegador e nenhuma auditoria ou teste manual tinha sido feito. **Atualização (04/10):**
+> - o app passou a ser aberto e conferido no navegador a cada bloco (registros em `docs/CHANGELOG.md`);
+> - há auditoria axe "antes" e "depois" (seção 19);
+> - há testes manuais feitos pelo autor (Bruno Diogo) nos Blocos 1, 2A e 2B (`docs/evidencias/depois/` e CHANGELOG);
+> - **o Lighthouse ainda não foi executado**;
+> - o que falta testar está em `docs/TESTES_PENDENTES.md`.
 > Campos `☐` são evidências que a equipe precisa gerar. Nada aqui foi inventado.
 > Itens marcados **[PROPOSTA]** vieram da conversa de 03/10 e precisam ser votados e registrados em ata.
 > Fontes: enunciado, Atas 08/09, 15/09, 22/09 e 29/09, documento técnico de 15/09, chat do grupo (até 02/10), código do Git de 03/10 e `docs/REQUISITOS_REGRAS_DE_NEGOCIO.md`.
@@ -175,28 +180,30 @@ Status (código do Git de 03/10, **por leitura de código; não testado no naveg
 eMAG: usar as recomendações equivalentes por tema (marcação, comportamento, conteúdo/informação, formulários). **Mapear os números exatos no eMAG 3.1 e citar no relatório.**
 
 **Procedimento "antes/depois":** (1) rodar Lighthouse e axe **no estado atual, antes de corrigir**, e guardar relatórios e prints em `docs/evidencias/antes/`; (2) corrigir G10–G14 (Bloco 3); (3) rodar de novo e guardar em `docs/evidencias/depois/`; (4) teste manual só com teclado e com NVDA (Windows) ou VoiceOver.
-Evidências: `☐ lighthouse-antes` `☐ axe-antes` `☐ lighthouse-depois` `☐ axe-depois` `☐ gravação com teclado` `☐ gravação com leitor de tela`.
+Evidências: `☐ lighthouse-antes` `☒ axe-antes` (assistente, `docs/evidencias/antes/`) `☐ lighthouse-depois` `☒ axe-depois` (assistente, na nuvem, `docs/evidencias/depois/`; rodada pela equipe pendente) `☐ gravação com teclado` `☐ gravação com leitor de tela`.
 
 ## 10. Plano de testes
 | ID | Cenário | Passos | Esperado | Resultado |
 |---|---|---|---|---|
-| TC01 | Nova demanda — campos | Abrir Nova Demanda como `ti` | Origem travada em TI; destino em lista; tipo depende do destino | ☐ |
-| TC02 | Validação | Enviar vazio | Mensagens claras, foco no 1º erro, anunciadas | ☐ |
-| TC03 | Envio com sucesso/erro | Enviar; repetir com `?falha=1` | Loading → confirmação / erro com retry | ☐ |
-| TC04 | Offline | DevTools → Offline, enviar, recarregar, reconectar | Dados mantidos; aviso; envio ao reconectar | ☐ |
+| TC01 | Nova demanda — campos | Abrir Nova Demanda como `ti` | Origem travada em TI; destino em lista; tipo depende do destino | ☐ (sem registro da equipe; conferido só pelo assistente, CHANGELOG 2B) |
+| TC02 | Validação | Enviar vazio | Mensagens claras, foco no 1º erro, anunciadas | ☐ (parcial: o teste da 2B pelo autor achou a falha do limite de caracteres, corrigida, e o reteste passou, conforme relato do autor; não há registro do envio vazio nem do anúncio por leitor de tela) |
+| TC03 | Envio com sucesso/erro | Enviar; repetir com `?falha=1` | Loading → confirmação / erro com retry | ☐ (conferido só pelo assistente, CHANGELOG 2B) |
+| TC04 | Offline | DevTools → Offline, enviar, recarregar, reconectar | Dados mantidos; aviso; envio ao reconectar | ☐ (não implementado: 2C adiada) |
 | TC05 | Ordenação | Abrir lista | Prioridade → data → nome | ☐ |
 | TC06 | Filtro/lista vazia | Buscar termo inexistente | Mensagem de lista vazia | ☐ |
-| TC07 | Detalhe | Abrir 3 demandas diferentes; trocar status; enviar mensagem | Dados de cada uma; histórico atualizado e persistido | ☐ |
-| TC08 | Departamentos | Acessar setor | Só demandas do setor | ☐ |
-| TC09 | Teclado | Percorrer tudo com Tab | Tudo alcançável; foco visível; sem armadilha | ☐ |
-| TC10 | Leitor de tela | NVDA no fluxo "abrir demanda" | Tudo anunciado com sentido | ☐ |
-| TC11 | Responsivo | 360, 768 e 1280 px | Sem rolagem horizontal | ☐ |
-| TC12 | Visão Geral | Comparar números com a lista | Indicadores batem com os dados | ☐ |
-| TC13 | Login/Sair | Credencial errada; Sair; botão Voltar | Erro acessível; sessão encerrada | ☐ |
+| TC07 | Detalhe | Abrir 3 demandas diferentes; trocar status; enviar mensagem | Dados de cada uma; histórico atualizado e persistido | ☐ (parcial: Detalhes e Atualizar passaram, com reteste, em `evidencias/depois/TESTE_MANUAL_BLOCO2A.md`; "enviar mensagem" é o chat, adiado) |
+| TC08 | Departamentos | Acessar setor | Só demandas do setor | ☒ passou — `evidencias/depois/TESTE_MANUAL_BLOCO2A.md` |
+| TC09 | Teclado | Percorrer tudo com Tab | Tudo alcançável; foco visível; sem armadilha | ☐ (parcial: Bloco 1 "parcial"; no Bloco 3 o autor conferiu no Edge o skip link, Tab, Enter, Shift+Tab e o contorno, segundo `RELATORIO_AXE_DEPOIS.md`; falta percorrer tudo, inclusive os Blocos 4A a 4C) |
+| TC10 | Leitor de tela | NVDA no fluxo "abrir demanda" | Tudo anunciado com sentido | ☐ (não executado) |
+| TC11 | Responsivo | 360, 768 e 1280 px | Sem rolagem horizontal | ☐ (parcial: Sair em 360 px passou no reteste do autor, com DevTools; o axe "depois" mediu 0 rolagem em 360 e 1280, mas é automático; falta 768 px) |
+| TC12 | Visão Geral | Comparar números com a lista | Indicadores batem com os dados | ☒ passou — `evidencias/depois/TESTE_MANUAL_BLOCO2A.md` (a contagem acompanhou a conclusão da DM-2012) |
+| TC13 | Login/Sair | Credencial errada; Sair; botão Voltar | Erro acessível; sessão encerrada | ☐ (parcial: Sair passou em `evidencias/depois/TESTE_MANUAL_BLOCO1.md`; credencial errada e Voltar depois de Sair sem registro) |
 | TC14 | Estados | Simular atraso e falha | Loading, vazio, sucesso e erro visíveis | ☐ |
-| TC15 | Perfis | 5 usuários; URL de demanda alheia | CT-R01 a CT-R04, CT-R07, CT-R11 | ☐ |
-| TC16 | Aceite, recusa e encerramento | Aceitar com/sem prioridade; recusar; redirecionar; concluir | CT-R05, CT-R06, CT-R08 | ☐ |
-| TC17 | Prazos e cobrança | Novo prazo; prazos por perfil | CT-R09, CT-R10 | ☐ |
+| TC15 | Perfis | 5 usuários; URL de demanda alheia | CT-R01 a CT-R04, CT-R07, CT-R11 | ☐ (parcial: ver CT-R02, R03, R04, R07 e R11 em `REQUISITOS_REGRAS_DE_NEGOCIO.md`, seção 9; CT-R01 sem registro) |
+| TC16 | Aceite, recusa e encerramento | Aceitar com/sem prioridade; recusar; redirecionar; concluir | CT-R05, CT-R06, CT-R08 | ☐ (conferido só pelo assistente, CHANGELOG 4A e 4C; teste da equipe pendente) |
+| TC17 | Prazos e cobrança | Novo prazo; prazos por perfil | CT-R09, CT-R10 | ☐ (novo prazo e cobrança ainda não têm tela) |
+
+`☒` = feito, com a fonte ao lado. `☐` = não feito ou só em parte: a observação diz o que falta.
 
 Casos detalhados de regras de negócio (CT-R01…CT-R14): `docs/REQUISITOS_REGRAS_DE_NEGOCIO.md`, seção 9.
 **Registro de defeitos corrigidos** (preencher): `ID | commit da correção | evidência antes | evidência depois`.
@@ -248,4 +255,10 @@ Cobertura item a item em `docs/REQUISITOS_REGRAS_DE_NEGOCIO.md`, seção 11.
 | Chat, reabrir, "visualizada", responsável individual | ☐ (adiado) | Prazo; especificados em `REQUISITOS_REGRAS_DE_NEGOCIO.md` |
 
 ## 19. Evidência real já existente
-`docs/evidencias/antes/RELATORIO_AXE_ANTES.md` e `axe_antes.json`: auditoria automática (axe-core 4.13.0) do `main` de 03/10, **antes** das correções. Achado dominante: contraste (24 combinações reprovadas) em todas as telas. O relatório "depois" ainda **não existe**.
+- **Axe "antes":** `docs/evidencias/antes/RELATORIO_AXE_ANTES.md` e `axe_antes.json`. Auditoria automática (axe-core 4.13.0) do `main` de 03/10, **antes** das correções. Achado dominante: contraste (24 combinações reprovadas) em todas as telas.
+- **Axe "depois":** `docs/evidencias/depois/RELATORIO_AXE_DEPOIS.md` e `axe_depois.json`.
+  - Feita no Bloco 3 (branch `fix/acessibilidade`), gerada **pelo assistente, em ambiente de nuvem, não pela equipe**.
+  - **0 violações nas 26 combinações** (login + 6 rotas × 2 perfis, em 1280 e 360 px).
+  - 12 itens "incompletos": contraste do menu lateral em 360 px, a conferir a mão.
+- **Testes manuais do autor:** `docs/evidencias/depois/TESTE_MANUAL_BLOCO1.md` e `TESTE_MANUAL_BLOCO2A.md`. O teste da 2B tem registro só no CHANGELOG, sem arquivo próprio. Prints guardados pelo autor, a anexar.
+- **Pendentes:** nova rodada do axe pela equipe (inclui os Blocos 4A a 4C), Lighthouse, leitor de tela e celular real. Roteiro em `docs/TESTES_PENDENTES.md`.

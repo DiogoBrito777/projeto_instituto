@@ -54,6 +54,22 @@ Usam os textos já aprovados da seção abaixo ("Aceitar sem prioridade", "Pop-u
 | Campo do pop-up da recusa | Rótulo "Motivo da recusa (obrigatório)" + contador "N/500 caracteres" |
 | Motivo acima do limite | "O motivo deve ter no máximo 500 caracteres." |
 
+## Triagem pela gerência na tela Atualizar (**proposta, Bloco 4C** — revisar em grupo)
+Usam os textos já aprovados da seção abaixo ("Redirecionar sem escolher setor", "Não aplicável / Cancelar sem justificativa", "Demanda finalizada"). Acréscimos:
+| Situação | Texto |
+|---|---|
+| Botão em Detalhes (gerência, demanda em triagem) | "Triar demanda" |
+| Botões na tela de triagem | "Redirecionar", "Marcar como não aplicável", "Cancelar demanda", "Voltar" |
+| Campos do redirecionamento | "Novo departamento (obrigatório)" e "Tipo de atendimento (obrigatório)"; antes de escolher o setor, o tipo mostra "Escolha primeiro o departamento" |
+| Redirecionar sem escolher o tipo | "Escolha o tipo de atendimento do novo departamento." |
+| Pop-up do redirecionamento | "A demanda vai para [setor], com o tipo "[tipo]", e volta a Pendente de aceite. O setor terá até [data e hora] para aceitar. Explique o motivo: ele fica no histórico." — campo "Justificativa (obrigatória)" + contador "N/500 caracteres"; botões "Voltar" / "Confirmar redirecionamento" (**proposta, ajuste do 4C**: antes terminava em "Confirmar?" e não tinha campo) |
+| Redirecionar sem justificativa | "Informe a justificativa." (mesmo texto do catálogo para Não aplicável / Cancelar) |
+| Histórico do redirecionamento | "Redirecionada para [setor] ([tipo]): [justificativa]." |
+| Pop-up de Não aplicável | "A demanda será encerrada como "Não aplicável" (nenhum setor tem competência) e não poderá mais ser alterada." — botões "Voltar" / "Confirmar não aplicável" |
+| Pop-up de Cancelar | "A demanda será cancelada e não poderá mais ser alterada." — botões "Voltar" / "Confirmar cancelamento" (não "Cancelar", para não confundir com a própria ação) |
+| Campo dos pop-ups de encerramento (e, desde o ajuste do 4C, do redirecionamento) | Rótulo "Justificativa (obrigatória)" + contador "N/500 caracteres" |
+| Justificativa acima do limite | "A justificativa deve ter no máximo 500 caracteres." |
+
 ## Aceite, recusa e encerramento
 | Situação | Mensagem |
 |---|---|

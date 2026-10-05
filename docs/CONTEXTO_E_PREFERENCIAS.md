@@ -24,7 +24,10 @@
 
 ## Honestidade (regra de ouro)
 - **Nunca invente evidências**: resultado de teste, auditoria, print, ata "como se tivessem ocorrido". O que não foi executado: "não executado".
-- Já existe uma evidência real: `docs/evidencias/antes/` (axe-core 4.13.0 no `main` de 03/10, gerada fora desta máquina). A auditoria "depois" **não existe**; não a crie, apenas deixe o espaço.
+- Evidências reais de auditoria automática:
+  - `docs/evidencias/antes/` (axe-core 4.13.0 no `main` de 03/10, gerada fora desta máquina);
+  - `docs/evidencias/depois/RELATORIO_AXE_DEPOIS.md` (axe-core 4.13.0 no Bloco 3, gerada **pelo assistente na nuvem, não pela equipe**; 0 violações nas 26 combinações).
+  - **Pendentes:** a nova rodada do axe pela equipe e o Lighthouse. Não os invente; o roteiro está em `docs/TESTES_PENDENTES.md`.
 
 ## Decisões (resumo; detalhes em `docs/REQUISITOS_REGRAS_DE_NEGOCIO.md`)
 - Logins: `admin` (gerenciamento) e `user01`–`user04` (TI, Hidráulica, Administrativo, Elétrica), senha igual ao usuário.

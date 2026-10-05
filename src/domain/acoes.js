@@ -3,11 +3,13 @@
 // Nada aqui grava; quem grava é o storage, depois que a ação foi aprovada.
 //
 // Mudanças "simples" de status (sem dado extra), aceite com prioridade e recusa com motivo (Bloco 4-A).
-// Devolver à triagem, redirecionar, cancelar e não aplicável (justificativa) ficam para o Bloco 4-B.
+// Redirecionar, Não aplicável e Cancelar (gerência, com justificativa) vieram no Bloco 4C, no fim do
+// arquivo. "Devolver à triagem" (de Em andamento/Aguardando) ainda não foi implementado.
 
-import { ehExecutor } from './permissoes.js'
+import { ehExecutor, ehGerencia } from './permissoes.js'
 import { calcularPrazoResolucao } from './prazos.js'
-import { ehPrioridadeValida } from './prioridades.js'
+import { NAO_DEFINIDA, ehPrioridadeValida } from './prioridades.js'
+import { nomeDoSetor, tiposDoSetor } from './setores.js'
 import { STATUS, estaFinal, podeTransicionar } from './status.js'
 
 export const ERROS_ACAO = {
@@ -20,6 +22,10 @@ export const ERROS_ACAO = {
   PRIORIDADE_AUSENTE: 'prioridade-ausente',
   MOTIVO_AUSENTE: 'motivo-ausente',
   MOTIVO_LONGO: 'motivo-longo',
+  // Bloco 4C (ações da gerência).
+  SETOR_INVALIDO: 'setor-invalido',
+  JUSTIFICATIVA_AUSENTE: 'justificativa-ausente',
+  JUSTIFICATIVA_LONGA: 'justificativa-longa',
 }
 
 // Mesmo limite da descrição da demanda (500 caracteres).
@@ -157,6 +163,121 @@ export function recusarDemanda(demanda, motivo, usuario, contexto) {
       ...demanda,
       status: STATUS.EM_TRIAGEM,
       historico: [...demanda.historico, evento(usuario, contexto, `Recusada: ${texto}`, 'recusa')],
+    },
+  }
+}
+
+// ---------------------------------------------------------------------------------------------
+// Bloco 4C — ações da gerência (RN18, RN19, RN20; matriz da seção 3 e transições da seção 4).
+
+// Mesmo limite do motivo da recusa (500 caracteres).
+export const LIMITE_JUSTIFICATIVA = LIMITE_MOTIVO
+
+// Por que a demanda está em triagem: o último item de recusa (ou devolução) do histórico.
+// Só a gerência chega à tela que mostra isso; quem abriu nunca recebe o histórico (RN03).
+export function motivoDaTriagem(demanda) {
+  const eventos = (demanda.historico ?? []).filter((item) => ['recusa', 'devolucao'].includes(item.tipo))
+  const ultimo = eventos[eventos.length - 1]
+  if (!ultimo) return null
+  return { texto: ultimo.texto.replace(/^Recusada:\s*/, ''), autor: ultimo.autor, data: ultimo.data }
+}
+
+// Conferências comuns: estado final (RN20), só a gerência (matriz) e só se a transição existe (seção 4).
+function conferirGerencia(demanda, usuario, para) {
+  if (estaFinal(demanda.status)) return { ok: false, erro: ERROS_ACAO.FINALIZADA }
+  if (!ehGerencia(usuario)) return { ok: false, erro: ERROS_ACAO.SEM_PERMISSAO }
+  if (!podeTransicionar(demanda.status, para, 'gerenciamento')) return { ok: false, erro: ERROS_ACAO.TRANSICAO_INVALIDA }
+  return { ok: true }
+}
+
+function conferirJustificativa(justificativa) {
+  const texto = (justificativa ?? '').trim()
+  if (!texto) return { ok: false, erro: ERROS_ACAO.JUSTIFICATIVA_AUSENTE }
+  if (texto.length > LIMITE_JUSTIFICATIVA) return { ok: false, erro: ERROS_ACAO.JUSTIFICATIVA_LONGA }
+  return { ok: true, texto }
+}
+
+// RN18: só a gerência redireciona, e só em triagem (a transição Em triagem → Pendente de aceite só
+// existe para ela). O tipo de atendimento depende do setor, então vem junto e precisa existir no novo
+// setor (decisão de 04/10). O setor que recusou pode ser escolhido de novo (sem regra nova).
+// O prazo de aceite reinicia (atencao.js → prazoDeAceite: 24 h contadas do redirecionamento).
+// Justificativa obrigatória (decisão de 04/10, combinada desde a 2A): cada redirecionamento reinicia
+// o relógio de 24 h, então ele precisa ficar explicado no histórico para o prazo não ser burlado.
+export function redirecionarDemanda(demanda, { setor, tipo, justificativa }, usuario, contexto) {
+  const conferencia = conferirGerencia(demanda, usuario, STATUS.PENDENTE_ACEITE)
+  if (!conferencia.ok) return conferencia
+
+  // "gerenciamento" não é departamento: tiposDoSetor devolve lista vazia e o setor é recusado.
+  const tiposDoNovoSetor = tiposDoSetor(setor)
+  if (tiposDoNovoSetor.length === 0) return { ok: false, erro: ERROS_ACAO.SETOR_INVALIDO }
+  if (!tiposDoNovoSetor.includes(tipo)) return { ok: false, erro: ERROS_ACAO.TIPO_INVALIDO }
+  const texto = conferirJustificativa(justificativa)
+  if (!texto.ok) return texto
+
+  // Ponto final só se a justificativa não terminar com pontuação ("…: motivo." e não "…: motivo..").
+  const final = /[.!?]$/.test(texto.texto) ? '' : '.'
+  const redirecionadaEm = contexto.agora.toISOString()
+  const registro = {
+    ...evento(
+      usuario,
+      contexto,
+      `Redirecionada para ${nomeDoSetor(setor)} (${tipo}): ${texto.texto}${final}`,
+      'redirecionamento',
+    ),
+    setor,
+    tipoAtendimento: tipo,
+    justificativa: texto.texto,
+  }
+  return {
+    ok: true,
+    dados: {
+      ...demanda,
+      status: STATUS.PENDENTE_ACEITE,
+      destino: setor,
+      tipo,
+      redirecionadaEm,
+      // O novo setor define a prioridade no aceite (RN10). Se a demanda já tinha sido aceita antes
+      // (devolução), prioridade e prazos antigos não valem para o novo setor.
+      prioridade: NAO_DEFINIDA,
+      aceitaEm: null,
+      prazo: null,
+      aguardandoDesde: null,
+      historico: [...demanda.historico, registro],
+    },
+  }
+}
+
+// RN19: Não aplicável só pela gerência, com justificativa; pela seção 4, só a partir de Em triagem.
+export function marcarNaoAplicavel(demanda, justificativa, usuario, contexto) {
+  const conferencia = conferirGerencia(demanda, usuario, STATUS.NAO_APLICAVEL)
+  if (!conferencia.ok) return conferencia
+  const texto = conferirJustificativa(justificativa)
+  if (!texto.ok) return texto
+
+  return {
+    ok: true,
+    dados: {
+      ...demanda,
+      status: STATUS.NAO_APLICAVEL,
+      historico: [...demanda.historico, evento(usuario, contexto, `Não aplicável: ${texto.texto}`, 'encerramento')],
+    },
+  }
+}
+
+// RN19: Cancelar só pela gerência, com justificativa. A seção 4 permite a partir de Pendente,
+// Em andamento, Aguardando e Em triagem; a tela oferece só em triagem (decisão de 04/10).
+export function cancelarDemanda(demanda, justificativa, usuario, contexto) {
+  const conferencia = conferirGerencia(demanda, usuario, STATUS.CANCELADA)
+  if (!conferencia.ok) return conferencia
+  const texto = conferirJustificativa(justificativa)
+  if (!texto.ok) return texto
+
+  return {
+    ok: true,
+    dados: {
+      ...demanda,
+      status: STATUS.CANCELADA,
+      historico: [...demanda.historico, evento(usuario, contexto, `Cancelada: ${texto.texto}`, 'encerramento')],
     },
   }
 }
