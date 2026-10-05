@@ -57,9 +57,10 @@ describe('demandasDaAba (RN02)', () => {
     expect(ids(demandasDaAba(LISTA, ti, ABAS.RECEBIDAS, 'eletrica'))).toEqual(['A', 'B'])
   })
 
-  it('gerência vê todas e pode filtrar por setor de destino', () => {
+  it('gerência vê todas e pode filtrar por setor responsável', () => {
     expect(demandasDaAba(LISTA, admin, ABAS.RECEBIDAS)).toHaveLength(LISTA.length)
-    expect(ids(demandasDaAba(LISTA, admin, ABAS.RECEBIDAS, 'eletrica'))).toEqual(['D', 'E'])
+    // E tem destino Elétrica, mas está em triagem: é da gerência, não aparece sob a Elétrica.
+    expect(ids(demandasDaAba(LISTA, admin, ABAS.RECEBIDAS, 'eletrica'))).toEqual(['D'])
   })
 
   it('"Solicitadas por mim" da gerência = origem gerenciamento', () => {
@@ -112,8 +113,10 @@ describe('indicadores (seção 6)', () => {
     expect(valor(ind, 'concluidas')).toBe(1)
   })
 
-  it('gerência filtrando por setor conta só aquele destino', () => {
-    expect(valor(indicadoresVisaoGeral(LISTA, admin, AGORA, 'eletrica'), 'abertas')).toBe(1)
+  it('gerência filtrando por setor conta só o que está com aquele setor (triagem fica fora)', () => {
+    // Elétrica: D (concluída) não é aberta; E está em triagem, com a gerência.
+    expect(valor(indicadoresVisaoGeral(LISTA, admin, AGORA, 'eletrica'), 'abertas')).toBe(0)
+    expect(valor(indicadoresVisaoGeral(LISTA, admin, AGORA, 'tecnologia'), 'abertas')).toBe(2)
   })
 
   it('setor: conta só as suas recebidas e solicitadas, NUNCA as dos outros', () => {
@@ -131,8 +134,36 @@ describe('indicadores (seção 6)', () => {
     expect(chaves).not.toContain('triagem')
   })
 
-  it('abertas do setor ignora as finalizadas', () => {
-    expect(abertasDoSetor(LISTA, 'eletrica')).toBe(1)
+  it('abertas do setor ignora as finalizadas e as que estão em triagem', () => {
+    expect(abertasDoSetor(LISTA, 'eletrica')).toBe(0)
     expect(abertasDoSetor(LISTA, 'tecnologia')).toBe(2)
+  })
+})
+
+describe('Em triagem pertence à gerência (decisão de 04/10)', () => {
+  // Demanda pendente da Hidráulica para a Elétrica, antes e depois da recusa.
+  const pendente = demanda('T', 'hidraulica', 'eletrica', STATUS.PENDENTE_ACEITE, { prioridade: 'Não definida' })
+  const emTriagem = { ...pendente, status: STATUS.EM_TRIAGEM }
+  const hidraulica = { usuario: 'user02', perfil: 'departamento', departamento: 'hidraulica' }
+
+  it('antes da recusa, a Elétrica tem a demanda em Recebidas e nos contadores', () => {
+    expect(ids(demandasDaAba([pendente], eletrica, ABAS.RECEBIDAS))).toEqual(['T'])
+    expect(indicadoresVisaoGeral([pendente], eletrica, AGORA).find((i) => i.chave === 'pendentes').valor).toBe(1)
+  })
+
+  it('setor de destino NÃO lista a demanda em triagem: Recebidas, contadores e card de Departamentos', () => {
+    expect(demandasDaAba([emTriagem], eletrica, ABAS.RECEBIDAS)).toEqual([])
+    expect(demandasDaAba([emTriagem], eletrica, ABAS.SOLICITADAS)).toEqual([])
+    expect(indicadoresVisaoGeral([emTriagem], eletrica, AGORA).every((i) => i.valor === 0)).toBe(true)
+    expect(abertasDoSetor([emTriagem], 'eletrica')).toBe(0)
+  })
+
+  it('gerência vê a demanda em Todas e no contador "Em triagem"', () => {
+    expect(ids(demandasDaAba([emTriagem], admin, ABAS.RECEBIDAS))).toEqual(['T'])
+    expect(indicadoresVisaoGeral([emTriagem], admin, AGORA).find((i) => i.chave === 'triagem').valor).toBe(1)
+  })
+
+  it('quem abriu continua vendo a demanda em Solicitadas', () => {
+    expect(ids(demandasDaAba([emTriagem], hidraulica, ABAS.SOLICITADAS))).toEqual(['T'])
   })
 })

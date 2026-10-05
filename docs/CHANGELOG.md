@@ -120,3 +120,61 @@ Uma entrada por bloco/PR (formato em `docs/CONVENCOES.md`).
     - Cores renderizadas: 4,63:1 (Departamentos) e 4,70:1 (mensagem em Detalhes).
     - Em 1280 px o selo da DM-2006 continua na mesma linha do código.
     - **Nova rodada do axe pela equipe: não executado.**
+
+### 2026-10-04 · Bloco 4 — Parte A (aceite e recusa) · feat/bloco4-aceite
+- **Regras (funções puras, com testes)** — `src/domain/acoes.js`:
+  - `aceitarDemanda(demanda, prioridade, usuario, contexto)`: só o setor executor, só com a demanda Pendente de aceite, com prioridade válida (RN10). Leva a Em andamento, grava `prioridade`, `aceitaEm` e `prazo` calculado do aceite (RN13) e acrescenta "Demanda aceita com prioridade X." ao histórico (RN22). Depois disso a prioridade fica travada, porque `podeDefinirPrioridade` só vale com a demanda pendente (CA-R03). Aceitar depois de 72 h é permitido; a RN09 prevê só o selo.
+  - `recusarDemanda(demanda, motivo, usuario, contexto)`: mesmas conferências; motivo obrigatório, de no máximo 500 caracteres (`LIMITE_MOTIVO`). Leva a Em triagem, mantém o destino e acrescenta "Recusada: <motivo>" ao histórico (RN11, CA-R04).
+  - `src/domain/prioridades.js`: `descreverPrazo` ("24 horas", "48 horas", "72 horas", "7 dias") para o pop-up.
+  - Testes: 14 novos em `acoes.test.js` e 1 em `prioridades.test.js`. Casos negativos: sem prioridade, "Não definida" ou valor inventado; gerência e quem só abriu; status errado (Em andamento, Aguardando, Em triagem); estados finais; motivo vazio, só com espaços ou com 501 caracteres; prioridade travada depois do aceite; quem abriu vê "setor atual: gerenciamento" sem o motivo.
+- **Interface:**
+  - `src/pages/DetalhesDemanda.jsx`: para o setor executor com a demanda pendente, o botão de ação se chama **"Aceitar ou recusar"** e leva à tela Atualizar. Gerência, quem só abriu e outros setores não veem.
+  - `src/pages/AtualizarDemanda.jsx`, "modo aceite":
+    - o select de prioridade é liberado com "Selecione"; status e tipo ficam travados e a observação não aparece;
+    - os botões são **"Aceitar demanda"**, **"Recusar demanda"** e **"Voltar"**;
+    - sem prioridade, o pop-up não abre: a mensagem do catálogo fica ligada ao campo (`aria-describedby`, `aria-invalid`) e o foco vai para ele;
+    - com prioridade, abre o **pop-up de confirmação** com o texto do catálogo e só a duração do prazo (decisão 4);
+    - "Recusar" abre um pop-up com o campo **"Motivo da recusa (obrigatório)"**, travado em 500 caracteres, com contador e aviso de limite;
+    - a regra é conferida de novo no storage, com a demanda lida na hora de gravar.
+  - `src/components/Dialogo.jsx`: nova prop `descricao` (o texto lido pelo leitor de tela, `aria-describedby`); o `children` saiu de dentro do `<p>` para aceitar um campo de formulário. `src/pages/NovaDemanda.jsx` passou a usar `descricao`, sem mudança visual.
+  - `src/mensagens.js`: textos do catálogo e as propostas novas. `src/App.css`: classe nova `.dialog-textarea` (borda com 3:1, fonte de 14 px).
+- **Decisões de 04/10:**
+  - "Devolver à triagem" (de Em andamento/Aguardando) fica para a **parte B**.
+  - **Em triagem, a demanda pertence à gerência** (esclarece a RN11; FLUXOS.md: "Em triagem (com o Gerenciamento)"). O campo `destino` não muda (auditoria e futuro redirecionamento), mas o setor que recusou **perde o acesso** enquanto ela estiver em triagem: some de Recebidas, dos contadores, do card de Departamentos e do detalhe/URL. A gerência a vê em "Todas" e no contador "Em triagem". Quem abriu continua vendo o resumo, com "Setor atual: Gerenciamento". **Decisão a confirmar em ata** (proposta 12 do rascunho de 03/10). *Substitui a primeira versão desta parte, em que o setor que recusou continuava vendo a demanda.*
+  - Limite do motivo: 500 caracteres. Pop-up do aceite só com a duração, sem data. A ação fica na tela Atualizar.
+- **Atende:** RN09, RN10, RN11, RN12 (já existia), RN13, RN20, RN22; RF-R07, RF-R09 (parte); CA-R03, CA-R04; CT-R05, CT-R06 (parte da recusa).
+- **Verificação:**
+  - `npm test` 9 arquivos / 139 testes passaram · lint 0 avisos e 0 erros · build OK.
+  - Navegador embutido, só com teclado, com `user01` na DM-2001:
+    - "Aceitar ou recusar" → Enter abriu o modo aceite;
+    - Enter em "Aceitar demanda" sem prioridade mostrou "Escolha a prioridade para aceitar a demanda." e o foco foi ao select;
+    - setas → Alta; Enter abriu o pop-up com o texto do catálogo e "48 horas", com o foco em "Confirmar aceite";
+    - Esc fechou e devolveu o foco a "Aceitar demanda", sem gravar;
+    - Tab e Shift+Tab ficaram presos no pop-up;
+    - a confirmação gravou Em andamento, Alta, aceite e prazo (+48 h) e o histórico com autor e perfil; o foco foi ao título e o select de prioridade ficou travado.
+  - Com os dados de volta ao seed, na recusa:
+    - o foco entrou no campo do motivo;
+    - confirmar vazio mostrou "Explique por que esta demanda não é do seu setor." ligado ao campo, sem gravar;
+    - Esc devolveu o foco a "Recusar demanda";
+    - com motivo: Em triagem, destino mantido, "Recusada: …" no histórico.
+  - Com `admin`: nenhum botão na DM-2002 (pendente) nem na DM-2001 (em triagem); pela URL de edição, a mensagem de que não há alterações para o perfil.
+  - **Teste da equipe no Edge e leitor de tela: não executado.**
+- **Correção antes dos commits — "Em triagem pertence à gerência":**
+  - **Regra central** — `src/domain/permissoes.js`: nova função `setorResponsavel(demanda)`, que devolve "gerenciamento" em triagem e o `destino` nos demais status. `ehExecutor` passou a usá-la, e com isso visibilidade, detalhe, URL, Recebidas e ações do setor de destino deixam de valer em triagem, sem mudar mais nada. `resumoParaSolicitante` usa a mesma função para o "setor atual".
+  - **Listas e contadores** — `src/domain/listas.js`: o filtro por setor da gerência, os indicadores com filtro de setor e `abertasDoSetor` (cards de Departamentos) usam o setor responsável. `src/pages/VisaoGeral.jsx`: o filtro de setor também. Efeito: com o filtro "Elétrica", a gerência não vê sob a Elétrica uma demanda que está em triagem; ela aparece em "Todas" e em "Em triagem".
+  - **Detalhes** — `src/pages/DetalhesDemanda.jsx`: para a gerência, em triagem, "Responsável (setor)" mostra Gerenciamento; "Departamento" continua mostrando o destino.
+  - **Tela Atualizar** — `src/pages/AtualizarDemanda.jsx`: depois da recusa, o setor vai para a **lista de Demandas**, e não para o detalhe, que agora mostraria "não encontrada". Problema achado na conferência no navegador.
+  - `src/domain/acoes.js`: só o comentário da recusa.
+  - **Testes:** 4 testes antigos registravam o comportamento anterior e foram ajustados, com comentário: em triagem o setor de destino recebe "sem permissão", e não "transição inválida"; com o filtro de setor, a demanda em triagem não aparece sob o destino; `abertasDoSetor` não a conta. Testes novos:
+    - 6 em `permissoes.test.js`: o destino não vê nem o detalhe; o destino continua gravado e o responsável é a gerência; a gerência vê; quem abriu vê só o resumo; nos demais status nada muda; outro setor continua sem ver;
+    - 4 em `listas.test.js`: antes da recusa a demanda está em Recebidas e nos contadores; depois, sai de Recebidas, dos contadores e do card; a gerência vê em Todas e em "Em triagem"; quem abriu continua com ela em Solicitadas;
+    - 1 em `acoes.test.js`: aceitar em triagem dá "sem permissão".
+  - **Verificação:**
+    - `npm test` 9 arquivos / **150** testes passaram · lint 0 avisos e 0 erros · build OK.
+    - Navegador embutido, com `user04` (Elétrica) na DM-2002:
+      - antes da recusa: Pendentes de aceite 1, DM-2002 em Recebidas, card "3 demandas abertas", detalhe acessível;
+      - recusa feita com o teclado; depois: Pendentes de aceite 0, fora de Recebidas, card "2 demandas abertas", URL de detalhe com "Demanda não encontrada ou sem permissão.", destino gravado ainda Elétrica;
+      - repetida após voltar os dados ao seed: a recusa leva à lista de Demandas, com o foco no título.
+    - Com `admin`: "Em triagem" 2 (DM-2007 do seed + DM-2002), a DM-2002 em "Todas" (achada pela busca, porque a lista tem 6 por página), detalhe com "Responsável: Gerenciamento", e 0 em "Em triagem" com o filtro "Elétrica".
+    - Com `user03` (quem abriu): "Em triagem", "Setor atual: Gerenciamento", sem histórico nem prioridade.
+    - **Teste da equipe no Edge: não executado.**

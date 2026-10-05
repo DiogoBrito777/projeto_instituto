@@ -44,6 +44,16 @@ Acréscimos do Bloco 2B (**proposta** — revisar em grupo):
 | Observação (instrução visível) | Rótulo "Observação (opcional)" + contador "N/500 caracteres" |
 | Observação acima do limite | "A observação deve ter no máximo 500 caracteres." |
 
+## Aceite e recusa na tela Atualizar (**proposta, Bloco 4-A** — revisar em grupo)
+Usam os textos já aprovados da seção abaixo ("Aceitar sem prioridade", "Pop-up do aceite", "Recusar sem motivo"); [Y] = "24 horas", "48 horas", "72 horas" ou "7 dias". Acréscimos:
+| Situação | Texto |
+|---|---|
+| Botão em Detalhes (executor, demanda pendente) | "Aceitar ou recusar" |
+| Botões na tela Atualizar | "Aceitar demanda", "Recusar demanda", "Voltar"; no pop-up: "Confirmar aceite" / "Confirmar recusa" e "Cancelar" |
+| Pop-up da recusa (explicação) | "A demanda vai para a triagem do Gerenciamento, que decide o destino." |
+| Campo do pop-up da recusa | Rótulo "Motivo da recusa (obrigatório)" + contador "N/500 caracteres" |
+| Motivo acima do limite | "O motivo deve ter no máximo 500 caracteres." |
+
 ## Aceite, recusa e encerramento
 | Situação | Mensagem |
 |---|---|

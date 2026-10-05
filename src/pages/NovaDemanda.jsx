@@ -229,6 +229,7 @@ function NovaDemanda({ usuario }) {
         <Dialogo
           titulo="Demanda enviada"
           rotuloSuperior={enviada}
+          descricao={MENSAGENS.envioSucesso(enviada)}
           onFechar={() => setEnviada(null)}
           retornarFocoPara={botaoEnviar}
           acoes={
@@ -248,9 +249,7 @@ function NovaDemanda({ usuario }) {
               </button>
             </>
           }
-        >
-          {MENSAGENS.envioSucesso(enviada)}
-        </Dialogo>
+        />
       )}
     </section>
   )

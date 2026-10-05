@@ -2,10 +2,12 @@
 // contexto (agora e gerador de IDs) e devolvem { ok: true, dados: novaDemanda } ou { ok: false, erro }.
 // Nada aqui grava; quem grava é o storage, depois que a ação foi aprovada.
 //
-// Neste bloco só existem as mudanças "simples" de status, que não pedem dado extra.
-// Aceitar (prioridade), recusar (motivo), redirecionar, cancelar e não aplicável (justificativa) são do Bloco 4.
+// Mudanças "simples" de status (sem dado extra), aceite com prioridade e recusa com motivo (Bloco 4-A).
+// Devolver à triagem, redirecionar, cancelar e não aplicável (justificativa) ficam para o Bloco 4-B.
 
 import { ehExecutor } from './permissoes.js'
+import { calcularPrazoResolucao } from './prazos.js'
+import { ehPrioridadeValida } from './prioridades.js'
 import { STATUS, estaFinal, podeTransicionar } from './status.js'
 
 export const ERROS_ACAO = {
@@ -15,10 +17,14 @@ export const ERROS_ACAO = {
   TIPO_INVALIDO: 'tipo-invalido',
   OBSERVACAO_LONGA: 'observacao-longa',
   SEM_ALTERACAO: 'sem-alteracao',
+  PRIORIDADE_AUSENTE: 'prioridade-ausente',
+  MOTIVO_AUSENTE: 'motivo-ausente',
+  MOTIVO_LONGO: 'motivo-longo',
 }
 
 // Mesmo limite da descrição da demanda (500 caracteres).
 export const LIMITE_OBSERVACAO = 500
+export const LIMITE_MOTIVO = 500
 
 const STATUS_COM_PRAZO_CORRENDO = [STATUS.EM_ANDAMENTO, STATUS.AGUARDANDO]
 
@@ -97,4 +103,60 @@ export function salvarAtualizacao(demanda, alteracoes, usuario, contexto) {
   // Histórico só cresce: itens antigos nunca são alterados (ERROR_HANDLING.md, seção 5).
   nova.historico = [...demanda.historico, ...eventos]
   return { ok: true, dados: nova }
+}
+
+// Conferências comuns ao aceite e à recusa: estado final (RN20), só o setor executor (matriz,
+// seção 3) e só enquanto a demanda está Pendente de aceite (seção 4).
+function conferirPendenteDoExecutor(demanda, usuario) {
+  if (estaFinal(demanda.status)) return { ok: false, erro: ERROS_ACAO.FINALIZADA }
+  if (!ehExecutor(usuario, demanda)) return { ok: false, erro: ERROS_ACAO.SEM_PERMISSAO }
+  if (demanda.status !== STATUS.PENDENTE_ACEITE) return { ok: false, erro: ERROS_ACAO.TRANSICAO_INVALIDA }
+  return { ok: true }
+}
+
+// RN10 + RN13: aceitar exige prioridade; o prazo conta a partir do aceite e fica gravado.
+// Depois daqui a prioridade fica travada: podeDefinirPrioridade só vale com a demanda pendente.
+// Aceitar depois de 72 h é permitido: a RN09 prevê só o selo "Aceite atrasado".
+export function aceitarDemanda(demanda, prioridade, usuario, contexto) {
+  const conferencia = conferirPendenteDoExecutor(demanda, usuario)
+  if (!conferencia.ok) return conferencia
+  if (!ehPrioridadeValida(prioridade)) return { ok: false, erro: ERROS_ACAO.PRIORIDADE_AUSENTE }
+
+  const aceitaEm = contexto.agora.toISOString()
+  return {
+    ok: true,
+    dados: {
+      ...demanda,
+      status: STATUS.EM_ANDAMENTO,
+      prioridade,
+      aceitaEm,
+      prazo: calcularPrazoResolucao(aceitaEm, prioridade).toISOString(),
+      historico: [
+        ...demanda.historico,
+        evento(usuario, contexto, `Demanda aceita com prioridade ${prioridade}.`, 'aceite'),
+      ],
+    },
+  }
+}
+
+// RN11: recusar exige motivo; a demanda vai para Em triagem e passa a PERTENCER À GERÊNCIA.
+// O destino não muda (auditoria; só a gerência redireciona, RN18), mas o setor que recusou perde o
+// acesso enquanto ela estiver em triagem (permissoes.js → setorResponsavel; decisão de 04/10, a
+// confirmar em ata). Quem abriu passa a ver o setor atual "Gerenciamento" (RN03).
+export function recusarDemanda(demanda, motivo, usuario, contexto) {
+  const conferencia = conferirPendenteDoExecutor(demanda, usuario)
+  if (!conferencia.ok) return conferencia
+
+  const texto = (motivo ?? '').trim()
+  if (!texto) return { ok: false, erro: ERROS_ACAO.MOTIVO_AUSENTE }
+  if (texto.length > LIMITE_MOTIVO) return { ok: false, erro: ERROS_ACAO.MOTIVO_LONGO }
+
+  return {
+    ok: true,
+    dados: {
+      ...demanda,
+      status: STATUS.EM_TRIAGEM,
+      historico: [...demanda.historico, evento(usuario, contexto, `Recusada: ${texto}`, 'recusa')],
+    },
+  }
 }

@@ -3,7 +3,7 @@
 
 import { compararDemandas, ordemPrioridade } from './prioridades.js'
 import { STATUS, estaFinal } from './status.js'
-import { ehExecutor, ehGerencia, ehSolicitante, podeVer, podeVerDetalhes } from './permissoes.js'
+import { ehExecutor, ehGerencia, ehSolicitante, podeVer, podeVerDetalhes, setorResponsavel } from './permissoes.js'
 import { aExpirar, aguardandoMuito, vencida } from './prazos.js'
 
 export const ABAS = {
@@ -25,8 +25,9 @@ export function abasDoPerfil(usuario) {
   ]
 }
 
-// O filtro por setor (destino) só vale para a gerência; para um setor ele fica travado no próprio
-// setor, e as regras de visibilidade já garantem isso (RN02).
+// O filtro por setor só vale para a gerência; para um setor ele fica travado no próprio setor, e as
+// regras de visibilidade já garantem isso (RN02). O filtro usa o setor RESPONSÁVEL: demanda em
+// triagem é da gerência e não aparece sob o setor de destino (decisão de 04/10).
 export function demandasDaAba(demandas, usuario, aba, setor = null) {
   return demandas
     .filter((demanda) => podeVer(usuario, demanda))
@@ -35,7 +36,7 @@ export function demandasDaAba(demandas, usuario, aba, setor = null) {
         ? ehSolicitante(usuario, demanda)
         : ehGerencia(usuario) || ehExecutor(usuario, demanda),
     )
-    .filter((demanda) => !ehGerencia(usuario) || !setor || demanda.destino === setor)
+    .filter((demanda) => !ehGerencia(usuario) || !setor || setorResponsavel(demanda) === setor)
 }
 
 // "Pendentes de aceite" ficam numa seção própria, no topo (seção 5).
@@ -81,7 +82,7 @@ const prazoCorrendo = (demanda) =>
 // Números da Visão Geral, sempre calculados (seção 6). "agora" entra por parâmetro.
 export function indicadoresVisaoGeral(demandas, usuario, agora, setor = null) {
   if (ehGerencia(usuario)) {
-    const base = setor ? demandas.filter((demanda) => demanda.destino === setor) : demandas
+    const base = setor ? demandas.filter((demanda) => setorResponsavel(demanda) === setor) : demandas
     return [
       { chave: 'abertas', rotulo: 'Abertas', valor: contar(base, (d) => !estaFinal(d.status)) },
       { chave: 'pendentes', rotulo: 'Pendentes de aceite', valor: contar(base, (d) => d.status === STATUS.PENDENTE_ACEITE), badge: '72 h para aceitar', tom: 'ambar' },
@@ -104,7 +105,8 @@ export function indicadoresVisaoGeral(demandas, usuario, agora, setor = null) {
   ]
 }
 
-// Demandas ainda abertas que um setor executa (cards de Departamentos).
+// Demandas ainda abertas que um setor executa (cards de Departamentos). Em triagem não conta:
+// está com a gerência.
 export function abertasDoSetor(demandas, setor) {
-  return contar(demandas, (demanda) => demanda.destino === setor && !estaFinal(demanda.status))
+  return contar(demandas, (demanda) => setorResponsavel(demanda) === setor && !estaFinal(demanda.status))
 }

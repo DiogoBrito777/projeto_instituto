@@ -10,9 +10,17 @@ export function ehGerencia(usuario) {
   return usuario?.perfil === 'gerenciamento'
 }
 
-// Executor = setor de destino da demanda.
+// Setor que responde pela demanda agora. Em triagem a demanda PERTENCE À GERÊNCIA (FLUXOS.md:
+// "Em triagem (com o Gerenciamento)"; decisão de 04/10 que esclarece a RN11, a confirmar em ata).
+// O campo destino não muda: fica para auditoria e para a gerência redirecionar depois.
+export function setorResponsavel(demanda) {
+  return demanda.status === STATUS.EM_TRIAGEM ? ORIGEM_GERENCIAMENTO : demanda.destino
+}
+
+// Executor = setor de destino da demanda, enquanto ela não está em triagem. Em triagem o setor
+// de destino perde o acesso (lista, contadores, detalhe e URL) até a gerência redirecionar.
 export function ehExecutor(usuario, demanda) {
-  return usuario?.perfil === 'departamento' && demanda.destino === usuario.departamento
+  return usuario?.perfil === 'departamento' && setorResponsavel(demanda) === usuario.departamento
 }
 
 // Quem abriu: o setor do usuário, ou "gerenciamento" quando foi o admin (RN07).
@@ -44,7 +52,6 @@ export function podeVerDetalhes(usuario, demanda) {
 // RN03 + RN12: o que quem abriu pode ver. Os campos são escolhidos um a um (lista branca),
 // para que histórico, prazo e prioridade nunca vazem, mesmo se a demanda ganhar campos novos.
 export function resumoParaSolicitante(demanda) {
-  const emTriagem = demanda.status === STATUS.EM_TRIAGEM
   const naoAceita = demanda.status === STATUS.PENDENTE_ACEITE
 
   return {
@@ -56,7 +63,7 @@ export function resumoParaSolicitante(demanda) {
     solicitante: demanda.solicitante,
     criadaEm: demanda.criadaEm,
     status: naoAceita ? 'Não aceita pelo setor' : demanda.status,
-    setorAtual: emTriagem ? ORIGEM_GERENCIAMENTO : demanda.destino,
+    setorAtual: setorResponsavel(demanda),
   }
 }
 
