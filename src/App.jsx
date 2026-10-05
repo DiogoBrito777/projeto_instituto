@@ -18,15 +18,6 @@ function PlusIcon() {
   )
 }
 
-function SearchIcon() {
-  return (
-    <svg aria-hidden="true" viewBox="0 0 24 24" className="search-icon">
-      <circle cx="10.8" cy="10.8" r="6.8" />
-      <path d="m16 16 4.3 4.3" />
-    </svg>
-  )
-}
-
 function getPageFromHash(hash) {
   if (hash === '#login') return 'login'
   if (hash === '#visao-geral') return 'visao-geral' // NOVO
@@ -55,7 +46,8 @@ function App() {
   const activePage = getPageFromHash(hash)
   const idDemanda = idDaRota(hash)
   const { usuario, entrar, sair } = useSessao()
-  const searchInput = useRef(null)
+  const tituloDaPagina = useRef(null)
+  const hashAnterior = useRef(hash)
   const isHomePage = activePage === 'visao-geral' // NOVO
   const isCreatePage = activePage === 'nova-demanda'
   const isDepartmentsPage = activePage === 'departamentos'
@@ -84,12 +76,28 @@ function App() {
     document.title = `${usuario ? pageTitle : 'Entrar'} | Demanda de aço`
   }, [usuario, pageTitle])
 
+  // WCAG 2.4.3: com roteamento por hash o navegador não muda o foco ao trocar de tela, e quem usa
+  // leitor de tela não percebe a troca. Por isso o foco vai para o título (h1) a cada mudança de
+  // endereço. No primeiro carregamento não move, para não pular o início da página.
+  useEffect(() => {
+    if (hashAnterior.current === hash) return
+    hashAnterior.current = hash
+    tituloDaPagina.current?.focus()
+  }, [hash])
+
   if (!usuario) {
     return <Login onEntrar={entrar} />
   }
 
   return (
     <div className="app-shell">
+      {/* WCAG 2.4.1: pular o menu. É botão (e não link "#conteudo") porque com roteamento por
+          hash um link trocaria de tela. Leva o foco ao título da tela (h1), que mostra contorno
+          visível; antes ia ao <main>, sem contorno, e o Enter parecia não fazer nada. */}
+      <button className="skip-link" type="button" onClick={() => tituloDaPagina.current?.focus()}>
+        Ir para o conteúdo
+      </button>
+
       <Sidebar
         activeItem={isDetailPage || isUpdatePage ? 'demandas' : activePage}
         usuario={usuario}
@@ -98,8 +106,11 @@ function App() {
 
       <main className="app-main">
         <header className="topbar">
-          <h1 className="page-title">{pageTitle}</h1>
-          {isCreatePage ? (
+          {/* O único h1 da tela; tabIndex -1 permite receber o foco por código, sem entrar no Tab. */}
+          <h1 className="page-title" ref={tituloDaPagina} tabIndex={-1}>
+            {pageTitle}
+          </h1>
+          {isCreatePage && (
             <button
               className="topbar-action"
               type="button"
@@ -108,16 +119,7 @@ function App() {
               <PlusIcon />
               <span>Criar</span>
             </button>
-          ) : !isHomePage && !isDepartmentsPage && !isDetailPage && !isUpdatePage ? (
-            <button
-              className="topbar-search"
-              type="button"
-              onClick={() => searchInput.current?.focus()}
-              aria-label="Buscar demandas"
-            >
-              <SearchIcon />
-            </button>
-          ) : null}
+          )}
         </header>
 
         {isCreatePage ? (
@@ -133,7 +135,6 @@ function App() {
         ) : (
           <Demandas
             key={setorDaRota(hash) ?? 'todos'}
-            searchInput={searchInput}
             usuario={usuario}
             setorInicial={setorDaRota(hash)}
           />

@@ -17,7 +17,8 @@ export default function VisaoGeralHeader({ onNovaDemanda, usuario }) {
     <header className="header">
       <div>
         <p className="header__eyebrow">{dataFormatada}</p>
-        <h1 className="header__title">Painel de Gerenciamento</h1>
+        {/* h2: o h1 da tela é o título da barra do topo (um único h1 por tela, WCAG 1.3.1). */}
+        <h2 className="header__title">Painel de Gerenciamento</h2>
         <p className="header__subtitle">
           Acompanhe demandas, prioridades e o ritmo da equipe.
         </p>

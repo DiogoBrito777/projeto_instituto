@@ -41,3 +41,82 @@ Uma entrada por bloco/PR (formato em `docs/CONVENCOES.md`).
 - **Fica como 2C (opcional, se houver tempo):** aviso online/offline, fila "Pendentes de envio" com "Enviar agora" e rascunho preservado ao recarregar (Bloco 2 do `PROMPT_BLOCOS.md`; Atas 15/09 e 02/10). Hoje o formulário é mantido em caso de erro, mas se perde se a página for recarregada.
 - **Correção — campos sem trava de limite (falha do teste manual da 2B):** dava para digitar e colar muito além do limite (vistos "2400/60" e "3072/500"), e o aviso só vinha no envio. Agora Título (60), Descrição (500) e a Observação da tela Atualizar (500) são travados com `maxLength`, e um aviso numa área `role="status"`, anunciada pelo leitor de tela, mostra "Limite de N caracteres atingido." ao chegar ao limite ou "Limite de N caracteres atingido. O texto foi cortado." quando um texto colado é maior que o espaço. Para saber que houve corte, o tamanho tentado é calculado no momento de colar (`domain/limites.js`, puro e testado; `hooks/useAvisoLimite.js`). A validação na regra (`validarNovaDemanda`, `salvarAtualizacao`) continua como segurança. Arquivos novos (4): `src/domain/limites.js`, `src/domain/limites.test.js`, `src/hooks/useAvisoLimite.js`, `src/components/ContadorLimite.jsx`. Alterados (7): `src/pages/NovaDemanda.jsx`, `src/pages/AtualizarDemanda.jsx`, `src/mensagens.js`, `src/App.css`, `docs/MENSAGENS_VALIDACAO.md`, `docs/EXPLICACAO_BLOCO2B.md` (o texto dizia "não usamos maxLength"), `docs/CHANGELOG.md`. Verificação: `npm test` 9 arquivos / 122 testes passaram · lint 0 avisos e 0 erros · build OK. Conferência do assistente no navegador embutido: digitando 69 caracteres no Título, o campo parou em 60 e mostrou "Limite de 60 caracteres atingido."; a Observação tem `maxLength` 500 e a área de aviso. A colagem real **não pôde ser testada** ali (o navegador embutido bloqueou a área de transferência); a lógica de "texto cortado" foi conferida com uma colagem simulada (3072 → 500, aviso certo). Reteste manual da equipe, inclusive colar no Edge e ouvir o aviso no leitor de tela: não executado.
 - **Decisão (a confirmar em ata): tipo "Outros".** Incluído no fim da lista `tiposAtendimento` de cada um dos 4 setores em `src/data/departamentos.json`. A Nova Demanda, a validação (`validarNovaDemanda`) e a tela Atualizar (`salvarAtualizacao`) leem a lista do setor, então aceitam "Outros" sem mudança de código. Testes acrescentados: "Outros" aceito e último da lista nos 4 setores (`novaDemanda.test.js`) e troca para "Outros" na Atualizar (`acoes.test.js`). Junto, proposta de **limitar a 4 setores** (área fora deles segue devolução → redirecionar ou "Não aplicável"; novos setores são cadastro futuro), registrada em `docs/ATAS_RASCUNHO_27-09_e_02-10.md` (itens 10 e 11) e em `docs/DOCUMENTACAO.md` (seção 11). Verificação: `npm test` 9 arquivos / 124 testes passaram · lint 0 avisos e 0 erros · build OK. Teste manual: não executado.
+
+### 2026-10-03 · Bloco 3 — Fase 1 (semântica) · fix/acessibilidade
+- **Escopo:** só estrutura e anúncios para tecnologia assistiva. Visual dos colegas sem mudança, exceto a remoção do "Ctrl K" (pedido do bloco) e o skip link, que só aparece com o foco do teclado.
+- **Skip link "Ir para o conteúdo" (WCAG 2.4.1)** — `src/App.jsx`, `src/index.css` (classe nova `.skip-link`). É o primeiro item do Tab e leva o foco ao `<main id="conteudo">`. É botão e não link `#conteudo`, porque com roteamento por hash um link trocaria de tela.
+- **Foco no título a cada troca de rota (WCAG 2.4.3)** — `src/App.jsx`. O `<h1>` da barra do topo tem `tabIndex=-1` e recebe o foco quando o endereço muda (não no primeiro carregamento). Em `src/index.css`, `[tabindex='-1']:focus { outline: none }`: título e `<main>` só recebem foco por código, não são clicáveis.
+- **Um único `<h1>` por tela (WCAG 1.3.1)** — `src/components/VisaoGeralHeader.jsx`: "Painel de Gerenciamento" passou de `<h1>` a `<h2>`, com a mesma classe; o CSS fixa margem, tamanho e peso, então o visual não muda. O `<h1>` é o título da barra do topo em todas as telas (o Login tem o seu).
+- **Rótulo na busca da Visão Geral (WCAG 1.3.1, 3.3.2)** — `src/components/VisaoGeralSearchBar.jsx`: `<label>` "Pesquisar demanda" para leitor de tela (antes só placeholder); ícone com `aria-hidden`. As buscas de Demandas e Departamentos já tinham rótulo.
+- **"Ctrl K" removido** — `src/components/VisaoGeralSearchBar.jsx`. Era decorativo; o atalho não existia (defeito G11). A regra `.kbd` em `VisaoGeral.css` ficou sem uso (não mexi no CSS dos colegas nesta fase).
+- **`aria-pressed` nas abas de filtro (WCAG 4.1.2)** — `src/components/VisaoGeralFilterTabs.jsx`, mais `type="button"`. As abas de Demandas já tinham desde a 2A.
+- **Contagem de resultados anunciada (WCAG 4.1.3)** — `src/components/VisaoGeralDemandList.jsx` ("N demandas exibidas") e `src/pages/Departamentos.jsx` ("N setores encontrados"), em `role="status"` invisível (`sr-only`). Demandas já tinha `aria-live` na contagem. Erros já eram anunciados: `role="alert"` em erro de dados, sem permissão, erro de envio e erro ao salvar; erros de campo são lidos pelo foco + `aria-describedby`.
+- **`aria-current="page"` no menu** — já existia em `Sidebar.jsx` (código dos colegas); conferido. Em Detalhes/Atualizar o item marcado é "Demandas", a seção de onde a tela vem.
+- **Verificação:** `npm test` 9 arquivos / 124 testes passaram · lint 0 avisos e 0 erros · build OK. Conferência do assistente no navegador embutido com `admin`: depois do login o foco foi ao `<h1>` "Visão geral"; numa página recarregada, o 1º Tab foi ao "Ir para o conteúdo", visível no topo, o Enter levou o foco ao `<main>` e o Tab seguinte já caiu no conteúdo; em 7 rotas (Demandas, Departamentos, Nova Demanda, Detalhes, Atualizar, Demandas por setor e Visão Geral) havia **1 `<h1>`** e o foco ia ao título; abas com `aria-pressed`; busca com rótulo; sem "Ctrl K". **Leitor de tela e teste da equipe: não executado.**
+
+### 2026-10-03 · Bloco 3 — Fase 2 (CSS) · fix/acessibilidade
+**Correções do teste de teclado no Edge (bugs da Fase 1)**
+- **Causa analisada no código** (não há `onKeyDown`, `onBlur` nem `onFocus` em `App.jsx` ou `Sidebar.jsx`; só o `hashchange` e o `keydown` do `Dialogo`, que só existe com o pop-up aberto):
+  1. o `.skip-link` ficava em `top: 8px; left: 8px`, exatamente sobre o link "Demanda de aço" da barra lateral;
+  2. o Enter levava o foco ao `<main>`, mas a regra `[tabindex='-1']:focus { outline: none }`, que eu criei na Fase 1, escondia o contorno; o skip link sumia e o link "Demanda de aço" aparecia no mesmo lugar, parecendo focado, e o Enter seguinte também "não fazia nada";
+  3. com Shift+Tab o foco caía de fato no link, cujo `href="#inicio"` é uma rota inexistente que o `getPageFromHash` manda para Demandas.
+  - A conferência da Fase 1 no navegador embutido não percebeu (1) e (2).
+- **Skip link reposicionado** — `src/index.css`: agora é `position: fixed` no topo, centralizado sobre a faixa do cabeçalho; no celular (≤ 760 px) fica à direita. Não cobre mais a marca.
+- **Skip link leva o foco ao `<h1>`** — `src/App.jsx`. O `<main>` não precisa mais de `id` nem `tabIndex`. Em `src/index.css`, a regra que escondia o contorno foi trocada por `.page-title:focus { outline: 2px solid #1b7766 }`, que mostra onde o foco caiu (também a cada troca de rota).
+- **Marca "Demanda de aço"** — `src/components/Sidebar.jsx`: `#inicio` → `#visao-geral`.
+- **Lupa do topo de Demandas removida** — `src/App.jsx`: saem o botão, o ícone `SearchIcon`, o ref `searchInput` e a prop. Ela só levava o foco à busca e o rótulo "Buscar demandas" prometia uma busca que não fazia. A lupa foi para **dentro** da barra de busca (`src/pages/Demandas.jsx`), como em Departamentos e na Visão Geral. Em `src/App.css` saem `.topbar-search` e `.search-icon`, sem uso; `.search-field` vira flex e ganha estilo para o ícone.
+
+**CSS dos colegas: o que mudou, arquivo por arquivo (só o que a acessibilidade exige)**
+- **`src/index.css`:**
+  - foco visível global: `:focus-visible { outline: 2px solid #1b7766; outline-offset: 2px }`. Antes valia só para botão e link, em `#58a495` (2,9:1); agora vale para todo elemento focável, com 5,4:1 (WCAG 2.4.7, 1.4.11). Na barra lateral escura o contorno é `#9fdccf`;
+  - `prefers-reduced-motion` zera transições e animações (WCAG 2.3.3);
+  - skip link e foco no título, como descrito acima.
+- **`src/App.css`:**
+  - 4 linhas `outline: none/0` removidas (campos do formulário, busca de Demandas, ordenação, busca de Departamentos);
+  - 16 cores de texto escurecidas, cada uma para o tom mais próximo na mesma cor com 4,5:1 ou mais (ex.: `#87938f` 3,18 → `#6b7773` 4,65; `#ea580c` 3,29 → `#c1480a` 4,62 no selo laranja; `#159447` 3,72 → `#12823e` 4,64 no selo verde);
+  - borda dos cards de Demandas: transparente (no celular, `#edf1ef`) → `#6d968c`, 3:1 (WCAG 1.4.11);
+  - borda das abas Recebidas/Solicitadas: → `#6d968c`;
+  - `overflow-wrap: anywhere` no título dos cards.
+- **`src/components/Sidebar.css`:**
+  - avatar `#17816e` → `#167d6a` (4,47 → 4,71 com o texto `#effaf7`);
+  - setor do usuário com opacidade 55% → 75% (abaixo de 4,5 → acima);
+  - Sair 22 × 24 → 24 × 24 px (WCAG 2.5.8).
+- **`src/pages/DetalhesDemanda.css`:**
+  - 6 `outline: 0` removidos;
+  - 8 cores escurecidas (ex.: `#91a09c` 2,72 → `#687874`; status azul `#2876d5` 4,12 → `#256ec6`; prioridade `#d95c54` 3,38 → `#ca362d`);
+  - caminho no topo da página → `#5e736f`, calculado sobre o fundo real `#f3f7f6` (4,7:1);
+  - contorno do card-link `#58a495` → `#1b7766`;
+  - `overflow-wrap: anywhere` em título, campos, descrição, histórico e caminho;
+  - select de prioridade com `min-height: 24px` (axe "antes").
+- **`src/pages/VisaoGeral.css`:**
+  - 1 `outline: none` removido;
+  - variáveis de cor: verde `#1f8a4c` → `#1c7b44`, âmbar `#b6790a` → `#946308`, vermelho `#d4392b` → `#bf3327`, texto claro `#9a9da2` → `#72757b`, texto médio `#6b7075` → `#676c71`;
+  - placeholder `#9a9a97` → `#757572`;
+  - regra `.kbd` apagada (sem uso desde a Fase 1);
+  - card com `min-width: 0` e `overflow-wrap: anywhere` no título e na descrição (texto sem espaço criava rolagem lateral);
+  - borda do filtro de setor (meu, da 2A) → `#6d968c`.
+- **Fonte mínima de 14 px, isolada (WCAG 1.4.4)** — arquivo novo `src/fonte-minima.css`, importado por último em `src/main.jsx`. **Nenhum CSS dos colegas foi editado para isso.** É gerado por script: para cada seletor que tinha texto abaixo de 14 px, repete os seus `font-size` na mesma ordem e `@media`, como `max(14px, original)`. Cobre 87 declarações de 7 a 13,5 px (as 88 do levantamento, menos a do `.kbd` apagado). No fim do arquivo há um ajuste manual: na Visão Geral, com a fonte maior, o selo de status e o número do card não cabiam em ~800 px e criavam rolagem; a linha agora pode quebrar. **Para desfazer:** apagar o arquivo e a linha de import no `main.jsx`.
+- **Contraste conferido por cálculo, não por auditoria:** um script `node`, rodado no terminal sem arquivo nem dependência nova, recalculou todas as cores de texto declaradas. Sobraram só 2 casos dispensados: botão de página desativado (a WCAG dispensa) e ícone branco sobre fundo colorido (o script não resolve o fundo). **A auditoria axe "depois" não foi gerada:** fica para a equipe, em `docs/evidencias/depois/`.
+- **Verificação:**
+  - `npm test` 9 arquivos / 124 testes passaram · lint 0 avisos e 0 erros · build OK.
+  - No CSS final do build, a fonte mínima vem por último.
+  - Conferência do assistente no navegador embutido:
+    - com página recarregada, o 1º Tab mostrou o skip link no topo, sem cobrir a marca, em 1280 e 360 px;
+    - o Enter levou o foco ao `<h1>`;
+    - título e descrição de 400 caracteres sem espaço quebraram dentro dos cards;
+    - em 6 telas e 4 larguras (360, 800, 1024, 1280 px), sem rolagem lateral e sem texto visível abaixo de 14 px.
+  - **Limitação:** o navegador embutido força o próprio estilo de foco (3 px na cor do texto, até num `<div>` de teste sem regra nossa); por isso a **cor e a espessura do contorno não puderam ser conferidas ali**.
+  - **Teste no Edge (teclado, contorno e leitor de tela): não executado.**
+- **Correções da auditoria axe "depois" (rodada pela equipe na branch publicada, 04/10):**
+  - **Contraste em fundos cinza** — `src/App.css`. As cores da Fase 2 tinham sido calculadas contra branco, e três regras ficam direto sobre o fundo da página:
+    - `.departments-intro p`: `#6c7581` → `#666f7a` (4,24 → 4,63:1 sobre `#f3f4f6`);
+    - `.department-empty-state`: `#6c7682` → `#656e7a` (4,19 → 4,69:1);
+    - `.empty-state p` (mensagens "Você pode consultar…", "Demanda não encontrada…", carregando e erro): `#6b7874` → `#65716d` (4,26 → 4,70:1 sobre `#f3f7f6`, 4,61 sobre `#f3f4f6`, 5,08 no branco).
+    - As demais regras com essas cores ficam em cards brancos ou na tela Demandas (branca) e já passavam.
+  - **Rolagem lateral em 360 px em Detalhes (DM-2006)** — `src/fonte-minima.css`. A causa **não era o menu**: os itens do menu estão dentro do `.sidebar-nav`, que tem rolagem própria (`overflow-x: auto`), e por isso aparecem na lista de elementos "fora da tela" sem alargar a página. O culpado era o selo `.detail-status` "Aguardando (processamento interno)": com `white-space: nowrap` e 14 px ele ficou com 274 px, numa linha flex sem quebra (`.detail-summary-top`), levando a página a 382 px. Só a DM-2006 tem esse status, e a conferência anterior tinha usado a DM-2003. O skip link medido em 374 px era efeito colateral: no modo celular, a área visível se alarga junto com o conteúdo. Correção no arquivo isolado da fonte (some se a fonte for desfeita): a linha pode quebrar e o selo também; em telas largas a linha cabe e nada muda.
+  - **Verificação:**
+    - `npm test` 124 passaram · lint 0 avisos e 0 erros · build OK.
+    - Navegador embutido, como `admin` e como `user01`: Visão Geral, Demandas, Departamentos, Nova Demanda e as 12 demandas em Detalhes e Atualizar (28 telas), em 360, 800, 1024 e 1280 px. **Nenhuma rolagem lateral** nas 224 combinações.
+    - Cores renderizadas: 4,63:1 (Departamentos) e 4,70:1 (mensagem em Detalhes).
+    - Em 1280 px o selo da DM-2006 continua na mesma linha do código.
+    - **Nova rodada do axe pela equipe: não executado.**

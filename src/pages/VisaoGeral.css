@@ -12,8 +12,8 @@
   --color-border-soft: #eeeeec;
 
   --color-text: #17181a;
-  --color-text-muted: #6b7075;
-  --color-text-faint: #9a9da2;
+  --color-text-muted: #676c71;
+  --color-text-faint: #72757b;
 
   --color-primary: #1f4b3f;
   --color-primary-hover: #163a30;
@@ -22,13 +22,13 @@
   --color-ink: #10221c;
 
   --tone-verde-bg: #e4f5ec;
-  --tone-verde-fg: #1f8a4c;
+  --tone-verde-fg: #1c7b44;
 
   --tone-ambar-bg: #fdf1d9;
-  --tone-ambar-fg: #b6790a;
+  --tone-ambar-fg: #946308;
 
   --tone-vermelho-bg: #fbe4e2;
-  --tone-vermelho-fg: #d4392b;
+  --tone-vermelho-fg: #bf3327;
 
   --tone-azul-bg: #e2edfc;
   --tone-azul-fg: #2166d6;
@@ -233,25 +233,15 @@
 .visao-geral .search-bar input {
   flex: 1;
   border: none;
-  outline: none;
   font-size: 14px;
   color: var(--color-text);
   background: transparent;
 }
 
 .visao-geral .search-bar input::placeholder {
-  color: #9a9a97;
+  color: #757572;
 }
 
-.visao-geral .kbd {
-  font-size: 12px;
-  color: var(--color-text-faint);
-  background: #f4f4f2;
-  border: 1px solid var(--color-border);
-  border-radius: 6px;
-  padding: 2px 8px;
-  flex-shrink: 0;
-}
 
 /* ---------- Filter tabs ---------- */
 
@@ -354,6 +344,8 @@
 }
 
 .visao-geral .demand-card {
+  /* Bloco 3: sem min-width 0, texto longo sem espaço alargava o card e criava rolagem lateral. */
+  min-width: 0;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
@@ -373,6 +365,11 @@
 .visao-geral .demand-card__ref {
   font-size: 13px;
   color: var(--color-text-faint);
+}
+
+.visao-geral .demand-card__title,
+.visao-geral .demand-card__desc {
+  overflow-wrap: anywhere;
 }
 
 .visao-geral .demand-card__title {
@@ -510,7 +507,7 @@
 .visao-geral .vg-setor select {
   min-height: 34px;
   padding: 0 10px;
-  border: 1px solid #c9d9d5;
+  border: 1px solid #6d968c;
   border-radius: 8px;
   background: #fff;
   color: #1e2926;
