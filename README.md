@@ -96,6 +96,7 @@ Estão registradas, e não escondidas, em `docs/DOCUMENTACAO.md` (seção 23). A
 
 Tudo está na pasta `docs/`:
 
+- `docs/LEIAME.md`: guia da pasta, com a finalidade de cada arquivo.
 - `docs/DOCUMENTACAO.md`: visão do produto, requisitos, backlog, matriz de rastreabilidade, plano de testes, limitações e retrospectiva.
 - `docs/REQUISITOS_REGRAS_DE_NEGOCIO.md`: regras de negócio.
 - `docs/FLUXOS.md`: fluxos e máquina de estados.
