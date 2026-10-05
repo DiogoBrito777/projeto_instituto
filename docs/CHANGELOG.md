@@ -178,3 +178,28 @@ Uma entrada por bloco/PR (formato em `docs/CONVENCOES.md`).
     - Com `admin`: "Em triagem" 2 (DM-2007 do seed + DM-2002), a DM-2002 em "Todas" (achada pela busca, porque a lista tem 6 por página), detalhe com "Responsável: Gerenciamento", e 0 em "Em triagem" com o filtro "Elétrica".
     - Com `user03` (quem abriu): "Em triagem", "Setor atual: Gerenciamento", sem histórico nem prioridade.
     - **Teste da equipe no Edge: não executado.**
+
+### 2026-10-04 · Bloco 4B — Fila de triagem e prioridade de atenção · feat/bloco4b-fila-triagem
+- **Domínio (funções puras, com testes):**
+  - `src/domain/atencao.js` (novo): `LIMITE_ACEITE_HORAS = 48` e `LIMITE_TRIAGEM_HORAS = 24` (**propostas**, a confirmar em ata; hoje RN09 e RN17 dizem 72 h). `marcoDeAtencao` (pendente: último `criacao`/`redirecionamento` do histórico; triagem: última `recusa`/`devolucao`), `tempoParado`, `formatarTempoParado`, `estaAtrasada` (limite exato não conta como atraso), `seloDeAtencao` e `compararPorAtencao`. "Agora" sempre por parâmetro.
+  - `src/domain/listas.js` (só acréscimos): `ordenarPorAtencao`, `filtrarPorStatus`, aba `triagem` em `filtrarVisaoGeral`, `avisoDeAtencao`, `linkDaLista`/`statusDoSlug` (status na URL) e o campo `status` nos indicadores de um único status. O selo do card passou de "72 h para aceitar" (texto fixo) para a constante (`48 h para aceitar`).
+  - `ordenarDemandas` **não mudou** ("Prioridade e data" continua igual); a ordem de atenção é um critério novo, usado como padrão nas telas.
+- **Interface:**
+  - Visão Geral: aviso "Precisa de atenção" (só com soma > 0) com links para a lista filtrada; aba rápida **Em triagem** com contador (`aria-pressed`, contagem anunciada pelo `role="status"` existente); cards Pendentes de aceite, Em triagem e Concluídas/Resolvidas viraram `<a>` com "Ver na lista"; lista em "atenção primeiro, depois recentes"; selos nos cards.
+  - Demandas: filtro **Status** (rótulo visível, todos os status) ao lado de "Ordenar por"; "Ordenar por" começa em **Atenção primeiro**; selos nos cards.
+  - `src/App.jsx`: lê `?status=` no hash (`#demandas?status=em-triagem`, `#demandas/eletrica?status=…`); o regex do setor passou a ignorar o `?`. O foco no h1 a cada troca de rota já existia.
+  - CSS: `.attention-tag` e `.status-filter` em `src/App.css`; aviso, card-link e selo em `src/pages/VisaoGeral.css`. Fonte nova já nasce com 14 px (por isso nada foi acrescentado a `src/fonte-minima.css`).
+- **Visibilidade (decisão de 04/10):** selo de aceite só para o setor executor e a gerência; selo de triagem só para a gerência; quem abriu vê só o resumo, sem tempo parado (RN03), e na ordem de atenção a demanda dele usa a data de criação. Aviso: gerência conta triagem + pendentes (respeitando o filtro de setor); setor conta só as pendentes que recebeu. Nenhum perfil ganhou acesso novo.
+- **Seed:** acrescentada a **DM-2013** ("Exemplo: infiltração no teto do almoxarifado"), Administrativo → Elétrica, em triagem, recusada há 30 h, marcada com o campo `exemplo`. As demais não mudaram. Quem já tem dados salvos precisa de "Resetar dados" para vê-la.
+- **Docs:** RN09 e RN17 com nota de proposta (texto atual mantido); propostas 13 e 14 no rascunho de ata de 03/10; `docs/EXPLICACAO_BLOCO4B.md`.
+- **Passar do prazo:** RN09 e RN17 só preveem selo; nada além do selo foi implementado.
+- **Atende:** RN02, RN03, RN09 (proposta), RN11, RN17 (proposta), RN20; RF-R06, RF-R08 (parte).
+- **Verificação:**
+  - `npm test` 10 arquivos / **192** testes passaram (42 novos: 18 em `atencao.test.js`, 23 em `listas.test.js`, 1 em `storage.test.js`) · lint 0 avisos e 0 erros · build OK.
+  - Navegador embutido, depois de "Resetar dados" (o reset recriou a semente com a DM-2013):
+    - `admin`: aviso "2 aguardando triagem · 2 pendentes de aceite"; ordem DM-2002, DM-2013, DM-2007, DM-2001 e depois por recentes; selos "Atrasada para aceite", "Atrasada para triagem", "Em triagem · parada há 20 horas", "Aguardando aceite há 5 horas"; com o teclado, Tab até o card "Em triagem" (contorno visível) e Enter abriu `#demandas?status=em-triagem` com o filtro preenchido e o foco no h1; aba "Em triagem" com `aria-pressed=true` e "2 demandas exibidas"; "Prioridade e data" tirou a fila da frente; Status "Pendente de aceite" + Elétrica = só DM-2002; "Em triagem" + Elétrica = 0.
+    - `user04` (Elétrica): aviso só "1 pendente de aceite" (o link, pelo teclado, abriu a lista filtrada com o foco no h1); aba Em triagem 0; DM-2013 fora das listas e da URL ("Demanda não encontrada ou sem permissão."); filtro "Em triagem" = 0 em Recebidas e Solicitadas.
+    - `user03` (Administrativo, quem abriu): sem aviso; aba Em triagem 1 (DM-2013, só resumo, "Setor atual: Gerenciamento"); nenhum selo.
+    - 360 px: sem rolagem lateral em Demandas e Visão Geral; nenhum texto novo abaixo de 14 px.
+  - Ajuste feito na conferência: o texto "Atenção primeiro (padrão)" cortava no select de 170 px; virou "Atenção primeiro", e o select de Status ganhou 260 px.
+  - **Teste da equipe no Edge e com leitor de tela: não executado.**

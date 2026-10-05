@@ -1,9 +1,18 @@
 import { useMemo, useState } from 'react'
 import departamentos from '../data/departamentos.json'
 import { useDemandas } from '../hooks/useDemandas.js'
-import { ABAS, abasDoPerfil, demandasDaAba, ordenarDemandas, separarPendentes } from '../domain/listas.js'
+import {
+  ABAS,
+  abasDoPerfil,
+  demandasDaAba,
+  filtrarPorStatus,
+  ordenarDemandas,
+  ordenarPorAtencao,
+  separarPendentes,
+} from '../domain/listas.js'
 import { ehGerencia, podeVerDetalhes, resumoParaSolicitante } from '../domain/permissoes.js'
 import { STATUS, estaFinal } from '../domain/status.js'
+import { seloDeAtencao } from '../domain/atencao.js'
 import { nomeDoSetor } from '../domain/setores.js'
 import { Carregando, ErroDados } from '../components/EstadoDados.jsx'
 import { formatarData } from '../formatos.js'
@@ -26,9 +35,12 @@ function priorityModifier(prioridade) {
 
 // Todos os cards abrem o detalhe (defeito G04). Quem só abriu a demanda vê o resumo:
 // status e setor atual, sem prioridade (RN03, RN12).
-function DemandCard({ demand, usuario }) {
+function DemandCard({ demand, usuario, agora }) {
   const completa = podeVerDetalhes(usuario, demand)
   const exibida = completa ? demand : resumoParaSolicitante(demand)
+  // Bloco 4B: "Aguardando aceite há X", "Em triagem · parada há X" ou "Atrasada para …".
+  // Quem só abriu não recebe selo (atencao.js → seloDeAtencao).
+  const selo = seloDeAtencao(demand, usuario, agora)
 
   return (
     <a className="demand-card demand-card--link" href={`#demanda/${demand.id}`}>
@@ -42,6 +54,10 @@ function DemandCard({ demand, usuario }) {
       </div>
 
       <h3 className="demand-title">{demand.titulo}</h3>
+
+      {selo && (
+        <p className={`attention-tag${selo.atrasada ? ' attention-tag--late' : ''}`}>{selo.texto}</p>
+      )}
 
       <div className="demand-meta">
         {completa ? (
@@ -69,7 +85,7 @@ function DemandCard({ demand, usuario }) {
   )
 }
 
-function Demandas({ usuario, setorInicial }) {
+function Demandas({ usuario, setorInicial, statusInicial = '' }) {
   const { carregando, demandas, erro, resetar } = useDemandas()
   const gerencia = ehGerencia(usuario)
   const abas = abasDoPerfil(usuario)
@@ -77,8 +93,13 @@ function Demandas({ usuario, setorInicial }) {
   // Setor fica travado no próprio departamento; só a gerência escolhe (RF-R04).
   const [setor, setSetor] = useState(gerencia ? (setorInicial ?? '') : usuario.departamento)
   const [searchTerm, setSearchTerm] = useState('')
-  const [sortBy, setSortBy] = useState('padrao')
+  // Bloco 4B: o padrão é "atenção primeiro"; qualquer outra escolha do usuário vale no lugar dela.
+  const [sortBy, setSortBy] = useState('atencao')
+  // Bloco 4B: filtro de status; os cards da Visão Geral já chegam com ele preenchido pela URL.
+  const [statusFiltro, setStatusFiltro] = useState(statusInicial)
   const [currentPage, setCurrentPage] = useState(1)
+  // "Agora" fixado quando a tela abre, como na Visão Geral: o tempo parado não muda sozinho.
+  const [agora] = useState(() => new Date())
 
   const listaDaAba = useMemo(
     () => demandasDaAba(demandas, usuario, aba, setor || null),
@@ -87,14 +108,16 @@ function Demandas({ usuario, setorInicial }) {
 
   const { pendentes, demais } = useMemo(() => {
     const normalizedTerm = searchTerm.trim().toLocaleLowerCase('pt-BR')
-    const filtered = listaDaAba.filter((demand) =>
+    // O status filtra a lista JÁ recortada pela permissão: nunca mostra além do que o perfil vê.
+    const filtered = filtrarPorStatus(listaDaAba, statusFiltro).filter((demand) =>
       [demand.id, demand.titulo, demand.solicitante, nomeDoSetor(demand.origem)]
         .some((value) => value.toLocaleLowerCase('pt-BR').includes(normalizedTerm)),
     )
-    const sorted = ordenarDemandas(filtered, sortBy)
+    const sorted =
+      sortBy === 'atencao' ? ordenarPorAtencao(filtered, usuario) : ordenarDemandas(filtered, sortBy)
     // "Pendentes de aceite" no topo só faz sentido para quem recebe (seção 5 dos requisitos).
     return aba === ABAS.RECEBIDAS ? separarPendentes(sorted) : { pendentes: [], demais: sorted }
-  }, [listaDaAba, searchTerm, sortBy, aba])
+  }, [listaDaAba, searchTerm, sortBy, aba, statusFiltro, usuario])
 
   const pageCount = Math.max(1, Math.ceil(demais.length / ITEMS_PER_PAGE))
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
@@ -177,6 +200,25 @@ function Demandas({ usuario, setorInicial }) {
           </label>
 
           <label className="sort-control">
+            <span>Status:</span>
+            <select
+              className="status-filter"
+              value={statusFiltro}
+              onChange={(event) => {
+                setStatusFiltro(event.target.value)
+                setCurrentPage(1)
+              }}
+            >
+              <option value="">Todos</option>
+              {Object.values(STATUS).map((status) => (
+                <option key={status} value={status}>
+                  {status}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="sort-control">
             <span>Ordenar por:</span>
             <select
               value={sortBy}
@@ -185,6 +227,7 @@ function Demandas({ usuario, setorInicial }) {
                 setCurrentPage(1)
               }}
             >
+              <option value="atencao">Atenção primeiro</option>
               <option value="padrao">Prioridade e data</option>
               <option value="recentes">Mais recentes</option>
               <option value="antigas">Mais antigas</option>
@@ -212,7 +255,7 @@ function Demandas({ usuario, setorInicial }) {
               </h3>
               <div className="demands-grid">
                 {pendentes.map((demand) => (
-                  <DemandCard demand={demand} usuario={usuario} key={demand.id} />
+                  <DemandCard demand={demand} usuario={usuario} agora={agora} key={demand.id} />
                 ))}
               </div>
             </section>
@@ -221,14 +264,14 @@ function Demandas({ usuario, setorInicial }) {
           {visibleDemands.length > 0 ? (
             <div className="demands-grid">
               {visibleDemands.map((demand) => (
-                <DemandCard demand={demand} usuario={usuario} key={demand.id} />
+                <DemandCard demand={demand} usuario={usuario} agora={agora} key={demand.id} />
               ))}
             </div>
           ) : (
             pendentes.length === 0 && (
               <div className="empty-state">
                 <h3>Nenhuma demanda encontrada</h3>
-                <p>Tente outra busca ou outro departamento.</p>
+                <p>Tente outra busca, outro status ou outro departamento.</p>
               </div>
             )
           )}

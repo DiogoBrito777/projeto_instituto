@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { CHAVES, ERROS, criarStorage } from './storage.js'
 import { criarSemente } from './seed.js'
 import { aExpirar, aceiteAtrasado, aguardandoMuito, vencida } from '../domain/prazos.js'
+import { estaAtrasada } from '../domain/atencao.js'
 import { STATUS } from '../domain/status.js'
 
 // Armazenamento falso, no lugar do localStorage: os testes rodam sem navegador.
@@ -159,6 +160,16 @@ describe('semente real (seed-demandas.json)', () => {
     for (const status of [STATUS.EM_TRIAGEM, STATUS.CONCLUIDA, STATUS.NAO_APLICAVEL, STATUS.CANCELADA]) {
       expect(algum((d) => d.status === status)).toBe(true)
     }
+  })
+
+  it('Bloco 4B: tem triagem no prazo e atrasada (24 h) e pendente no prazo e atrasada (48 h)', () => {
+    const algum = (teste) => demandas.some(teste)
+    const triagem = (d) => d.status === STATUS.EM_TRIAGEM
+    const pendente = (d) => d.status === STATUS.PENDENTE_ACEITE
+    expect(algum((d) => triagem(d) && !estaAtrasada(d, agora))).toBe(true)
+    expect(algum((d) => triagem(d) && estaAtrasada(d, agora))).toBe(true)
+    expect(algum((d) => pendente(d) && !estaAtrasada(d, agora))).toBe(true)
+    expect(algum((d) => pendente(d) && estaAtrasada(d, agora))).toBe(true)
   })
 
   it('cada setor abriu ao menos uma demanda para outro setor', () => {

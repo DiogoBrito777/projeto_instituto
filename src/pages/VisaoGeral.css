@@ -513,3 +513,74 @@
   color: #1e2926;
   font: inherit;
 }
+
+/* Bloco 4B — aviso do topo ("N aguardando triagem", "N pendentes de aceite").
+   Links sublinhados e em negrito: não dependem só da cor. #1f4b3f sobre #fff7e6 = 9,2:1. */
+.visao-geral .vg-aviso {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  margin: 0 0 24px;
+  padding: 14px 18px;
+  border: 1px solid #e0b354;
+  border-left-width: 6px;
+  border-radius: var(--radius-md);
+  background: #fff7e6;
+  color: var(--color-text);
+  font-size: 15px;
+}
+
+.visao-geral .vg-aviso__titulo {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.visao-geral .vg-aviso__lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.visao-geral .vg-aviso a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  color: var(--color-primary);
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+/* Bloco 4B — cards de status viram links para a lista filtrada. O foco usa o contorno global
+   (index.css, :focus-visible); "Ver na lista" deixa claro, sem depender da cor, que é clicável. */
+.visao-geral a.stat-card--link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.visao-geral a.stat-card--link:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 2px 8px rgba(16, 24, 20, 0.08);
+}
+
+.visao-geral .stat-card__acao {
+  display: block;
+  margin-top: 8px;
+  color: var(--color-primary);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+/* Bloco 4B — selo de atenção no card da lista (usa as cores de .badge, já com 4,6:1). */
+.visao-geral .demand-card__selo {
+  align-self: flex-start;
+  margin: 0 0 10px;
+  white-space: normal;
+}

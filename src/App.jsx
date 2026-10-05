@@ -8,6 +8,7 @@ import AtualizarDemanda from './pages/AtualizarDemanda.jsx'
 import VisaoGeral from './pages/VisaoGeral.jsx' // NOVO
 import Login from './pages/Login.jsx'
 import { useSessao } from './hooks/useSessao.js'
+import { statusDoSlug } from './domain/listas.js'
 import './App.css'
 
 function PlusIcon() {
@@ -35,9 +36,18 @@ function idDaRota(hash) {
 }
 
 // "#demandas/hidraulica" → "hidraulica" ("Acessar setor" em Departamentos).
+// O "?" fica de fora: "#demandas/eletrica?status=em-triagem" → "eletrica" (Bloco 4B).
 function setorDaRota(hash) {
-  const encontrado = hash.match(/^#demandas\/([^/]+)/)
+  const encontrado = hash.match(/^#demandas\/([^/?]+)/)
   return encontrado ? decodeURIComponent(encontrado[1]) : null
+}
+
+// "#demandas?status=em-triagem" → "Em triagem" (cards e aviso da Visão Geral; Bloco 4B).
+// Com roteamento por hash, o filtro vai depois do "?" dentro do próprio hash.
+function statusDaRota(hash) {
+  if (!hash.startsWith('#demandas')) return ''
+  const consulta = hash.split('?')[1] ?? ''
+  return statusDoSlug(new URLSearchParams(consulta).get('status'))
 }
 
 function App() {
@@ -134,9 +144,10 @@ function App() {
           <AtualizarDemanda key={idDemanda} id={idDemanda} usuario={usuario} />
         ) : (
           <Demandas
-            key={setorDaRota(hash) ?? 'todos'}
+            key={`${setorDaRota(hash) ?? 'todos'}|${statusDaRota(hash)}`}
             usuario={usuario}
             setorInicial={setorDaRota(hash)}
+            statusInicial={statusDaRota(hash)}
           />
         )}
       </main>
