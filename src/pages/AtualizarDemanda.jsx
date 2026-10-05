@@ -315,6 +315,8 @@ function FormularioAtualizacao({ demand, usuario }) {
                 type="button"
                 onClick={() => {
                   setErroMotivo('')
+                  // O aviso de limite é recalculado pelo texto atual do motivo (ajustes, item 5).
+                  limiteMotivo.reiniciar(motivo)
                   setDialogo('recusa')
                 }}
               >

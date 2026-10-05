@@ -1,17 +1,21 @@
-# Auditoria "depois" — o que já existe e o que falta
+# Auditoria e testes "depois": o que existe e o que não foi executado
 
-> Este arquivo dizia que a auditoria "depois" não tinha sido executada. **Isso mudou:** atualizado em 04/10/2026.
+> Atualizado em 04/10/2026, depois da rodada final de testes do autor (Bruno Diogo). Decisão do autor: nenhuma correção de código antes da apresentação (06/10).
 
-**Já existe:** `RELATORIO_AXE_DEPOIS.md` + `axe_depois.json`, nesta pasta.
-- axe-core 4.13.0, gerado **pelo assistente, em ambiente de nuvem, não pela equipe**, sobre a branch `fix/acessibilidade` (Bloco 3);
-- **0 violações nas 26 combinações** (login + 6 rotas × 2 perfis, em 1280 e 360 px);
-- 12 itens "incompletos": contraste do menu lateral em 360 px, pendente de conferência manual.
+**Já existe nesta pasta:**
+- `RELATORIO_AXE_DEPOIS.md` + `axe_depois.json`: axe-core 4.13.0 gerado **pelo assistente, em ambiente de nuvem, não pela equipe**, sobre o Bloco 3. **0 violações nas 26 combinações.** 12 itens "incompletos" (contraste do menu em 360 px).
+- Prints do autor: Lighthouse (Visão Geral e Nova Demanda, `admin`, desktop: 100/100), NVDA + Edge InPrivate, 360 px no DevTools, zoom de 200% no Chrome, celular Android (rodada anterior ao PR #9).
+- `celular/`: **ainda não existe**; o autor vai criar a pasta e salvar os prints da rodada final no celular.
 
-**Ainda falta (pendente):**
-- nova rodada do axe **pela equipe**, de preferência depois dos Blocos 4A a 4C;
-- Lighthouse;
-- teste com leitor de tela (Narrador ou NVDA);
-- celular real;
-- zoom de 400%.
+**Não executado (motivo: falta de tempo antes da apresentação):**
+- nova rodada do axe no código atual;
+- Lighthouse nas demais telas (Login, Demandas, Detalhes, Atualizar) e no mobile;
+- NVDA na rodada de reteste (Visão Geral, Demandas, Nova Demanda);
+- zoom de 400% e 500%;
+- dados corrompidos no `localStorage` pelo F12;
+- reabrir o aviso de limite de 500 caracteres;
+- Voz de Acesso.
 
-Para cada um, anotar quem executou e quando. Passo a passo em `docs/TESTES_PENDENTES.md`, seção 3.
+**Executado, com falha:** no celular real (acesso pelo IP da rede), o envio da Nova Demanda trava em "Enviando…" (falha F1, `docs/DOCUMENTACAO.md`, seção 23).
+
+Detalhes item a item em `docs/TESTES_PENDENTES.md`.

@@ -3,9 +3,11 @@ import departamentos from '../data/departamentos.json'
 import { useDemandas } from '../hooks/useDemandas.js'
 import {
   avisoDeAtencao,
+  combinaComBusca,
   filtrarVisaoGeral,
   indicadoresVisaoGeral,
   linkDaLista,
+  linkDoIndicador,
   ordenarPorAtencao,
 } from '../domain/listas.js'
 import { ehGerencia, podeVer, podeVerDetalhes, resumoParaSolicitante, setorResponsavel } from '../domain/permissoes.js'
@@ -78,12 +80,13 @@ export default function VisaoGeral({ usuario }) {
     [demandas, usuario, gerencia, setor],
   )
 
-  // Bloco 4B: card de um único status vira link para Demandas já filtrada (com o setor da gerência).
+  // Todo card vira link para Demandas já filtrada (com o setor da gerência): por status (Bloco 4B)
+  // ou pelo filtro do painel, como Vencidas e A expirar (ajustes do teste manual).
   const indicadores = useMemo(
     () =>
       indicadoresVisaoGeral(base, usuario, agora, setor || null).map((indicador) => ({
         ...indicador,
-        href: indicador.status ? linkDaLista(indicador.status, setor || null) : null,
+        href: linkDoIndicador(indicador, setor || null),
       })),
     [base, usuario, agora, setor],
   )
@@ -97,15 +100,8 @@ export default function VisaoGeral({ usuario }) {
   }
 
   const demandasFiltradas = useMemo(() => {
-    const termo = busca.trim().toLowerCase()
-    const filtradas = filtrarVisaoGeral(base, usuario, filtroAtivo).filter(
-      (demanda) =>
-        termo === '' ||
-        demanda.titulo.toLowerCase().includes(termo) ||
-        demanda.descricao.toLowerCase().includes(termo) ||
-        demanda.tipo.toLowerCase().includes(termo) ||
-        demanda.id.toLowerCase().includes(termo),
-    )
+    // Mesma busca da tela Demandas (listas.js → combinaComBusca), que também acha pelo solicitante.
+    const filtradas = filtrarVisaoGeral(base, usuario, filtroAtivo).filter((demanda) => combinaComBusca(demanda, busca))
     // Bloco 4B: triagem e pendentes primeiro (a mais antiga antes); o resto continua por "recentes".
     return ordenarPorAtencao(filtradas, usuario, 'recentes').map((demanda) => paraCard(demanda, usuario, agora))
   }, [base, usuario, busca, filtroAtivo, agora])

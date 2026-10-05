@@ -2,7 +2,7 @@
 
 - **Data:** 03/10/2026
 - **Executado por:** Bruno Diogo (relato do autor)
-- **Prints:** guardados pelo autor, a anexar
+- **Prints:** sem print do estado anterior (defeito corrigido; não reproduzível sem voltar o código)
 - **Ambiente:** Microsoft Edge, navegação privada, `npm run dev` (branch `feat/fundacao`)
 - **Usuários de teste:** `admin`, `user01`, `user02`, `user03`, `user04` (senha = usuário)
 

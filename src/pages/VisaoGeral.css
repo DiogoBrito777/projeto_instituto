@@ -8,7 +8,10 @@
   --color-surface: #ffffff;
   --color-sidebar-elevated: #17352a;
   --color-accent-fill: #34b171;
-  --color-border: #e7e7e4;
+  /* Ajustes do teste manual (item 4): #e7e7e4 dava 1,24:1 sobre o branco; busca, abas e cards
+     não se distinguiam do fundo. #868a85 dá 3,51:1 (WCAG 1.4.11). O divisor interno do card
+     (--color-border-soft) é decorativo e não muda. */
+  --color-border: #868a85;
   --color-border-soft: #eeeeec;
 
   --color-text: #17181a;
@@ -276,8 +279,9 @@
   transition: all 0.15s ease;
 }
 
+/* Com a borda mais escura, o hover claro (#cfd2ce) ficaria mais fraco que o normal: agora escurece. */
 .visao-geral .tab:hover {
-  border-color: #cfd2ce;
+  border-color: var(--color-primary);
 }
 
 .visao-geral .tab--active {

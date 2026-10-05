@@ -26,6 +26,25 @@ describe('avisoDeLimite', () => {
   })
 })
 
+describe('ajustes do teste manual — aviso que voltava ao reabrir o pop-up (item 5)', () => {
+  // Reproduz o bug: com 500 caracteres, a pessoa cola mais 10. O navegador bloqueia (o valor não
+  // muda, não há onChange) e o "tentado" 510 fica guardado. Ela apaga tudo, fecha, reabre e digita
+  // 1 caractere: antes o aviso "cortado" voltava; só sumia no 2º caractere.
+  it('"tentado" velho acima do limite com o campo abaixo dele NÃO gera aviso', () => {
+    expect(avisoDeLimite(1, 500, 510)).toBe(AVISOS_LIMITE.NENHUM)
+    expect(avisoDeLimite(0, 500, 510)).toBe(AVISOS_LIMITE.NENHUM)
+  })
+
+  it('o corte de verdade continua avisado (campo no limite)', () => {
+    expect(avisoDeLimite(500, 500, 510)).toBe(AVISOS_LIMITE.CORTADO)
+  })
+
+  it('reiniciar pelo tamanho atual: vazio sem aviso; texto no limite com "atingido"', () => {
+    expect(avisoDeLimite(''.length, 500)).toBe(AVISOS_LIMITE.NENHUM)
+    expect(avisoDeLimite('x'.repeat(500).length, 500)).toBe(AVISOS_LIMITE.ATINGIDO)
+  })
+})
+
 describe('tamanhoAposColar', () => {
   it('cursor no fim: soma o texto colado', () => {
     expect(tamanhoAposColar(10, 10, 10, 55)).toBe(65)

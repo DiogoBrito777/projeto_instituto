@@ -10,7 +10,9 @@ export const AVISOS_LIMITE = {
 
 export function avisoDeLimite(tamanhoFinal, limite, tamanhoTentado = tamanhoFinal) {
   // O navegador corta o texto colado sem avisar; aqui a pessoa fica sabendo que perdeu uma parte.
-  if (tamanhoTentado > limite) return AVISOS_LIMITE.CORTADO
+  // Só houve corte se o campo FICOU no limite. Um "tentado" acima do limite com o campo abaixo dele
+  // é resto de uma colagem antiga (ajustes do teste manual, item 5: o aviso voltava no 1º caractere).
+  if (tamanhoTentado > limite && tamanhoFinal >= limite) return AVISOS_LIMITE.CORTADO
   if (tamanhoFinal >= limite) return AVISOS_LIMITE.ATINGIDO
   return AVISOS_LIMITE.NENHUM
 }

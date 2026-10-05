@@ -1,7 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import {
   ABAS,
+  FILTROS_DO_PAINEL,
   abasDoPerfil,
+  combinaComBusca,
+  filtrarPorPainel,
+  filtroDoPainel,
+  linkDoIndicador,
   abertasDoSetor,
   avisoDeAtencao,
   demandasDaAba,
@@ -11,6 +16,7 @@ import {
   linkDaLista,
   ordenarDemandas,
   ordenarPorAtencao,
+  paginarComPendentes,
   separarPendentes,
   statusDoSlug,
 } from './listas.js'
@@ -174,6 +180,123 @@ describe('Em triagem pertence à gerência (decisão de 04/10)', () => {
   })
 })
 
+describe('ajustes do teste manual — busca única (item 3)', () => {
+  const d = {
+    id: 'DM-2002',
+    titulo: 'Lâmpadas queimadas no arquivo',
+    descricao: 'A sala fica escura à tarde.',
+    tipo: 'Iluminação',
+    solicitante: 'Lucas Ribeiro',
+    origem: 'administrativo',
+  }
+
+  it('acha por solicitante (o que faltava na Visão Geral) e por descrição (o que faltava em Demandas)', () => {
+    expect(combinaComBusca(d, 'lucas')).toBe(true)
+    expect(combinaComBusca(d, 'escura')).toBe(true)
+  })
+
+  it('acha por ID, título, tipo e setor de origem, sem diferença de maiúsculas e acentos', () => {
+    for (const termo of ['dm-2002', 'LAMPADAS', 'iluminacao', 'Administrativo']) {
+      expect(combinaComBusca(d, termo)).toBe(true)
+    }
+  })
+
+  it('busca vazia ou só espaços não filtra; termo inexistente não acha', () => {
+    expect(combinaComBusca(d, '')).toBe(true)
+    expect(combinaComBusca(d, '   ')).toBe(true)
+    expect(combinaComBusca(d, 'hidráulica')).toBe(false)
+  })
+
+  it('não procura em campos internos (prioridade, histórico, destino)', () => {
+    const interna = { ...d, prioridade: 'Urgente', destino: 'eletrica', historico: [{ texto: 'Recusada: segredo' }] }
+    expect(combinaComBusca(interna, 'urgente')).toBe(false)
+    expect(combinaComBusca(interna, 'segredo')).toBe(false)
+    expect(combinaComBusca(interna, 'eletrica')).toBe(false)
+  })
+})
+
+describe('ajustes do teste manual — paginação com o grupo de pendentes (item 2)', () => {
+  const itens = (prefixo, n) => Array.from({ length: n }, (_, i) => ({ id: `${prefixo}${i + 1}` }))
+  const ids = (lista) => lista.map((d) => d.id)
+  // Caso do teste manual: 13 demandas, 2 pendentes, 6 por página.
+  const grupos = { pendentes: itens('P', 2), demais: itens('D', 11) }
+
+  it('nenhuma demanda se repete entre as páginas e todas aparecem (antes: 8 + 7 = 15 de 13)', () => {
+    const vistas = []
+    for (let pagina = 1; pagina <= 3; pagina += 1) {
+      const p = paginarComPendentes(grupos, pagina, 6)
+      vistas.push(...ids(p.pendentes), ...ids(p.demais))
+      expect(p.pendentes.length + p.demais.length).toBeLessThanOrEqual(6)
+    }
+    expect(vistas).toHaveLength(13)
+    expect(new Set(vistas).size).toBe(13)
+  })
+
+  it('o grupo vem primeiro: página 1 = 2 pendentes + 4; página 3 sem pendentes', () => {
+    const p1 = paginarComPendentes(grupos, 1, 6)
+    expect(ids(p1.pendentes)).toEqual(['P1', 'P2'])
+    expect(ids(p1.demais)).toEqual(['D1', 'D2', 'D3', 'D4'])
+    expect(paginarComPendentes(grupos, 3, 6).pendentes).toEqual([])
+    expect(p1).toMatchObject({ total: 13, totalPendentes: 2, totalPaginas: 3 })
+  })
+
+  it('grupo maior que uma página continua na seguinte', () => {
+    const muitos = { pendentes: itens('P', 8), demais: itens('D', 1) }
+    expect(ids(paginarComPendentes(muitos, 2, 6).pendentes)).toEqual(['P7', 'P8'])
+    expect(ids(paginarComPendentes(muitos, 2, 6).demais)).toEqual(['D1'])
+  })
+
+  it('página fora do intervalo vai para a última (ou a primeira); lista vazia tem 1 página', () => {
+    expect(paginarComPendentes(grupos, 9, 6).pagina).toBe(3)
+    expect(paginarComPendentes(grupos, 0, 6).pagina).toBe(1)
+    expect(paginarComPendentes({ pendentes: [], demais: [] }, 1, 6)).toMatchObject({ total: 0, totalPaginas: 1 })
+  })
+})
+
+describe('ajustes do teste manual — cards da Visão Geral filtram Demandas (item 1)', () => {
+  const valor = (indicadores, chave) => indicadores.find((item) => item.chave === chave)
+  // Para cada card, o número tem de bater com o que a lista de Demandas mostra com o filtro.
+  const naLista = (usuario, indicador, setor = null) => {
+    const aba = FILTROS_DO_PAINEL[indicador.filtro]?.aba ?? ABAS.RECEBIDAS
+    return filtrarPorPainel(demandasDaAba(LISTA, usuario, aba, setor), indicador.filtro, AGORA).length
+  }
+
+  it('gerência: Abertas, A expirar, Vencidas e Aguardando batem com a lista filtrada', () => {
+    const ind = indicadoresVisaoGeral(LISTA, admin, AGORA)
+    for (const chave of ['abertas', 'a-expirar', 'vencidas', 'aguardando']) {
+      expect(naLista(admin, valor(ind, chave))).toBe(valor(ind, chave).valor)
+    }
+  })
+
+  it('gerência com filtro de setor: os números e a lista usam o mesmo setor', () => {
+    const ind = indicadoresVisaoGeral(LISTA, admin, AGORA, 'tecnologia')
+    for (const chave of ['abertas', 'a-expirar', 'vencidas', 'aguardando']) {
+      expect(naLista(admin, valor(ind, chave), 'tecnologia')).toBe(valor(ind, chave).valor)
+    }
+    expect(linkDoIndicador(valor(ind, 'vencidas'), 'tecnologia')).toBe('#demandas/tecnologia?filtro=vencidas')
+  })
+
+  it('setor: Recebidas abertas e A expirar (aba Recebidas) e Solicitadas em aberto (aba Solicitadas) batem', () => {
+    const ind = indicadoresVisaoGeral(LISTA, ti, AGORA)
+    for (const chave of ['recebidas-abertas', 'a-expirar', 'solicitadas-abertas']) {
+      expect(naLista(ti, valor(ind, chave))).toBe(valor(ind, chave).valor)
+    }
+    expect(linkDoIndicador(valor(ind, 'solicitadas-abertas'))).toBe('#demandas?filtro=solicitadas-abertas&aba=solicitadas')
+  })
+
+  it('o filtro nunca ultrapassa a permissão: Elétrica com "Abertas" não vê demanda de TI', () => {
+    const lista = filtrarPorPainel(demandasDaAba(LISTA, eletrica, ABAS.RECEBIDAS), 'abertas', AGORA)
+    expect(lista.every((d) => d.destino === 'eletrica')).toBe(true)
+  })
+
+  it('filtro desconhecido na URL vira "sem filtro" e não esconde nada', () => {
+    expect(filtroDoPainel('xyz')).toBe('')
+    expect(filtroDoPainel(null)).toBe('')
+    expect(filtroDoPainel('vencidas')).toBe('vencidas')
+    expect(filtrarPorPainel(LISTA, '', AGORA)).toHaveLength(LISTA.length)
+  })
+})
+
 describe('Bloco 4B — fila de triagem e prioridade de atenção', () => {
   const administrativo = { usuario: 'user03', perfil: 'departamento', departamento: 'administrativo' }
   const comHistorico = (d, eventos) => ({ ...d, historico: eventos.map(([tipo, horas]) => ({ tipo, data: horasAntes(horas) })) })
@@ -304,6 +427,14 @@ describe('Bloco 4B — fila de triagem e prioridade de atenção', () => {
     it('setor: pendentes e resolvidas', () => {
       const comStatus = indicadoresVisaoGeral(FILA, eletrica, AGORA).filter((i) => i.status).map((i) => i.chave)
       expect(comStatus).toEqual(['pendentes', 'resolvidas'])
+    })
+
+    it('ajuste do teste manual: TODO card tem link (status ou filtro do painel)', () => {
+      for (const usuario of [admin, eletrica, ti]) {
+        for (const indicador of indicadoresVisaoGeral(FILA, usuario, AGORA)) {
+          expect(linkDoIndicador(indicador)).toMatch(/^#demandas\?(status|filtro)=/)
+        }
+      }
     })
 
     it('selo do card de pendentes vem da constante (48 h)', () => {

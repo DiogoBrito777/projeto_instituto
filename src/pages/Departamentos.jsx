@@ -4,6 +4,7 @@ import { useDemandas } from '../hooks/useDemandas.js'
 import { abertasDoSetor } from '../domain/listas.js'
 import { ehGerencia } from '../domain/permissoes.js'
 import { Carregando, ErroDados } from '../components/EstadoDados.jsx'
+import { quantidade } from '../formatos.js'
 
 function IconeDepartamento({ tipo }) {
   if (tipo === 'tecnologia') {
@@ -94,7 +95,7 @@ function Departamentos({ usuario }) {
                   <IconeDepartamento tipo={departamento.icone} />
                 </span>
                 <span className={`department-count department-count--${departamento.cor}`}>
-                  {abertasDoSetor(demandas, departamento.id)} demandas abertas
+                  {quantidade(abertasDoSetor(demandas, departamento.id), 'demanda aberta', 'demandas abertas')}
                 </span>
               </div>
               <h3>{departamento.nome}</h3>

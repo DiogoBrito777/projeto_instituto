@@ -6,6 +6,7 @@ import { STATUS, estaFinal } from './status.js'
 import { ehExecutor, ehGerencia, ehSolicitante, podeVer, podeVerDetalhes, setorResponsavel } from './permissoes.js'
 import { aExpirar, aguardandoMuito, vencida } from './prazos.js'
 import { LIMITE_ACEITE_HORAS, compararPorAtencao, marcoDeAtencao } from './atencao.js'
+import { nomeDoSetor } from './setores.js'
 
 // Selo do card "Pendentes de aceite", lido da constante (proposta de 48 h; a RN09 hoje diz 72 h).
 const SELO_ACEITE = `${LIMITE_ACEITE_HORAS} h para aceitar`
@@ -48,6 +49,42 @@ export function separarPendentes(demandas) {
   return {
     pendentes: demandas.filter((demanda) => demanda.status === STATUS.PENDENTE_ACEITE),
     demais: demandas.filter((demanda) => demanda.status !== STATUS.PENDENTE_ACEITE),
+  }
+}
+
+// Busca única de Demandas e da Visão Geral (ajustes do teste manual, item 3): antes a Visão Geral
+// não achava pelo solicitante e Demandas não achava pela descrição. Agora as duas procuram em ID,
+// título, descrição, tipo, solicitante e setor de origem. Todos esses campos estão no resumo de quem
+// abriu (RN03), então a busca não revela nada escondido. Ignora maiúsculas e acentos.
+function semAcento(texto) {
+  return (texto ?? '').toLocaleLowerCase('pt-BR').normalize('NFD').replace(/[̀-ͯ]/g, '')
+}
+
+export function combinaComBusca(demanda, termo) {
+  const procurado = semAcento(termo).trim()
+  if (!procurado) return true
+  return [demanda.id, demanda.titulo, demanda.descricao, demanda.tipo, demanda.solicitante, nomeDoSetor(demanda.origem)]
+    .some((campo) => semAcento(campo).includes(procurado))
+}
+
+// Paginação da lista de Demandas (ajustes do teste manual, item 2). Antes o grupo "Pendentes de
+// aceite" ficava FORA da paginação e se repetia em todas as páginas (página 1: 2 + 6; página 2:
+// 2 + 5, somando 15 de 13). Agora a lista inteira é paginada, com o grupo primeiro: cada demanda
+// aparece em uma página só, e a página só mostra o pedaço do grupo que cai nela.
+export function paginarComPendentes({ pendentes, demais }, pagina, porPagina) {
+  const todas = [...pendentes, ...demais]
+  const totalPaginas = Math.max(1, Math.ceil(todas.length / porPagina))
+  const atual = Math.min(Math.max(1, pagina), totalPaginas)
+  const inicio = (atual - 1) * porPagina
+  const daPagina = todas.slice(inicio, inicio + porPagina)
+  const pendentesNaPagina = Math.max(0, Math.min(pendentes.length - inicio, daPagina.length))
+  return {
+    pendentes: daPagina.slice(0, pendentesNaPagina),
+    demais: daPagina.slice(pendentesNaPagina),
+    total: todas.length,
+    totalPendentes: pendentes.length,
+    totalPaginas,
+    pagina: atual,
   }
 }
 
@@ -129,18 +166,63 @@ function contar(demandas, teste) {
 const prazoCorrendo = (demanda) =>
   demanda.status === STATUS.EM_ANDAMENTO || demanda.status === STATUS.AGUARDANDO
 
+// Filtros dos cards da Visão Geral que não são um único status (ajustes do teste manual, item 1).
+// O MESMO teste conta o número do card e filtra a lista de Demandas, para os dois baterem.
+// "aba": em qual aba de Demandas o card faz sentido (Solicitadas, para "Solicitadas por mim").
+export const FILTROS_DO_PAINEL = {
+  abertas: { rotulo: 'Abertas', teste: (d) => !estaFinal(d.status) },
+  'recebidas-abertas': { rotulo: 'Recebidas abertas', teste: prazoCorrendo },
+  'a-expirar': { rotulo: 'A expirar', teste: (d, agora) => aExpirar(d, agora) },
+  vencidas: { rotulo: 'Vencidas', teste: (d, agora) => vencida(d, agora) },
+  aguardando: { rotulo: 'Aguardando > 7 dias', teste: (d, agora) => aguardandoMuito(d, agora) },
+  'solicitadas-abertas': {
+    rotulo: 'Solicitadas por mim em aberto',
+    teste: (d) => !estaFinal(d.status),
+    aba: ABAS.SOLICITADAS,
+  },
+}
+
+// Valor do endereço que não é um filtro conhecido vira "sem filtro", sem erro.
+export function filtroDoPainel(chave) {
+  return Object.hasOwn(FILTROS_DO_PAINEL, chave ?? '') ? chave : ''
+}
+
+// Recebe a lista JÁ recortada pela permissão e pela aba (demandasDaAba): nunca mostra além disso.
+export function filtrarPorPainel(demandas, chave, agora) {
+  const filtro = FILTROS_DO_PAINEL[chave]
+  return filtro ? demandas.filter((demanda) => filtro.teste(demanda, agora)) : demandas
+}
+
+// Link de qualquer card: status ("?status=") ou filtro do painel ("?filtro=", mais "&aba=" se preciso).
+export function linkDoIndicador(indicador, setor = null) {
+  if (indicador.status) return linkDaLista(indicador.status, setor)
+  const filtro = FILTROS_DO_PAINEL[indicador.filtro]
+  if (!filtro) return null
+  const caminho = setor ? `#demandas/${encodeURIComponent(setor)}` : '#demandas'
+  const aba = filtro.aba ? `&aba=${filtro.aba}` : ''
+  return `${caminho}?filtro=${indicador.filtro}${aba}`
+}
+
+const indicadorDoPainel = (chave, base, agora, extra = {}) => ({
+  chave,
+  rotulo: FILTROS_DO_PAINEL[chave].rotulo,
+  valor: contar(base, (d) => FILTROS_DO_PAINEL[chave].teste(d, agora)),
+  filtro: chave,
+  ...extra,
+})
+
 // Números da Visão Geral, sempre calculados (seção 6). "agora" entra por parâmetro.
-// "status" (Bloco 4B): o card que corresponde a um único status vira link para a lista filtrada.
+// "status" (Bloco 4B) ou "filtro" (ajustes do teste manual): todo card vira link para a lista filtrada.
 export function indicadoresVisaoGeral(demandas, usuario, agora, setor = null) {
   if (ehGerencia(usuario)) {
     const base = setor ? demandas.filter((demanda) => setorResponsavel(demanda) === setor) : demandas
     return [
-      { chave: 'abertas', rotulo: 'Abertas', valor: contar(base, (d) => !estaFinal(d.status)) },
+      indicadorDoPainel('abertas', base, agora),
       { chave: 'pendentes', rotulo: 'Pendentes de aceite', valor: contar(base, (d) => d.status === STATUS.PENDENTE_ACEITE), badge: SELO_ACEITE, tom: 'ambar', status: STATUS.PENDENTE_ACEITE },
       { chave: 'triagem', rotulo: 'Em triagem', valor: contar(base, (d) => d.status === STATUS.EM_TRIAGEM), status: STATUS.EM_TRIAGEM },
-      { chave: 'a-expirar', rotulo: 'A expirar', valor: contar(base, (d) => aExpirar(d, agora)), badge: '25% do prazo', tom: 'ambar' },
-      { chave: 'vencidas', rotulo: 'Vencidas', valor: contar(base, (d) => vencida(d, agora)), badge: 'Prazo passou', tom: 'vermelho' },
-      { chave: 'aguardando', rotulo: 'Aguardando > 7 dias', valor: contar(base, (d) => aguardandoMuito(d, agora)) },
+      indicadorDoPainel('a-expirar', base, agora, { badge: '25% do prazo', tom: 'ambar' }),
+      indicadorDoPainel('vencidas', base, agora, { badge: 'Prazo passou', tom: 'vermelho' }),
+      indicadorDoPainel('aguardando', base, agora),
       { chave: 'concluidas', rotulo: 'Concluídas', valor: contar(base, (d) => d.status === STATUS.CONCLUIDA), tom: 'verde', status: STATUS.CONCLUIDA },
     ]
   }
@@ -148,11 +230,11 @@ export function indicadoresVisaoGeral(demandas, usuario, agora, setor = null) {
   const recebidas = demandas.filter((demanda) => ehExecutor(usuario, demanda))
   const solicitadas = demandas.filter((demanda) => ehSolicitante(usuario, demanda))
   return [
-    { chave: 'recebidas-abertas', rotulo: 'Recebidas abertas', valor: contar(recebidas, prazoCorrendo) },
+    indicadorDoPainel('recebidas-abertas', recebidas, agora),
     { chave: 'pendentes', rotulo: 'Pendentes de aceite', valor: contar(recebidas, (d) => d.status === STATUS.PENDENTE_ACEITE), badge: SELO_ACEITE, tom: 'ambar', status: STATUS.PENDENTE_ACEITE },
-    { chave: 'a-expirar', rotulo: 'A expirar', valor: contar(recebidas, (d) => aExpirar(d, agora)), badge: '25% do prazo', tom: 'ambar' },
+    indicadorDoPainel('a-expirar', recebidas, agora, { badge: '25% do prazo', tom: 'ambar' }),
     { chave: 'resolvidas', rotulo: 'Resolvidas', valor: contar(recebidas, (d) => d.status === STATUS.CONCLUIDA), tom: 'verde', status: STATUS.CONCLUIDA },
-    { chave: 'solicitadas-abertas', rotulo: 'Solicitadas por mim em aberto', valor: contar(solicitadas, (d) => !estaFinal(d.status)) },
+    indicadorDoPainel('solicitadas-abertas', solicitadas, agora),
   ]
 }
 

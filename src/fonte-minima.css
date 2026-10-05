@@ -183,9 +183,7 @@
 }
 
 /* ---- App.css ---- */
-.topbar-action {
-  font-size: max(14px, 13px);
-}
+/* (.topbar-action saiu junto com o botão "Criar" do topo: ajustes do teste manual, item 8.) */
 .form-notice {
   font-size: max(14px, 13px);
 }
@@ -199,7 +197,8 @@
   font-size: max(14px, 10px);
 }
 .search-field input {
-  font-size: max(14px, 11px);
+  /* Ajustes do teste manual (item 4): a busca de Demandas passou de 11 px para 16 px em App.css. */
+  font-size: max(14px, 16px);
 }
 .sort-control {
   font-size: max(14px, 10px);

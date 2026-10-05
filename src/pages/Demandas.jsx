@@ -3,11 +3,15 @@ import departamentos from '../data/departamentos.json'
 import { useDemandas } from '../hooks/useDemandas.js'
 import {
   ABAS,
+  FILTROS_DO_PAINEL,
   abasDoPerfil,
+  combinaComBusca,
   demandasDaAba,
+  filtrarPorPainel,
   filtrarPorStatus,
   ordenarDemandas,
   ordenarPorAtencao,
+  paginarComPendentes,
   separarPendentes,
 } from '../domain/listas.js'
 import { ehGerencia, podeVerDetalhes, resumoParaSolicitante } from '../domain/permissoes.js'
@@ -15,7 +19,7 @@ import { STATUS, estaFinal } from '../domain/status.js'
 import { seloDeAtencao } from '../domain/atencao.js'
 import { nomeDoSetor } from '../domain/setores.js'
 import { Carregando, ErroDados } from '../components/EstadoDados.jsx'
-import { formatarData } from '../formatos.js'
+import { formatarData, quantidade } from '../formatos.js'
 
 const ITEMS_PER_PAGE = 6
 
@@ -85,11 +89,13 @@ function DemandCard({ demand, usuario, agora }) {
   )
 }
 
-function Demandas({ usuario, setorInicial, statusInicial = '' }) {
+function Demandas({ usuario, setorInicial, statusInicial = '', filtroInicial = '', abaInicial = ABAS.RECEBIDAS }) {
   const { carregando, demandas, erro, resetar } = useDemandas()
   const gerencia = ehGerencia(usuario)
   const abas = abasDoPerfil(usuario)
-  const [aba, setAba] = useState(ABAS.RECEBIDAS)
+  const [aba, setAba] = useState(abaInicial)
+  // Filtro que veio de um card da Visão Geral (Vencidas, A expirar…): aparece em destaque e pode ser limpo.
+  const [filtroPainel, setFiltroPainel] = useState(filtroInicial)
   // Setor fica travado no próprio departamento; só a gerência escolhe (RF-R04).
   const [setor, setSetor] = useState(gerencia ? (setorInicial ?? '') : usuario.departamento)
   const [searchTerm, setSearchTerm] = useState('')
@@ -107,21 +113,22 @@ function Demandas({ usuario, setorInicial, statusInicial = '' }) {
   )
 
   const { pendentes, demais } = useMemo(() => {
-    const normalizedTerm = searchTerm.trim().toLocaleLowerCase('pt-BR')
-    // O status filtra a lista JÁ recortada pela permissão: nunca mostra além do que o perfil vê.
-    const filtered = filtrarPorStatus(listaDaAba, statusFiltro).filter((demand) =>
-      [demand.id, demand.titulo, demand.solicitante, nomeDoSetor(demand.origem)]
-        .some((value) => value.toLocaleLowerCase('pt-BR').includes(normalizedTerm)),
+    // Status e filtro do painel filtram a lista JÁ recortada pela permissão: nunca mostram além do que o perfil vê.
+    // A busca é a mesma da Visão Geral (listas.js → combinaComBusca).
+    const filtered = filtrarPorStatus(filtrarPorPainel(listaDaAba, filtroPainel, agora), statusFiltro).filter((demand) =>
+      combinaComBusca(demand, searchTerm),
     )
     const sorted =
       sortBy === 'atencao' ? ordenarPorAtencao(filtered, usuario) : ordenarDemandas(filtered, sortBy)
     // "Pendentes de aceite" no topo só faz sentido para quem recebe (seção 5 dos requisitos).
     return aba === ABAS.RECEBIDAS ? separarPendentes(sorted) : { pendentes: [], demais: sorted }
-  }, [listaDaAba, searchTerm, sortBy, aba, statusFiltro, usuario])
+  }, [listaDaAba, searchTerm, sortBy, aba, statusFiltro, usuario, filtroPainel, agora])
 
-  const pageCount = Math.max(1, Math.ceil(demais.length / ITEMS_PER_PAGE))
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
-  const visibleDemands = demais.slice(startIndex, startIndex + ITEMS_PER_PAGE)
+  // Lista inteira paginada, grupo de pendentes primeiro, sem repetir nada entre as páginas.
+  const pagina = paginarComPendentes({ pendentes, demais }, currentPage, ITEMS_PER_PAGE)
+  const pageCount = pagina.totalPaginas
+  const pendentesDaPagina = pagina.pendentes
+  const visibleDemands = pagina.demais
   const ativas = listaDaAba.filter((demand) => !estaFinal(demand.status)).length
 
   const departamentoAtual = departamentos.find((item) => item.id === setor)
@@ -146,7 +153,7 @@ function Demandas({ usuario, setorInicial, statusInicial = '' }) {
           <h2 id="department-name">{titulo}</h2>
           <p className="department-description">{descricao}</p>
         </div>
-        <p className="active-count">{ativas} demandas ativas</p>
+        <p className="active-count">{quantidade(ativas, 'demanda ativa', 'demandas ativas')}</p>
       </div>
 
       <div className="demand-tabs" role="group" aria-label="Lista de demandas">
@@ -202,7 +209,6 @@ function Demandas({ usuario, setorInicial, statusInicial = '' }) {
           <label className="sort-control">
             <span>Status:</span>
             <select
-              className="status-filter"
               value={statusFiltro}
               onChange={(event) => {
                 setStatusFiltro(event.target.value)
@@ -244,17 +250,37 @@ function Demandas({ usuario, setorInicial, statusInicial = '' }) {
         <ErroDados erro={erro} onResetar={resetar} />
       ) : (
         <>
+          {FILTROS_DO_PAINEL[filtroPainel] && (
+            <div className="active-filter">
+              <p>
+                Filtro da Visão Geral: <strong>{FILTROS_DO_PAINEL[filtroPainel].rotulo}</strong>
+              </p>
+              <button
+                type="button"
+                className="active-filter__clear"
+                onClick={() => {
+                  setFiltroPainel('')
+                  setCurrentPage(1)
+                }}
+              >
+                Limpar filtro
+              </button>
+            </div>
+          )}
+
           <p className="results-count" aria-live="polite">
-            Exibindo {visibleDemands.length + pendentes.length} de {demais.length + pendentes.length} demandas
+            Exibindo {pendentesDaPagina.length + visibleDemands.length} de {pagina.total}{' '}
+            {pagina.total === 1 ? 'demanda' : 'demandas'}
           </p>
 
-          {pendentes.length > 0 && (
+          {pendentesDaPagina.length > 0 && (
             <section className="pending-section" aria-labelledby="pendentes-titulo">
+              {/* O número é o total do grupo, mesmo quando ele continua na página seguinte. */}
               <h3 id="pendentes-titulo" className="pending-title">
-                Pendentes de aceite ({pendentes.length})
+                Pendentes de aceite ({pagina.totalPendentes})
               </h3>
               <div className="demands-grid">
-                {pendentes.map((demand) => (
+                {pendentesDaPagina.map((demand) => (
                   <DemandCard demand={demand} usuario={usuario} agora={agora} key={demand.id} />
                 ))}
               </div>
@@ -268,7 +294,7 @@ function Demandas({ usuario, setorInicial, statusInicial = '' }) {
               ))}
             </div>
           ) : (
-            pendentes.length === 0 && (
+            pendentesDaPagina.length === 0 && (
               <div className="empty-state">
                 <h3>Nenhuma demanda encontrada</h3>
                 <p>Tente outra busca, outro status ou outro departamento.</p>
