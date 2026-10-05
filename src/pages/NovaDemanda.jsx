@@ -105,6 +105,9 @@ function NovaDemanda({ usuario }) {
 
   return (
     <section className="page-content" aria-label="Cadastro de demanda">
+      {/* noValidate: o navegador não mostra os balões dele; as mensagens são as do catálogo, junto do
+          campo, com o foco no primeiro erro. `required`/`aria-required` só dizem ao leitor de tela que o
+          campo é obrigatório (ajustes do teste manual, item 7), igual aos pop-ups ("(obrigatório)"). */}
       <form className="demand-form" onSubmit={handleSubmit} noValidate>
         <div className="form-grid form-grid--locations">
           <div className="field">
@@ -114,13 +117,15 @@ function NovaDemanda({ usuario }) {
           </div>
 
           <div className="field">
-            <label htmlFor="destino">Destino</label>
+            <label htmlFor="destino">Destino (obrigatório)</label>
             <select
               ref={campoDestino}
               id="destino"
               name="destino"
               value={campos.destino}
               onChange={atualizar}
+              required
+              aria-required="true"
               aria-invalid={erros.destino ? 'true' : undefined}
               aria-describedby={descritores('destino', erros.destino)}
             >
@@ -137,7 +142,7 @@ function NovaDemanda({ usuario }) {
 
         <div className="form-grid form-grid--details">
           <div className="field">
-            <label htmlFor="tipo">Tipo de atendimento</label>
+            <label htmlFor="tipo">Tipo de atendimento (obrigatório)</label>
             <select
               ref={campoTipo}
               id="tipo"
@@ -145,6 +150,8 @@ function NovaDemanda({ usuario }) {
               value={campos.tipo}
               onChange={atualizar}
               disabled={!campos.destino}
+              required
+              aria-required="true"
               aria-invalid={erros.tipo ? 'true' : undefined}
               aria-describedby={descritores('tipo', erros.tipo)}
             >
@@ -159,7 +166,7 @@ function NovaDemanda({ usuario }) {
           </div>
 
           <div className="field">
-            <label htmlFor="titulo">Título</label>
+            <label htmlFor="titulo">Título (obrigatório)</label>
             <input
               ref={campoTitulo}
               id="titulo"
@@ -169,6 +176,8 @@ function NovaDemanda({ usuario }) {
               onChange={atualizar}
               onPaste={limiteTitulo.aoColar}
               maxLength={LIMITE_TITULO}
+              required
+              aria-required="true"
               aria-invalid={erros.titulo ? 'true' : undefined}
               aria-describedby={descritores('titulo', erros.titulo, true)}
             />
@@ -183,7 +192,7 @@ function NovaDemanda({ usuario }) {
         </div>
 
         <div className="field field--description">
-          <label htmlFor="descricao">Descrição</label>
+          <label htmlFor="descricao">Descrição (obrigatória)</label>
           <textarea
             ref={campoDescricao}
             id="descricao"
@@ -193,6 +202,8 @@ function NovaDemanda({ usuario }) {
             onChange={atualizar}
             onPaste={limiteDescricao.aoColar}
             maxLength={LIMITE_DESCRICAO}
+            required
+            aria-required="true"
             aria-invalid={erros.descricao ? 'true' : undefined}
             aria-describedby={descritores('descricao', erros.descricao, true)}
           />
@@ -229,6 +240,7 @@ function NovaDemanda({ usuario }) {
         <Dialogo
           titulo="Demanda enviada"
           rotuloSuperior={enviada}
+          descricao={MENSAGENS.envioSucesso(enviada)}
           onFechar={() => setEnviada(null)}
           retornarFocoPara={botaoEnviar}
           acoes={
@@ -248,9 +260,7 @@ function NovaDemanda({ usuario }) {
               </button>
             </>
           }
-        >
-          {MENSAGENS.envioSucesso(enviada)}
-        </Dialogo>
+        />
       )}
     </section>
   )

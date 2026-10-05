@@ -29,37 +29,6 @@
   line-height: 1.2;
 }
 
-.topbar-action {
-  display: inline-flex;
-  min-height: 36px;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 0 14px;
-  border: 1px solid #d0d0d0;
-  border-radius: 12px;
-  background: #fff;
-  color: #1d2422;
-  font: inherit;
-  font-size: 13px;
-  cursor: pointer;
-  transition: background-color 140ms ease, border-color 140ms ease;
-}
-
-.topbar-action:hover {
-  border-color: #9bb5af;
-  background: #f7faf9;
-}
-
-.button-icon {
-  width: 16px;
-  height: 16px;
-  fill: none;
-  stroke: currentColor;
-  stroke-linecap: round;
-  stroke-width: 1.8;
-}
-
 .page-content {
   display: flex;
   flex: 1;
@@ -291,12 +260,15 @@
   width: 100%;
   min-height: 34px;
   padding: 6px 10px;
-  border: 1px solid transparent;
+  /* Ajustes do teste manual (item 4): sem foco a busca não tinha borda visível (transparente).
+     #6d968c sobre o branco da tela = 3,29:1 (WCAG 1.4.11 pede 3:1). Fonte de 11 px (14 px pela
+     fonte-minima) → 16 px. O foco continua com o anel duplo (borda + contorno global). */
+  border: 1px solid #6d968c;
   border-radius: 7px;
-  background: transparent;
+  background: #fff;
   color: #273b37;
   font: inherit;
-  font-size: 11px;
+  font-size: 16px;
   transition: border-color 140ms ease, background-color 140ms ease;
 }
 
@@ -320,15 +292,23 @@
   white-space: nowrap;
 }
 
+/* Ajustes do teste manual (item 4): os selects de filtro não tinham borda (border: 0) e cortavam o
+   texto ("Tecnologia da Inforr") com max-width 170 px. Agora têm borda #6d968c (3,29:1 sobre o
+   branco) e ficam do tamanho da opção escolhida. */
 .sort-control select {
-  max-width: 170px;
-  padding: 5px 18px 5px 0;
-  border: 0;
-  background: transparent;
+  min-height: 34px;
+  padding: 5px 8px;
+  border: 1px solid #6d968c;
+  border-radius: 7px;
+  background: #fff;
   color: #344641;
   font: inherit;
   font-size: 10px;
   cursor: pointer;
+}
+
+.sort-control select:disabled {
+  cursor: default;
 }
 
 /* Bloco 2A: elementos novos da lista (abas, filtros, pendentes e nível Urgente),
@@ -364,6 +344,39 @@
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: 8px 18px;
+}
+
+/* Ajustes do teste manual (item 1): filtro que veio de um card da Visão Geral, com botão para limpar.
+   Texto #1e3430 sobre #f3f8f6 (13,4:1); borda #6d968c (3,1:1 sobre o fundo branco da tela); botão
+   #1b7766 sobre branco (5,4:1). */
+.active-filter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin: 14px 0 0;
+  padding: 8px 12px;
+  border: 1px solid #6d968c;
+  border-radius: 8px;
+  background: #f3f8f6;
+  color: #1e3430;
+  font-size: 14px;
+}
+
+.active-filter p {
+  margin: 0;
+}
+
+.active-filter__clear {
+  min-height: 32px;
+  padding: 0 12px;
+  border: 1px solid #1b7766;
+  border-radius: 999px;
+  background: #fff;
+  color: #1b7766;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .pending-section {
@@ -430,6 +443,23 @@
   font-size: 12px;
   font-weight: 500;
   text-align: right;
+}
+
+/* Bloco 4-A: campo de texto dentro do pop-up (motivo da recusa). Borda com 3:1 (WCAG 1.4.11). */
+.dialog-textarea {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 96px;
+  margin-top: 6px;
+  padding: 10px 12px;
+  border: 1px solid #6d968c;
+  border-radius: 8px;
+  background: #fff;
+  color: #1e2926;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+  resize: vertical;
 }
 
 .priority--urgente {
@@ -657,7 +687,8 @@
   gap: 8px;
   margin-top: 13px;
   padding: 0 10px;
-  border: 1px solid #e7e9ed;
+  /* Ajustes do teste manual (item 4): #e7e9ed dava 1,10:1 sobre o fundo #f3f4f6; #868a85 dá 3,19:1. */
+  border: 1px solid #868a85;
   border-radius: 6px;
   background: #fff;
   color: #6c7682;
@@ -707,7 +738,8 @@
   min-height: 120px;
   flex-direction: column;
   padding: 12px;
-  border: 1px solid #eceef1;
+  /* Ajustes do teste manual (item 4): #eceef1 dava 1,06:1 sobre o fundo #f3f4f6; #868a85 dá 3,19:1. */
+  border: 1px solid #868a85;
   border-radius: 10px;
   background: #fff;
   box-shadow: 0 1px 2px rgb(16 24 40 / 3%);
@@ -1007,20 +1039,31 @@
     width: 100%;
   }
 
+  /* A borda #e1e7e5 dava 1,25:1; agora fica a mesma #6d968c do computador (item 4). */
   .search-field input {
     min-height: 38px;
     padding-inline: 10px;
-    border-color: #e1e7e5;
+  }
+
+  /* Rótulos alinhados em coluna e select na largura toda: antes cada linha ficava encostada à
+     direita com tamanhos diferentes e o select cortava o texto (item 4). */
+  .demands-filters {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
   }
 
   .sort-control {
-    justify-content: flex-end;
+    display: grid;
+    grid-template-columns: 8.5em minmax(0, 1fr);
+    justify-content: stretch;
     min-height: 30px;
     font-size: 10px;
+    white-space: normal;
   }
 
   .sort-control select {
-    max-width: 170px;
+    width: 100%;
     font-size: 10px;
   }
 
@@ -1109,4 +1152,27 @@
   .department-card > a {
     font-size: 9px;
   }
+}
+
+/* Bloco 4B — selo de atenção nos cards da lista de Demandas.
+   O texto diz tudo sozinho ("Atrasada para aceite"); cor e borda são só reforço (WCAG 1.4.1).
+   Contraste: #7a4a00 sobre #fff4dc = 6,85:1; #a3271b sobre #fdecea = 6,41:1. Fonte já nasce com 14 px. */
+.attention-tag {
+  width: fit-content;
+  max-width: 100%;
+  margin: 8px 0 0;
+  padding: 3px 10px;
+  border: 1px solid #c99a3d;
+  border-radius: 999px;
+  background: #fff4dc;
+  color: #7a4a00;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.attention-tag--late {
+  border-color: #d9796f;
+  background: #fdecea;
+  color: #a3271b;
 }

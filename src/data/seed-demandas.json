@@ -200,5 +200,22 @@
       { "haHoras": 30, "autor": "Equipe de Elétrica", "perfil": "departamento", "tipo": "criacao", "texto": "Demanda criada." },
       { "haHoras": 24, "autor": "Equipe de TI", "perfil": "departamento", "tipo": "aceite", "texto": "Demanda aceita com prioridade Baixa." }
     ]
+  },
+  {
+    "id": "DM-2013",
+    "exemplo": "Bloco 4B: em triagem e atrasada (recusada há 30 h; limite proposto de 24 h)",
+    "titulo": "Exemplo: infiltração no teto do almoxarifado",
+    "descricao": "Exemplo de demanda em triagem atrasada. Há uma mancha de umidade no teto do almoxarifado, perto da luminária.",
+    "tipo": "Iluminação",
+    "origem": "administrativo",
+    "destino": "eletrica",
+    "prioridade": "Não definida",
+    "status": "Em triagem",
+    "solicitante": "Fernanda Lima",
+    "criadaHaHoras": 40,
+    "historico": [
+      { "haHoras": 40, "autor": "Equipe Administrativa", "perfil": "departamento", "tipo": "criacao", "texto": "Demanda criada." },
+      { "haHoras": 30, "autor": "Equipe de Elétrica", "perfil": "departamento", "tipo": "recusa", "texto": "Recusada: infiltração é da Hidráulica; a luminária está funcionando." }
+    ]
   }
 ]

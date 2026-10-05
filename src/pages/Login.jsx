@@ -1,6 +1,8 @@
 import { useRef, useState } from 'react'
 import { useDemandas } from '../hooks/useDemandas.js'
 import { ERROS } from '../services/storage.js'
+import { resetarComConfirmacao } from '../services/reset.js'
+import Dialogo from '../components/Dialogo.jsx'
 import './Login.css'
 
 // Textos de docs/MENSAGENS_VALIDACAO.md (os marcados "proposta" foram acrescentados no Bloco 1).
@@ -15,12 +17,17 @@ const MENSAGENS = {
     'Não foi possível acessar os dados deste aparelho. Verifique se o navegador permite armazenamento local.',
   resetOk: 'Dados de demonstração restaurados.',
   resetFalhou: 'Não foi possível resetar os dados. Recarregue a página e tente de novo.',
+  // Proposta (ajustes do teste manual, item 9): pop-up de confirmação antes de apagar.
+  resetConfirmacao:
+    'As demandas criadas ou alteradas neste navegador serão apagadas e os dados de demonstração voltarão. Esta ação não pode ser desfeita.',
 }
 
 function Login({ onEntrar }) {
   const [valores, setValores] = useState({ usuario: '', senha: '' })
   const [erros, setErros] = useState({})
   const [avisoReset, setAvisoReset] = useState('')
+  const [confirmandoReset, setConfirmandoReset] = useState(false)
+  const botaoReset = useRef(null)
   const campoUsuario = useRef(null)
   const campoSenha = useRef(null)
   const { erro: erroDados, resetar } = useDemandas()
@@ -54,9 +61,12 @@ function Login({ onEntrar }) {
     }
   }
 
-  function handleResetar() {
-    const resultado = resetar()
-    setAvisoReset(resultado.ok ? MENSAGENS.resetOk : MENSAGENS.resetFalhou)
+  // Ajustes do teste manual (item 9): antes o clique apagava tudo na hora. Agora abre um pop-up;
+  // "Voltar" ou Esc cancelam sem tocar nos dados, e o foco volta ao botão (Dialogo).
+  function decidirReset(confirmado) {
+    setConfirmandoReset(false)
+    const resultado = resetarComConfirmacao(confirmado, resetar)
+    if (resultado.executado) setAvisoReset(resultado.ok ? MENSAGENS.resetOk : MENSAGENS.resetFalhou)
   }
 
   return (
@@ -117,13 +127,41 @@ function Login({ onEntrar }) {
             {erroDados === ERROS.CORROMPIDO ? MENSAGENS.dadosCorrompidos : MENSAGENS.dadosIndisponiveis}
           </p>
         )}
-        <button className="login-reset" type="button" onClick={handleResetar}>
+        <button
+          ref={botaoReset}
+          className="login-reset"
+          type="button"
+          onClick={() => {
+            setAvisoReset('')
+            setConfirmandoReset(true)
+          }}
+        >
           Resetar dados
         </button>
         <p className="login-reset-status" role="status">
           {avisoReset}
         </p>
       </section>
+
+      {confirmandoReset && (
+        <Dialogo
+          titulo="Resetar dados de demonstração?"
+          descricao={MENSAGENS.resetConfirmacao}
+          onFechar={() => decidirReset(false)}
+          retornarFocoPara={botaoReset}
+          acoes={
+            <>
+              {/* O foco começa em "Voltar": a ação destrutiva nunca é a escolha por engano do Enter. */}
+              <button className="detail-button detail-button--outline" type="button" data-autofocus onClick={() => decidirReset(false)}>
+                Voltar
+              </button>
+              <button className="detail-button detail-button--primary" type="button" onClick={() => decidirReset(true)}>
+                Resetar dados
+              </button>
+            </>
+          }
+        />
+      )}
     </main>
   )
 }

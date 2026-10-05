@@ -49,10 +49,16 @@ Uma regra só cobre botões, links, campos e selects. Antes eram duas regras, e 
 ```
 É um **botão**, e não um link `#conteudo`, porque no nosso app mudar o hash troca de tela.
 
-## 6. O que a equipe ainda precisa fazer (evidência)
-- Rodar o **axe "depois"** com o mesmo procedimento do relatório "antes" e salvar em `docs/evidencias/depois/`.
-- Rodar o **Lighthouse** no Edge.
-- Fazer o teste **só com teclado** e com **leitor de tela** (Narrador ou NVDA), anotando quem fez e quando.
+## 6. Evidências: o que já existe e o que a equipe ainda precisa fazer
+- **Já existe:**
+  - o **axe "depois"**, em `docs/evidencias/depois/RELATORIO_AXE_DEPOIS.md`, gerado **pelo assistente na nuvem, não pela equipe**: **0 violações nas 26 combinações** (o "antes" tinha 190 ocorrências);
+  - o autor conferiu a mão no Edge o skip link, as buscas, o contorno dos botões, Tab, Enter e Shift+Tab (relatório "depois").
+- **Ainda falta:**
+  - nova rodada do axe **pela equipe**, que agora também deve cobrir as telas dos Blocos 4A a 4C;
+  - **Lighthouse** no Edge;
+  - teste completo **só com teclado** e com **leitor de tela** (Narrador ou NVDA), anotando quem fez e quando;
+  - celular real, zoom de 400% e o contraste do menu lateral em 360 px (o axe deixou "incompleto").
+- Roteiro passo a passo em `docs/TESTES_PENDENTES.md`.
 
 ## 7. Perguntas que o professor pode fazer
 1. **Para que serve o "Ir para o conteúdo"?** Para quem usa teclado pular o menu e ir direto ao conteúdo da tela (WCAG 2.4.1).

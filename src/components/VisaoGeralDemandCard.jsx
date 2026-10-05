@@ -16,6 +16,12 @@ export default function DemandCard({ demanda, onAbrir }) {
       </div>
 
       <h3 className="demand-card__title">{demanda.titulo}</h3>
+      {/* Bloco 4B: selo de atenção, só para quem pode vê-lo (atencao.js → seloDeAtencao). */}
+      {demanda.selo && (
+        <span className={`badge badge--${demanda.selo.atrasada ? 'vermelho' : 'ambar'} demand-card__selo`}>
+          {demanda.selo.texto}
+        </span>
+      )}
       <p className="demand-card__desc">{demanda.descricao}</p>
 
       <hr className="demand-card__divider" />
