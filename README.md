@@ -111,4 +111,3 @@ Tudo está na pasta `docs/`:
 - `docs/FLUXOS.md`: fluxos e máquina de estados.
 - `docs/TESTES_PENDENTES.md` e `docs/evidencias/`: testes e evidências (auditoria axe antes e depois).
 - `docs/CHANGELOG.md`: histórico de mudanças.
-- `docs/estudo/`: material de estudo para a apresentação.

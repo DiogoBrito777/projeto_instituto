@@ -1,6 +1,6 @@
 # Guia da pasta `docs/`
 
-Esta pasta tem muitos arquivos porque o projeto foi feito com apoio de IA, em blocos, e cada passo ficou registrado. Aqui está o que cada grupo de arquivos é e para quem serve.
+Esta pasta tem muitos arquivos porque o projeto foi feito com apoio de IA, em blocos, e cada passo ficou registrado. Aqui estão os três grupos de arquivos (o produto, como o trabalho foi conduzido e o registro do processo) e para que serve cada um.
 
 **Se você quer entender o produto, comece por:** `DOCUMENTACAO.md`, `REQUISITOS_REGRAS_DE_NEGOCIO.md` e `FLUXOS.md`.
 
@@ -37,13 +37,6 @@ Usamos IA para construir o projeto. Estes arquivos são as regras que ela devia 
 | `ATAS_RASCUNHO_27-09_e_02-10.md` | Rascunhos de ata feitos depois das reuniões, a partir do chat, para revisão de quem participou |
 | `evidencias/` | Relatórios do axe (antes e depois) e capturas de teste (celular, 360 px, Lighthouse, NVDA, zoom) |
 | `wireframes/` | Capturas do Figma Make e do Figma Design, com a linha do tempo de como o layout surgiu |
-
-## 4. Estudo (para a apresentação)
-
-| Arquivo | Para que serve |
-|---|---|
-| `GUIA_DE_ESTUDO.md` | Resumo do projeto e das perguntas que podem aparecer |
-| `estudo/` | Material por tema, perguntas rápidas, roteiro da apresentação e falhas conhecidas |
 
 ## Observações
 
