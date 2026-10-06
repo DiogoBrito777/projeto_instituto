@@ -88,6 +88,15 @@ npm run build
 - O botão **Resetar dados**, na tela de login, volta ao estado inicial.
 - As senhas ficam em texto simples porque o sistema é uma simulação.
 
+## Parâmetros de demonstração
+
+Servem só para a apresentação. Vão na parte de busca do endereço, **antes do `#`**, e só valem depois de recarregar a página. Sem eles, nada muda.
+
+| Parâmetro | Exemplo | O que faz |
+| --- | --- | --- |
+| `?falha=1` | `http://localhost:5173/?falha=1#nova-demanda` | As gravações falham de propósito, para mostrar a mensagem de erro (os dados do formulário são mantidos). |
+| `?lento=1` | `http://localhost:5173/?lento=1#visao-geral` | Leitura e gravação passam a 2 s (padrões: 150 ms e 250 ms), para mostrar "Carregando demandas…" e "Enviando…" com calma. |
+
 ## Falhas e limitações conhecidas
 
 Estão registradas, e não escondidas, em `docs/DOCUMENTACAO.md` (seção 23). As principais: sem aviso de falta de conexão, o formulário se perde ao recarregar e o envio pode travar em celular quando o app é aberto por `http://IP` da rede (pela Vercel, em HTTPS, funciona).

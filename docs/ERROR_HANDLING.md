@@ -38,13 +38,16 @@ Só `console.error`/`console.warn` com contexto (operação, id, chave do storag
 - Dados são editáveis no DevTools: simulação, não segurança.
 
 ## 6. Offline, envio, repetição e recuperação (RF10, RF11, RNF03)
+> **Estado na entrega:** a fila "Pendentes de envio" e o envio ao reconectar estão **não implementado (melhoria futura)**; o app não detecta falta de conexão. Os itens abaixo marcados assim descrevem como deveria funcionar.
+
 - O **rascunho** do formulário é preservado em qualquer falha ou cancelamento.
-- Sem conexão: a demanda vai para **"Pendentes de envio"** com aviso (`aria-live`); nada é marcado como enviado.
-- Ao reconectar, o envio da fila é **item a item**: falha em um **não** perde nem trava os demais; cada item sai da fila **somente após** a gravação confirmada.
+- Sem conexão: a demanda vai para **"Pendentes de envio"** com aviso (`aria-live`); nada é marcado como enviado. **Não implementado (melhoria futura).**
+- Ao reconectar, o envio da fila é **item a item**: falha em um **não** perde nem trava os demais; cada item sai da fila **somente após** a gravação confirmada. **Não implementado (melhoria futura).**
 - **Sem duplicar escrita:** cada pendente tem identificador local; antes de reenviar, confira se já foi gravado. Desabilite o botão durante o envio (evita duplo clique).
-- **Retry:** manual ("Tentar de novo") e no máximo **uma tentativa automática por evento "online"**. Sem laços de repetição.
+- **Retry:** manual ("Tentar de novo") e no máximo **uma tentativa automática por evento "online"**. Sem laços de repetição. A tentativa automática por evento "online": **não implementado (melhoria futura)**.
 - **Cancelamento:** fechar o pop-up de confirmação ou sair da tela não descarta o rascunho.
 - **Falha simulada (`?falha=1`)** existe só para demonstrar o estado de erro; padrão desligado; documentada no README.
+- **Lentidão simulada (`?lento=1`)** existe só para a demonstração: leitura e gravação passam a 2 s (padrões: 150 ms e 250 ms), para "Carregando demandas…" e "Enviando…" ficarem visíveis. Vai na parte de busca do endereço, antes do `#` (`http://localhost:5173/?lento=1#visao-geral`), e só vale depois de recarregar a página. Sem ele, nada muda. Documentada no README.
 
 ## 7. Integridade de dados e de regras
 - Mudança de status **somente** por função do domínio que valida quem pode e a transição.

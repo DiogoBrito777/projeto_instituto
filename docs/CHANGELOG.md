@@ -413,3 +413,14 @@ Origem: bateria de testes manuais do autor (Bruno Diogo). Cada item foi feito se
   - 4C.5 ligado ao 3.7.
 - `docs/evidencias/depois/NAO_EXECUTADO_AINDA.md` atualizado com a lista final.
 - **Material de estudo** para o grupo em `docs/estudo/` (14 arquivos): índice, funcionalidades, perguntas rápidas, roteiro da apresentação e falhas para falar.
+
+### 2026-10-05 · PR #14 — ?lento=1 para a demonstração · feat/lento-demo
+- Arquivos: `src/services/storage.js` (só `obterStorage`).
+- O quê: `?lento=1` na URL deixa leitura e gravação em 2 s (padrões: 150 ms e 250 ms). Vai na parte de busca do endereço, antes do `#`, e só vale depois de recarregar a página. Sem ele, nada muda. O `?falha=1` continua igual.
+- Por quê: mostrar "Carregando demandas…" e "Enviando…" com calma na demonstração.
+- Atende: RNF06 (estados de carregamento visíveis).
+- Verificação:
+  - `npm test` 12 arquivos / 245 testes passaram · `npm run lint` 0 avisos e 0 erros · `npm run build` OK (rodados em 05/10, durante a tarefa de documentação deste PR, com o código de 2 s);
+  - teste automatizado específico para o `?lento=1`: **não executado** (não existe);
+  - navegador embutido: conferido pelo assistente na versão de 1,5 s (05/10); versão final de 2 s: conferida visualmente pelo autor, sem medir o tempo, no Edge (prévia da Vercel) e no celular (produção), em 05/10.
+- Documentação: `README.md` (seção nova "Parâmetros de demonstração", com `?falha=1` e `?lento=1`), `docs/ERROR_HANDLING.md` e `docs/DOCUMENTACAO.md` (seções 20.2 e 20.5) registram o `?lento=1`; `ERROR_HANDLING.md` (seção 6) e `FLUXOS.md` (seção 5) marcam a fila "Pendentes de envio" como **não implementado (melhoria futura)**, porque ela não existe no código; `docs/CONTEXTO_E_PREFERENCIAS.md` ganhou a seção "Divisão de papéis".
