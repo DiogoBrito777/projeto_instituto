@@ -424,3 +424,10 @@ Origem: bateria de testes manuais do autor (Bruno Diogo). Cada item foi feito se
   - teste automatizado específico para o `?lento=1`: **não executado** (não existe);
   - navegador embutido: conferido pelo assistente na versão de 1,5 s (05/10); versão final de 2 s: conferida visualmente pelo autor, sem medir o tempo, no Edge (prévia da Vercel) e no celular (produção), em 05/10.
 - Documentação: `README.md` (seção nova "Parâmetros de demonstração", com `?falha=1` e `?lento=1`), `docs/ERROR_HANDLING.md` e `docs/DOCUMENTACAO.md` (seções 20.2 e 20.5) registram o `?lento=1`; `ERROR_HANDLING.md` (seção 6) e `FLUXOS.md` (seção 5) marcam a fila "Pendentes de envio" como **não implementado (melhoria futura)**, porque ela não existe no código; `docs/CONTEXTO_E_PREFERENCIAS.md` ganhou a seção "Divisão de papéis".
+
+### 2026-10-06 · Documentação: material de estudo sai do repositório · docs/remove-estudo
+- **Só documentação**; nenhum arquivo de `src/` mudou.
+- Arquivos: removidos `docs/estudo/` (21 arquivos) e `docs/GUIA_DE_ESTUDO.md`; ajustados `README.md`, `docs/LEIAME.md` e este CHANGELOG.
+- O quê: o material de estudo deixa o repositório e passa a ser entregue ao grupo à parte. Ele continua no histórico do Git (commits anteriores a este).
+- Por quê: decisão do autor; o material é de uso interno do grupo para a apresentação.
+- Verificação: busca por referências restantes (`estudo/`, `GUIA_DE_ESTUDO`, `92-FALHAS`, `PERGUNTAS-RAPIDAS`); só restam as entradas antigas deste CHANGELOG, mantidas como histórico. `src/` sem alteração.
