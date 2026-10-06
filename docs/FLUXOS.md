@@ -84,8 +84,8 @@ flowchart TD
   V -- Não --> M["Mensagens claras e foco no 1º erro"]
   M --> P
   V -- Sim --> N{"Há conexão?"}
-  N -- Não --> Q["Guarda em 'Pendentes de envio' e avisa"]
-  Q --> W["Ao reconectar, envia"]
+  N -- Não --> Q["Guarda em 'Pendentes de envio' e avisa<br/>(não implementado — melhoria futura)"]
+  Q --> W["Ao reconectar, envia<br/>(não implementado — melhoria futura)"]
   N -- Sim --> E["Envio com estado de carregamento"]
   W --> E
   E --> OK{"Sucesso?"}
@@ -93,3 +93,4 @@ flowchart TD
   OK -- Não --> ER["Erro e tentar de novo (dados mantidos)"]
   ER --> E
 ```
+**Estado na entrega:** a fila "Pendentes de envio" e o envio automático ao reconectar estão **não implementado (melhoria futura)**: o app não detecta falta de conexão. O que existe hoje é o caminho "Envio com estado de carregamento" → sucesso ou erro, com os dados mantidos no formulário.

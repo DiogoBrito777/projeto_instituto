@@ -22,6 +22,12 @@
 - Nunca altere o `main` nem faça push.
 - Comandos usados no CMD do Windows: `npm install`, `npm run dev`, `npm run lint`, `npm run build` e `npm test`.
 
+## Divisão de papéis
+- O **Claude do chat** (na nuvem) pensa, escreve prompts, confere resultados e redige documentação; **não edita código-fonte** na pasta do projeto.
+- O **Claude Code** edita e testa o código, **só na pasta do projeto**, mostra o plano antes e espera aprovação.
+- O **commit e o push** são feitos pelo usuário no GitHub Desktop, um passo por vez; a descrição do PR segue `.github/pull_request_template.md`.
+- Mudança de código só por prompt ao Claude Code.
+
 ## Honestidade (regra de ouro)
 - **Nunca invente evidências**: resultado de teste, auditoria, print, ata "como se tivessem ocorrido". O que não foi executado: "não executado".
 - Evidências reais de auditoria automática:

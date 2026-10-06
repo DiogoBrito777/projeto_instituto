@@ -354,6 +354,10 @@ Cobertura item a item em `docs/REQUISITOS_REGRAS_DE_NEGOCIO.md`, seção 11.
   - `storage.js` confere `falha === '1'` e faz **as gravações** falharem de propósito, para mostrar o estado de erro.
   - A leitura não falha.
   - Dentro do hash (`#nova-demanda?falha=1`) não funciona.
+- **`?lento=1`:** gancho só para a demonstração, também na parte de busca do endereço, antes do `#` (`http://localhost:5173/?lento=1#visao-geral`).
+  - `storage.js` confere `lento === '1'` e deixa **leitura e gravação em 2 s** (padrões: 150 ms e 250 ms), para "Carregando demandas…" e "Enviando…" ficarem visíveis com calma.
+  - Só vale depois de recarregar a página: o storage lê o endereço uma vez, quando é criado.
+  - Sem ele, nada muda.
 
 ### 20.3 Por que assim
 - ADR-02 (JSON + `localStorage`, chave versionada, `try/catch`, "Resetar dados", falha simulável), ADR-03 (um JSON por entidade) e ADR-07 (perfis em `sessionStorage` como simulação).
@@ -377,6 +381,7 @@ Cobertura item a item em `docs/REQUISITOS_REGRAS_DE_NEGOCIO.md`, seção 11.
 | Contador de números no navegador | Número gerado pelo banco, sem repetição |
 | Relógio do navegador para prazos | Relógio do servidor; tarefa agendada para marcar atrasos |
 | `?falha=1` | Erros reais de rede/servidor, com nova tentativa |
+| `?lento=1` | Latência real da rede |
 | Histórico editável | Histórico só de acréscimo, com auditoria |
 | — | Fila de envio offline (service worker) e aviso de conexão |
 
