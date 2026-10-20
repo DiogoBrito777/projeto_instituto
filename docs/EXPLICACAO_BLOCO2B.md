@@ -3,7 +3,7 @@
 > Pré-requisitos: `EXPLICACAO_BLOCO1.md` e `EXPLICACAO_BLOCO2A.md`. Rode `npm run dev`, entre com `user01` e abra "Nova demanda".
 
 ## 1. A ideia em uma frase
-O formulário que antes só mostrava "Cadastro simulado" agora **cria a demanda de verdade**. O próprio sistema preenche a origem e a data, o tipo de atendimento depende do destino, quem abre não escolhe prioridade, e cada erro aparece junto do campo.
+O formulário que antes só mostrava "Cadastro simulado" agora **grava a demanda** (no navegador). O próprio sistema preenche a origem e a data, o tipo de atendimento depende do destino, quem abre não escolhe prioridade, e cada erro aparece junto do campo.
 
 ## 2. O caminho do envio
 ```
@@ -12,7 +12,7 @@ Clique em "Criar Nova Demanda"
       tem erro? → mostra os erros e põe o foco no primeiro campo errado. FIM
   → botão vira "Enviando…" (desativado)
   → montarNovaDemanda(...)                      monta a demanda: origem, status, prioridade, histórico
-  → storage.criarDemanda(...)                   espera 250 ms, dá o número (DM-2013…) e grava
+  → storage.criarDemanda(...)                   espera 250 ms, dá o número (DM-2014…) e grava
       deu erro? → mensagem de erro; o formulário continua preenchido. FIM
   → formulário limpo + pop-up "Demanda DM-XXXX enviada com sucesso."
 ```

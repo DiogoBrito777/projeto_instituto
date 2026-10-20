@@ -1,18 +1,18 @@
 # Fluxos e máquina de estados
 
-> Kit final de 03/10/2026. Fontes: documento técnico de 15/09, Atas 15/09, 22/09 e 29/09, chat de 02/10 e decisões de 03/10 (`docs/REQUISITOS_REGRAS_DE_NEGOCIO.md`). Itens de 03/10 são **propostas** a registrar em ata. Os diagramas usam Mermaid (renderizam no GitHub; **não foram renderizados por quem escreveu**, conferir ao subir).
+> Kit final de 03/10/2026. Fontes: documento técnico de 15/09, Atas 15/09, 22/09 e 29/09, chat de 02/10 e decisões de 03/10 (`docs/REQUISITOS_REGRAS_DE_NEGOCIO.md`). Itens de 03/10 são **propostas** a registrar em ata. Os diagramas usam Mermaid.
 
 ## 1. Fluxo da demanda
 ```mermaid
 flowchart TD
-  A["Usuário abre nova demanda<br/>(origem e data automáticas; destino em lista)"] --> P["Pendente de aceite<br/>(sem prioridade; setor tem 72 h)"]
+  A["Usuário abre nova demanda<br/>(origem e data automáticas; destino em lista)"] --> P["Pendente de aceite<br/>(sem prioridade; setor tem 48 h,<br/>24 h após redirecionamento; proposta)"]
   P --> Q{"Setor aceita?"}
   Q -- "Sim: define a prioridade<br/>e confirma no pop-up" --> E["Em andamento<br/>(prazo conforme a prioridade)"]
   Q -- "Não: informa o motivo" --> T["Em triagem (com o Gerenciamento)"]
   E --> G["Aguardando (processamento interno)<br/>o prazo continua correndo"]
   G --> E
   E --> D["Concluída (final, sem alterações)"]
-  E -- "setor devolve com motivo" --> T
+  E -- "setor devolve com motivo<br/>(sem tela, seção 18 da DOCUMENTACAO)" --> T
   T --> R{"Gerenciamento decide"}
   R -- "redireciona a outro setor" --> P
   R -- "nenhum setor tem competência<br/>(justificativa)" --> N["Não aplicável (final)"]
@@ -37,8 +37,8 @@ stateDiagram-v2
   AG --> EA
   EA --> CO
   AG --> CO
-  EA --> TR: devolve (motivo)
-  AG --> TR: devolve (motivo)
+  EA --> TR: devolve (motivo, sem tela)
+  AG --> TR: devolve (motivo, sem tela)
   TR --> PA: gerência redireciona
   TR --> NA: gerência (justificativa)
   PA --> CA: gerência (justificativa)
@@ -53,7 +53,7 @@ stateDiagram-v2
 ## 3. Quem vê o quê
 ```mermaid
 flowchart LR
-  U{"Usuário logado"} -- admin --> ADM["Gerenciamento:<br/>vê tudo e os prazos de todos;<br/>redireciona, cancela, marca não aplicável, cobra;<br/>não define prioridade"]
+  U{"Usuário logado"} -- admin --> ADM["Gerenciamento:<br/>vê tudo e os prazos de todos;<br/>redireciona, cancela, marca não aplicável, cobra (sem tela, adiado);<br/>não define prioridade"]
   U -- "user01 a user04" --> DEP["Departamento (independente)"]
   DEP --> EXE["Demandas recebidas (destino = meu setor):<br/>vê tudo e só os meus prazos;<br/>aceita, define prioridade, recusa, conclui"]
   DEP --> ORI["Demandas que eu abri:<br/>só status e setor atual"]
@@ -72,14 +72,14 @@ flowchart LR
   DM --> DT["Detalhe"]
   VG -- "Abrir" --> DT
   DT --> AT["Atualizar"]
-  ND -- "pop-up de confirmação / erro / offline" --> DM
+  ND -- "pop-up de confirmação / erro" --> DM
 ```
 Sem login, qualquer rota vai ao Login. Demanda sem permissão ou inexistente mostra a mesma mensagem.
 
 ## 5. Fluxo de envio (Ata 15/09, chat 02/10)
 ```mermaid
 flowchart TD
-  P["Preenche o formulário"] --> R["Rascunho salvo no dispositivo"]
+  P["Preenche o formulário"] --> R["Rascunho salvo no dispositivo<br/>(não implementado — melhoria futura)"]
   R --> V{"Dados válidos?"}
   V -- Não --> M["Mensagens claras e foco no 1º erro"]
   M --> P

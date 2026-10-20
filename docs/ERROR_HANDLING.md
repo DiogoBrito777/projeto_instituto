@@ -1,6 +1,6 @@
 # Tratamento de erros — validação, falhas, mensagens, logs e integridade
 
-Leia ao **alterar formulários, login, storage, offline/rede, rotas com parâmetro ou qualquer fluxo de falha**. Adaptado ao projeto real: sem servidor, sem banco, sem fila externa. "Rede" é simulada (`navigator.onLine` + atraso/falha simulados).
+Leia ao **alterar formulários, login, storage, offline/rede, rotas com parâmetro ou qualquer fluxo de falha**. Adaptado ao projeto real: sem servidor, sem banco, sem fila externa. "Rede" é simulada por atraso e falha (`?falha=1`, `?lento=1`); o app não detecta conexão.
 
 ## 1. Princípios
 1. **Nunca** sucesso falso: só mostre "enviado/salvo" depois de a gravação ser confirmada.
@@ -17,7 +17,7 @@ Leia ao **alterar formulários, login, storage, offline/rede, rotas com parâmet
 | Login | Campos preenchidos; erro único e genérico para usuário/senha |
 | Ações de domínio (aceitar, recusar, redirecionar…) | Validar com as funções puras **antes** de gravar; campos obrigatórios (prioridade, motivo, justificativa) |
 
-A validação na tela dá feedback; a validação no domínio/storage garante a regra. Uma não substitui a outra.
+A validação na tela dá feedback; a validação no domínio/storage aplica a regra. Uma não substitui a outra.
 
 ## 3. Mensagens
 - Dizem **o que aconteceu e o que fazer**; sem jargão, sem stack, sem códigos internos.
@@ -40,12 +40,12 @@ Só `console.error`/`console.warn` com contexto (operação, id, chave do storag
 ## 6. Offline, envio, repetição e recuperação (RF10, RF11, RNF03)
 > **Estado na entrega:** a fila "Pendentes de envio" e o envio ao reconectar estão **não implementado (melhoria futura)**; o app não detecta falta de conexão. Os itens abaixo marcados assim descrevem como deveria funcionar.
 
-- O **rascunho** do formulário é preservado em qualquer falha ou cancelamento.
+- O **rascunho** do formulário é preservado em qualquer falha ou cancelamento. **Não implementado (melhoria futura)**; hoje o formulário é mantido só no erro de envio, na mesma tela.
 - Sem conexão: a demanda vai para **"Pendentes de envio"** com aviso (`aria-live`); nada é marcado como enviado. **Não implementado (melhoria futura).**
 - Ao reconectar, o envio da fila é **item a item**: falha em um **não** perde nem trava os demais; cada item sai da fila **somente após** a gravação confirmada. **Não implementado (melhoria futura).**
-- **Sem duplicar escrita:** cada pendente tem identificador local; antes de reenviar, confira se já foi gravado. Desabilite o botão durante o envio (evita duplo clique).
+- **Sem duplicar escrita:** cada pendente tem identificador local; antes de reenviar, confira se já foi gravado (**não implementado**: depende da fila). Desabilite o botão durante o envio (evita duplo clique).
 - **Retry:** manual ("Tentar de novo") e no máximo **uma tentativa automática por evento "online"**. Sem laços de repetição. A tentativa automática por evento "online": **não implementado (melhoria futura)**.
-- **Cancelamento:** fechar o pop-up de confirmação ou sair da tela não descarta o rascunho.
+- **Cancelamento:** fechar o pop-up de confirmação ou sair da tela não descarta o rascunho. **Não implementado (melhoria futura).**
 - **Falha simulada (`?falha=1`)** existe só para demonstrar o estado de erro; padrão desligado; documentada no README.
 - **Lentidão simulada (`?lento=1`)** existe só para a demonstração: leitura e gravação passam a 2 s (padrões: 150 ms e 250 ms), para "Carregando demandas…" e "Enviando…" ficarem visíveis. Vai na parte de busca do endereço, antes do `#` (`http://localhost:5173/?lento=1#visao-geral`), e só vale depois de recarregar a página. Sem ele, nada muda. Documentada no README.
 

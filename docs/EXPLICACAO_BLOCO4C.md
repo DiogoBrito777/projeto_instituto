@@ -26,7 +26,7 @@ Todas começam pelas mesmas três perguntas (`conferirGerencia`): **está finali
   - o setor tem de ser um dos 4 departamentos ("gerenciamento" não vale);
   - o **tipo de atendimento tem de existir no novo setor** (cada setor tem os seus tipos; decisão de 04/10);
   - grava: Pendente de aceite, novo `destino`, novo `tipo`, `redirecionadaEm`; a prioridade volta a "Não definida", porque quem define é o novo setor no aceite (RN10);
-  - **justificativa obrigatória**, até 500 caracteres (vazia, só espaços ou com 501 caracteres é recusada). Motivo, decisão do dono do projeto combinada desde a 2A: cada redirecionamento reinicia o relógio de 24 h; sem justificativa, a gerência poderia redirecionar várias vezes sem ninguém saber por quê;
+  - **justificativa obrigatória**, até 500 caracteres (vazia, só espaços ou com 501 caracteres é recusada). Motivo (decisão combinada desde a 2A): cada redirecionamento reinicia o relógio de 24 h; sem justificativa, a gerência poderia redirecionar várias vezes sem ninguém saber por quê;
   - o histórico ganha um item `redirecionamento` com o setor, o tipo e a justificativa: "Redirecionada para Hidráulica (Vazamento): motivo." (RN22). O novo setor lê nos Detalhes; quem abriu vê só o resumo, sem o histórico (RN03);
   - pode escolher de novo o setor que recusou: não há regra proibindo.
 - **`marcarNaoAplicavel`** (RN19): só a partir de Em triagem (é o que a seção 4 permite). Justificativa obrigatória, até 500 caracteres.
@@ -50,7 +50,7 @@ export function prazoAposRedirecionar(redirecionadaEm) {
 ```
 (trecho simplificado; o código usa datas em milissegundos.)
 
-- *Histórico da decisão:* a primeira versão do 4C tinha um teto de 48 h desde a abertura. O dono do projeto retirou o teto (04/10), porque com ele o novo setor podia ficar com poucos minutos.
+- *Histórico da decisão:* a primeira versão do 4C tinha um teto de 48 h desde a abertura. O teto foi retirado (04/10), porque com ele o novo setor podia ficar com poucos minutos.
 - O selo "Aguardando aceite há X" / "Atrasada para aceite" e o campo **"Aceitar até"** dos Detalhes usam esse prazo.
 - O pop-up do redirecionamento já mostra até quando o novo setor terá para aceitar.
 
@@ -75,7 +75,7 @@ export function prazoAposRedirecionar(redirecionadaEm) {
    - **Por que exigir justificativa no redirecionamento?** Cada redirecionamento dá mais 24 h ao novo setor. Sem motivo registrado, daria para "esticar" o prazo redirecionando de novo, sem deixar rastro.
 2. **Por que a gerência escolhe o tipo junto com o setor?** Cada setor tem os seus tipos; sem isso, a demanda chegaria com um tipo que não existe no novo setor.
 3. **Como fica o prazo de aceite depois do redirecionamento?** Sempre 24 h, contadas do redirecionamento. A demanda que nunca foi redirecionada continua com 48 h.
-4. **Por que 24 h e não 48 h depois do redirecionamento?** A demanda já perdeu tempo na recusa e na triagem; 24 h é o mínimo justo para o novo setor e evita que ela fique parada mais tempo.
+4. **Por que 24 h e não 48 h depois do redirecionamento?** Decisão registrada no CHANGELOG (ajuste do 4C): a demanda já esperou na recusa e na triagem, e com 24 h fixas o novo setor não fica com só alguns minutos para aceitar.
 5. **Qual a diferença entre Não aplicável e Cancelada?** Não aplicável: nenhum setor tem competência. Cancelada: o pedido não deve ser atendido (duplicado, desistência…). Os dois exigem justificativa e são finais (RN19, RN20).
 6. **Dá para cancelar uma demanda em andamento?** Pela regra (seção 4), sim, e o domínio permite. Pela tela, por enquanto só em triagem (decisão de 04/10).
 7. **O que impede alguém de triar pelo DevTools?** A regra roda de novo no storage, com a demanda lida na hora de gravar; para quem não é gerência a resposta é "sem permissão". Há teste para isso.

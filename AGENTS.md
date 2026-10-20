@@ -1,6 +1,6 @@
 # AGENTS.md — contrato para qualquer agente de código neste projeto
 
-Projeto "Demanda de Aço" (PBL, Programação Web). Front-end React 19 + Vite, sem back-end; dados em JSON (semente) + `localStorage`. Entrega: **terça 06/10/2026, à noite**. Todos do grupo precisam explicar o código.
+Projeto "Demanda de Aço" (PBL, Programação Web). Front-end React 19 + Vite, sem back-end; dados em JSON (semente) + `localStorage`.
 
 ## Quando ler o quê (não leia tudo para uma pergunta simples ou ajuste trivial)
 | Situação | Leia |
@@ -17,7 +17,7 @@ Projeto "Demanda de Aço" (PBL, Programação Web). Front-end React 19 + Vite, s
 2. **Autorização.** Não faça commit, push, deploy, exclusão de dados nem mudanças fora da pasta do projeto sem pedido explícito. Aqui o `git` não está no PATH: o usuário commita pelo GitHub Desktop; entregue **mensagens de commit sugeridas**. Nunca altere o `main`.
 3. **Trabalho existente.** Preserve alterações locais e as telas dos colegas (layout e classes CSS). Sem comandos destrutivos.
 4. **Decisões.** Se faltar informação que mude comportamento, dados, segurança ou escopo, pergunte (poucas perguntas, com sugestão de padrão). O que já está decidido em `docs/` não se pergunta de novo.
-5. **Honestidade.** Nunca invente resultado de teste, auditoria, print ou ata. O que não foi executado: "não executado". Não escreva "corrigido", "testado" ou "compatível" sem evidência.
+5. **Evidências.** Não registre resultado de teste, auditoria, print ou ata que não exista. O que não foi executado: "não executado". Não escreva "corrigido", "testado" ou "compatível" sem evidência.
 6. **Aprendizado.** O usuário precisa entender: explique o porquê em linguagem simples; ao fim de cada bloco gere `docs/EXPLICACAO_BLOCO<N>.md`.
 7. **Idioma.** Português do Brasil em código comentado, commits e documentação.
 8. **Ao concluir:** informe arquivos alterados, comportamento resultante, verificações feitas e resultados, limitações e sugestões fora do escopo (modelo em `docs/VERIFICATION.md`).

@@ -62,7 +62,7 @@ return compararPorAtencao(a, b, marcoVisivel) || resto(a, b)
 Primeiro a fila de atenção (a mais antiga antes). Se as duas estão fora da fila, o comparador devolve 0 e quem decide é a ordem de antes (prioridade e data em Demandas; recentes na Visão Geral).
 
 ## 6. Como os cards levam para a lista filtrada
-- O card "Em triagem" é um **link de verdade** (`<a href="#demandas?status=em-triagem">`), não uma `div` com clique: funciona com Tab e Enter e tem o contorno de foco do app.
+- O card "Em triagem" é um link (`<a href="#demandas?status=em-triagem">`): funciona com Tab e Enter e tem o contorno de foco do app.
 - Com roteamento por hash, o filtro vai **depois do `?` dentro do próprio hash**. O `App.jsx` lê o `status` e a tela Demandas abre com o filtro preenchido.
 - A cada troca de endereço, o foco vai para o título (h1), regra que já existia no `App.jsx`.
 - Só viram link os cards de **um único status**: Pendentes de aceite, Em triagem, Concluídas/Resolvidas. "A expirar", "Vencidas" etc. misturam status e continuam só informativos.
@@ -85,7 +85,7 @@ Primeiro a fila de atenção (a mais antiga antes). Se as duas estão fora da fi
 ## 10. Perguntas que o professor pode fazer
 1. **Por que essas duas situações vêm primeiro?** Nelas a demanda está parada esperando alguém; nas outras alguém já está trabalhando.
 2. **Como o sistema sabe há quanto tempo está parada?** Pelo histórico: o último item de criação/redirecionamento (pendente) ou de recusa (triagem).
-3. **O que acontece quando passa do prazo?** Só o selo muda para "Atrasada…". Os requisitos não preveem bloqueio, e não inventamos regra.
+3. **O que acontece quando passa do prazo?** Só o selo muda para "Atrasada…". Os requisitos não preveem bloqueio.
 4. **Por que o setor não vê "Em triagem"?** Porque em triagem a demanda é da gerência (decisão de 04/10); o setor que recusou perde o acesso.
 5. **Por que quem abriu não vê o tempo parado?** É operação interna (RN03): ele vê só status e setor atual.
 6. **Como o card vira filtro?** É um link para `#demandas?status=…`; o `App.jsx` lê o status do endereço e entrega à tela.

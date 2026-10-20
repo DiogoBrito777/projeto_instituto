@@ -1,6 +1,6 @@
 # Contexto e preferências (leia antes de começar)
 
-> Este arquivo existe porque o trabalho começou em outra conversa. Não há como transferir o histórico, então tudo o que importa está aqui e em `docs/`.
+> Este arquivo existe porque o trabalho começou em outra conversa. Não há como transferir o histórico, então o contexto necessário está aqui e em `docs/`.
 
 ## Projeto e forma de comunicação
 - Disciplina Programação Web (UnDF, Brasília), PBL, Problema 1: "O formulário das seis caixas de entrada". Grupo de 7 pessoas.
@@ -10,10 +10,10 @@
 - Prefira passos pequenos e concretos.
 
 ## Prazo
-- Entrega e apresentação: **terça, 06/10/2026, à noite, na universidade**.
+- Entrega e apresentação: data a definir, na universidade.
 - Tempo de desenvolvimento: **sábado 03/10 e parte do domingo 04/10**.
-- O professor disse: não precisa entregar tudo; o que não for entregue deve ser **justificável**; todos precisam explicar cada parte do código; IA é permitida se souberem explicar.
-- Prioridade: Bloco 1 → 2 → 3 → 4 de `docs/PROMPT_BLOCOS.md`. O que não couber vira "adiado" em `docs/DOCUMENTACAO.md` (seção 18), com justificativa honesta.
+- O professor disse: não precisa entregar tudo; o que não for entregue deve ser **justificado**; IA é permitida.
+- Prioridade: Bloco 1 → 2 → 3 → 4 de `docs/PROMPT_BLOCOS.md`. O que não couber vira "adiado" em `docs/DOCUMENTACAO.md` (seção 18), com justificativa.
 - Pesos da nota: requisitos/rastreabilidade 25%, front-end responsivo e acessível 30%, processo de engenharia 20%, testes e evidências 15%, demonstração/colaboração/reflexão 10%.
 
 ## Como trabalhar neste computador
@@ -28,24 +28,24 @@
 - O **commit e o push** são feitos pelo usuário no GitHub Desktop, um passo por vez; a descrição do PR segue `.github/pull_request_template.md`.
 - Mudança de código só por prompt ao Claude Code.
 
-## Honestidade (regra de ouro)
+## Evidências
 - **Nunca invente evidências**: resultado de teste, auditoria, print, ata "como se tivessem ocorrido". O que não foi executado: "não executado".
 - Evidências reais de auditoria automática:
   - `docs/evidencias/antes/` (axe-core 4.13.0 no `main` de 03/10, gerada fora desta máquina);
   - `docs/evidencias/depois/RELATORIO_AXE_DEPOIS.md` (axe-core 4.13.0 no Bloco 3, gerada **pelo assistente na nuvem, não pela equipe**; 0 violações nas 26 combinações).
-  - **Pendentes:** a nova rodada do axe pela equipe e o Lighthouse. Não os invente; o roteiro está em `docs/TESTES_PENDENTES.md`.
+  - **Pendentes:** a nova rodada do axe pela equipe e o Lighthouse nas demais telas (feito só em Visão Geral e Nova Demanda, desktop). Roteiro em `docs/TESTES_PENDENTES.md`.
 
 ## Decisões (resumo; detalhes em `docs/REQUISITOS_REGRAS_DE_NEGOCIO.md`)
 - Logins: `admin` (gerenciamento) e `user01`–`user04` (TI, Hidráulica, Administrativo, Elétrica), senha igual ao usuário.
 - **Departamentos são independentes**: só o setor executor e a gerência veem a operação interna. Quem abriu vê só status e setor atual.
 - Setor **nunca** envia direto a outro setor. Só a gerência redireciona, marca Não aplicável ou cancela (com justificativa). Gerência **não define prioridade**.
-- Aceite pelo setor com prioridade obrigatória e travada (Urgente 24 h, Alta 48 h, Média 72 h, Baixa 7 dias); 72 h para aceitar; novo prazo só com justificativa registrada; concluídas/canceladas/não aplicáveis são imutáveis.
+- Aceite pelo setor com prioridade obrigatória e travada (Urgente 24 h, Alta 48 h, Média 72 h, Baixa 7 dias); 48 h para aceitar (24 h após redirecionamento; proposta); novo prazo só com justificativa registrada; concluídas/canceladas/não aplicáveis são imutáveis.
 - Quem abre a demanda **não escolhe** prioridade. Moderação de urgência e demanda vinculada foram **descartadas**.
 - Chat, reabrir com citação, "visualizada" e responsável individual: **adiados** (não implementar).
 - Limites padrão: título 60, descrição 500 caracteres (a confirmar com o grupo).
 - As regras de negócio de 03/10 **ainda não foram votadas em ata** (rascunho em `docs/ATAS_RASCUNHO_27-09_e_02-10.md`).
 - Layouts das telas existentes (Visão Geral, Detalhes, Atualizar etc.) são mantidos; só são ligados aos dados.
-- Login: responsável na Ata 29/09 era o Pedro; o Bloco 1 cobre o login — alinhar com ele.
+- Login: o Bloco 1 cobre o login; alinhar com o responsável definido na Ata 29/09.
 
 ## Primeiro passo sugerido
 Leia `CLAUDE.md`, `AGENTS.md`, este arquivo, `docs/PROMPT_BLOCOS.md` e `docs/REQUISITOS_REGRAS_DE_NEGOCIO.md`. Depois **mostre o plano do bloco** e espere a aprovação antes de editar.

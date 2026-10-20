@@ -5,7 +5,7 @@ Capturas de tela dos arquivos do Figma usados como base do projeto Demanda de A�
 - **Figma Make (layout base):** https://www.figma.com/make/zNWLi7mmp60RYxb40Yl8wP/Desktop-Web-Interface-Design (arquivos `16` a `22`)
 - **Figma Design (interface):** https://www.figma.com/design/Xc0uXdnZjy6oy5cc1datYf/frontendz%C3%A3o-do-prof (arquivos `00` a `15`: login, painel geral, demandas, nova demanda, detalhes, atualizar demanda e departamentos, em desktop e mobile, mais o diagrama de referência dos fluxos)
 
-O layout base foi criado no Figma Make e, a partir dele, o grupo desenhou as telas no Figma Design. A estrutura do código partiu dessas telas (ver `docs/ATAS_RASCUNHO_27-09_e_02-10.md`, itens de 22/09 e 25/09).
+O layout base foi criado no Figma Make e, a partir dele, o grupo desenhou as telas no Figma Design. A estrutura do código partiu dessas telas (ver `docs/ATAS_RASCUNHO_27-09_e_02-10.md`, linha do tempo no anexo, 22/09 e 25/09).
 
 ## Como chegamos aqui
 

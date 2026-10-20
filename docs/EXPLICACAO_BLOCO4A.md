@@ -70,4 +70,4 @@ A regra roda de novo **na hora de gravar**, com a demanda lida naquele momento. 
 5. **Para onde vai a demanda recusada?** Para Em triagem, e passa a ser da gerência, que vai redirecionar ou marcar "Não aplicável" (parte B). O setor que recusou deixa de vê-la; quem abriu vê "Setor atual: Gerenciamento". O destino continua gravado, para auditoria.
 6. **A gerência pode aceitar no lugar do setor?** Não. A função `aceitarDemanda` responde "sem permissão" para a gerência, e um teste prova isso.
 7. **Por que o pop-up devolve o foco ao botão?** Quem usa teclado ou leitor de tela precisa continuar de onde estava; sem isso, o foco iria para o início da página (WCAG 2.4.3).
-8. **Por que a regra roda duas vezes (tela e storage)?** A tela dá retorno rápido ao usuário; a regra no storage garante que nada inválido seja gravado, mesmo se a tela estiver desatualizada.
+8. **Por que a regra roda duas vezes (tela e storage)?** A tela dá retorno rápido ao usuário; a regra no storage impede gravar o que ela recusa, mesmo se a tela estiver desatualizada.

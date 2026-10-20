@@ -2,7 +2,7 @@
 <!-- 2-3 linhas -->
 
 ## Por que (requisito / issue)
-Fecha #__ · RF/RN/CA: __
+Fecha #__ (ou: Sem issue) · RF/RN/CA: __
 
 ## Arquivos principais
 -
