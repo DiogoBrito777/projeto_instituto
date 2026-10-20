@@ -1,6 +1,6 @@
 # Regras de negócio, perfis e acesso — Demanda de Aço
 
-> **Versão final do kit — 03/10/2026.** Origem: conversa de alinhamento de 03/10 + Atas 08/09 e 15/09. **Nenhum item aqui foi votado em ata**: são propostas a registrar. Nada foi testado.
+> **Versão final do kit — 03/10/2026.** Origem: conversa de alinhamento de 03/10 + Atas 08/09 e 15/09. **Nenhum item aqui foi votado em ata**: são propostas a registrar. Situação dos testes: seção 9 e `docs/TESTES_PENDENTES.md`.
 > Cada requisito traz a **faixa**: **N** = núcleo (entregar), **R** = regras (entregar se houver tempo), **F** = futuro (especificado, não será implementado agora; ver seção 12).
 
 ## 1. Perfis e logins de teste (senha = usuário)
@@ -85,7 +85,7 @@ Status (7): **Pendente de aceite · Em andamento · Aguardando (processamento in
 | Pendente, Andamento, Aguardando, Triagem | Cancelada | gerência | justificativa |
 
 ## 5. Prioridades
-Quatro níveis: Urgente, Alta, Média, Baixa (o Git hoje tem três: acrescentar **Urgente** em dados, ordenação e estilos). Antes do aceite: "Não definida". Ordenação da lista (Ata 15/09): prioridade → mais recente → nome; **Pendentes de aceite** aparecem em seção própria, no topo.
+Quatro níveis: Urgente, Alta, Média, Baixa (**Urgente** foi acrescentado no Bloco 2A, em dados, ordenação e estilos). Antes do aceite: "Não definida". Ordenação da lista (Ata 15/09): prioridade → mais recente → nome; **Pendentes de aceite** aparecem em seção própria, no topo.
 
 ## 6. Dashboard (Visão Geral) por perfil
 - **Todos os perfis** têm Visão Geral, filtrada pelo perfil.
@@ -131,10 +131,10 @@ Quatro níveis: Urgente, Alta, Média, Baixa (o Git hoje tem três: acrescentar 
 | CT-R02 | Login errado e certo (5 usuários) | Erro acessível / entra | ☐ (parcial: login certo com os 5 usuários passou em `docs/evidencias/depois/TESTE_MANUAL_BLOCO1.md`; login errado sem registro) |
 | CT-R03 | `user01` lista Recebidas e Solicitadas | Só o que lhe cabe | ☒ passou — `docs/evidencias/depois/TESTE_MANUAL_BLOCO2A.md` (linha "Demandas"). **Evidência fraca:** a linha não diz que foi com o `user01` nem detalha as duas abas |
 | CT-R04 | URL de demanda alheia | CA-R01 | ☒ passou — `docs/evidencias/depois/TESTE_MANUAL_BLOCO2A.md` (linha "Detalhes") |
-| CT-R05 | Aceitar sem e com prioridade | CA-R03 | ☐ (conferido só pelo assistente, `docs/CHANGELOG.md` 4A; teste da equipe pendente) |
+| CT-R05 | Aceitar sem e com prioridade | CA-R03 | ☐ (parcial: aceite passou no reteste 8, `docs/TESTES_PENDENTES.md` 4A.1; recusa sem registro) |
 | CT-R06 | Recusar e redirecionar | CA-R04, CA-R05 | ☐ (conferido só pelo assistente, `docs/CHANGELOG.md` 4A e 4C; teste da equipe pendente) |
 | CT-R07 | Visão de quem abriu | CA-R06 | ☒ passou — `docs/evidencias/depois/TESTE_MANUAL_BLOCO2A.md` (linha "Detalhes") |
-| CT-R08 | Demanda final | CA-R07 | ☐ (conferido só pelo assistente, `docs/CHANGELOG.md` 4C) |
+| CT-R08 | Demanda final | CA-R07 | ☒ passou — `docs/TESTES_PENDENTES.md`, 2.3 (reteste 12 e Bloco A) |
 | CT-R09 | Novo prazo | CA-R08 | ☐ (sem tela ainda) |
 | CT-R10 | Prazos por perfil | CA-R09 | ☐ (sem registro) |
 | CT-R11 | Sair + Voltar | CA-R10 | ☐ (parcial: "Entrar e sair" passou em `docs/evidencias/depois/TESTE_MANUAL_BLOCO1.md`, e o reteste 10 de login/sessão passou em 04/10, sem print do passo 1. Nenhum dos dois descreve o **Voltar depois do Sair**. Coerente com `TESTES_PENDENTES.md`, item 1.5) |
@@ -142,7 +142,7 @@ Quatro níveis: Urgente, Alta, Média, Baixa (o Git hoje tem três: acrescentar 
 | CT-R13 | Teclado: login, aceite, recusa, pop-ups | Tudo operável | ☐ (parcial: Bloco 1 "parcial", 2A "não executado"; no Bloco 3 o autor conferiu Tab, Enter e Shift+Tab no Edge, segundo `docs/evidencias/depois/RELATORIO_AXE_DEPOIS.md`; aceite, recusa e pop-ups sem teste da equipe) |
 | CT-R14 | Leitor de tela: erros e resultados | Anunciado | ☐ (não executado) |
 
-`☐` = a equipe preenche com evidência real. `☒` = feito, com a fonte ao lado. Itens conferidos só pelo assistente no navegador embutido continuam `☐`, porque o teste da equipe ainda não foi feito. Pendências e roteiro em `docs/TESTES_PENDENTES.md`. Funções puras (permissões, transições, prazos) também têm testes automáticos (`npm test`).
+`☐` = a equipe preenche com evidência. `☒` = feito, com a fonte ao lado. Itens conferidos só pelo assistente no navegador embutido continuam `☐`, porque o teste da equipe ainda não foi feito. Pendências e roteiro em `docs/TESTES_PENDENTES.md`. Funções puras (permissões, transições, prazos) também têm testes automáticos (`npm test`).
 
 ## 10. Dados de exemplo
 - Remapear as origens legadas do mock (Financeiro, Compras, Facilities…) para os 4 departamentos.
@@ -163,7 +163,7 @@ Quatro níveis: Urgente, Alta, Média, Baixa (o Git hoje tem três: acrescentar 
 | Carregando, vazio, sucesso, erro | Blocos 1 e 2 |
 
 ## 12. Fora desta entrega (justificativa para o professor)
-Especificado e **não implementado** (se for o caso ao final, marcar aqui o que ficou): chat, reabrir com citação, "visualizada", responsável individual. Motivo: prazo de 3 dias úteis e prioridade ao fluxo principal e à acessibilidade; as regras estão documentadas para a próxima etapa.
+Especificado e **não implementado** (lista final: `docs/DOCUMENTACAO.md`, seção 18): chat, reabrir com citação, "visualizada", responsável individual. Motivo: prazo de 3 dias e prioridade ao fluxo principal e à acessibilidade; as regras estão documentadas para a próxima etapa.
 
 ## 13. Limitações
 Perfis em `sessionStorage` e dados em `localStorage` são editáveis pelo DevTools: **simulação, não segurança**. Antes do back-end: autenticação e autorização no servidor, auditoria do histórico, concorrência, notificações reais.

@@ -272,7 +272,7 @@ Uma entrada por bloco/PR (formato em `docs/CONVENCOES.md`).
     - cancelamento pela tela fora de triagem (a tela não oferece).
 
 ### 2026-10-04 · Bloco 4C — ajuste: prazo de aceite após redirecionar sem teto · feat/bloco4c-acoes-gerencia
-- **Decisão do dono do projeto:** depois do redirecionamento, o novo setor tem **sempre 24 h**, contadas do redirecionamento. O teto de 48 h desde a abertura e a regra das "24 h cheias quando o teto venceu" deixaram de existir. Com isso some o caso-limite de sobrar só alguns minutos. A demanda nunca redirecionada continua com 48 h.
+- **Decisão:** depois do redirecionamento, o novo setor tem **sempre 24 h**, contadas do redirecionamento. O teto de 48 h desde a abertura e a regra das "24 h cheias quando o teto venceu" deixaram de existir. Com isso some o caso-limite de sobrar só alguns minutos. A demanda nunca redirecionada continua com 48 h.
 - **Código:**
   - `src/domain/atencao.js`: `prazoAposRedirecionar(redirecionadaEm)` agora é só redirecionamento + 24 h (recebe um parâmetro a menos), e `prazoDeAceite` a usa. Sem código morto.
   - `src/pages/TriagemDemanda.jsx`: o pop-up chama a função nova.
@@ -294,7 +294,7 @@ Uma entrada por bloco/PR (formato em `docs/CONVENCOES.md`).
   - **Não executado:** Edge, leitor de tela, celular real, axe.
 
 ### 2026-10-04 · Bloco 4C — ajuste: justificativa obrigatória ao redirecionar · feat/bloco4c-acoes-gerencia
-- **Decisão do dono do projeto, combinada desde a 2A:** o redirecionamento exige justificativa. Cada redirecionamento reinicia o relógio de 24 h; sem motivo registrado, a gerência poderia redirecionar várias vezes sem ninguém saber por quê. *(Isso resolve a divergência apontada no 4C entre a entrada da 2A e a primeira versão do 4C.)*
+- **Decisão combinada desde a 2A:** o redirecionamento exige justificativa. Cada redirecionamento reinicia o relógio de 24 h; sem motivo registrado, a gerência poderia redirecionar várias vezes sem ninguém saber por quê. *(Isso resolve a divergência apontada no 4C entre a entrada da 2A e a primeira versão do 4C.)*
 - **Domínio** — `src/domain/acoes.js`:
   - `redirecionarDemanda(demanda, { setor, tipo, justificativa }, usuario, contexto)` exige justificativa com a mesma validação de Não aplicável e Cancelar (`LIMITE_JUSTIFICATIVA = LIMITE_MOTIVO = 500`; vazia ou só espaços → `justificativa-ausente`; acima de 500 → `justificativa-longa`). A ordem das conferências não mudou: estado final, perfil, transição, setor, tipo e por último a justificativa.
   - O histórico `redirecionamento` grava `setor`, `tipoAtendimento` e `justificativa`, com o texto "Redirecionada para <setor> (<tipo>): <justificativa>." (sem ponto duplicado se a justificativa já termina com pontuação).
@@ -396,7 +396,7 @@ Origem: bateria de testes manuais do autor (Bruno Diogo). Cada item foi feito se
 - Os prints ficam só em `docs/evidencias/antes/` e `docs/evidencias/depois/`.
 
 ### 2026-10-04 · Registro final de testes, falhas conhecidas e material de estudo · fix/ajustes-teste-manual
-- **Só documentação**; nenhum arquivo de `src/` mudou. Decisão do autor: nenhuma correção de código antes da apresentação (06/10).
+- **Só documentação**; nenhum arquivo de `src/` mudou. Decisão: nenhuma correção de código antes da apresentação (06/10).
 - **Rodada final do autor (04/10/2026), manual:**
   - passaram: retestes 1 a 12 do PR #9 (o passo 1 do reteste 10 está sem print), Bloco A, Bloco B (por relato, sem print de cada passo), Bloco C partes 1 e 2 (com prints);
   - Bloco D, parte 1 (celular Android real): as telas abrem, mas **o envio da Nova Demanda falhou** (F1);
@@ -429,5 +429,13 @@ Origem: bateria de testes manuais do autor (Bruno Diogo). Cada item foi feito se
 - **Só documentação**; nenhum arquivo de `src/` mudou.
 - Arquivos: removidos `docs/estudo/` (21 arquivos) e `docs/GUIA_DE_ESTUDO.md`; ajustados `README.md`, `docs/LEIAME.md` e este CHANGELOG.
 - O quê: o material de estudo deixa o repositório e passa a ser entregue ao grupo à parte. Ele continua no histórico do Git (commits anteriores a este).
-- Por quê: decisão do autor; o material é de uso interno do grupo para a apresentação.
+- Por quê: decisão; o material é de uso interno do grupo para a apresentação.
 - Verificação: busca por referências restantes (`estudo/`, `GUIA_DE_ESTUDO`, `92-FALHAS`, `PERGUNTAS-RAPIDAS`); só restam as entradas antigas deste CHANGELOG, mantidas como histórico. `src/` sem alteração.
+
+### 2026-10-20 · Documentação: revisão geral · docs/revisao
+- **Só documentação**; nenhum arquivo de `src/` mudou, nenhum arquivo foi movido e o `.gitignore` não mudou.
+- Arquivos: `README.md`, `AGENTS.md`, `.github/pull_request_template.md`, `docs/` (LEIAME, DOCUMENTACAO, REQUISITOS_REGRAS_DE_NEGOCIO, FLUXOS, TESTES_PENDENTES, ERROR_HANDLING, MENSAGENS_VALIDACAO, CONVENCOES, VERIFICATION, CONTEXTO_E_PREFERENCIAS, ATAS_RASCUNHO, EXPLICACAO_BLOCO1, 2B, 3, 4A, 4B e 4C, este CHANGELOG), `docs/evidencias/depois/NAO_EXECUTADO_AINDA.md`, `docs/evidencias/depois/TESTE_MANUAL_BLOCO2A.md`, `docs/wireframes/LEIAME.md`.
+- O quê: retira frases defensivas e afirmações sem evidência; corrige o que divergia do código (prazos, offline, rascunho, `cobrancas[]`, usuário `ti`); alinha os resultados de teste da DOCUMENTACAO e dos REQUISITOS com o TESTES_PENDENTES; acrescenta RF12/US13 (adiado) e RNF08 (não executado); troca nomes por "o autor" fora dos registros históricos; acrescenta um glossário ao LEIAME. Neste CHANGELOG, só "Decisão do dono do projeto" virou "Decisão" nas duas entradas do Bloco 4C.
+- Edição fora do Code: três linhas foram alteradas no chat com o Claude, com autorização, e conferidas pelo Code (`DOCUMENTACAO.md:7`, Lighthouse executado em Visão Geral e Nova Demanda; `DOCUMENTACAO.md:435` e `TESTES_PENDENTES.md:20`, "Decisão do autor:" → "Decisão:"). Na mesma lógica, "decisão do autor" virou "decisão" em `DOCUMENTACAO.md:292`, `NAO_EXECUTADO_AINDA.md:3` e nas entradas de 04/10 e 06/10 deste CHANGELOG.
+- Por quê: o repositório é material de entrega e precisa bater com o código e com as evidências.
+- Verificação: `npm test` 12 arquivos / 245 testes passaram · `npm run lint` código de saída 0, sem avisos · `npm run build` não executado (sem mudança de código). Relatório completo, classificação dos arquivos e pendências em `docs/VERIFICATION.md`, seção 7.

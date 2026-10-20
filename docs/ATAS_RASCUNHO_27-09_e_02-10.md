@@ -1,6 +1,6 @@
 # Rascunhos de ata — 27/09/2026 e 02/10/2026
 
-> **Registro retroativo.** Estes rascunhos foram elaborados em 02/10/2026 **a partir do chat do grupo**; não existiam atas dessas datas. Devem ser **revisados e corrigidos por quem participou** antes de entrar no repositório. Campos `☐` não constam nas fontes e precisam ser confirmados. Ao publicar, mantenha a observação de que o registro é retroativo: isso é honesto e continua valendo como evidência.
+> **Registro retroativo.** Estes rascunhos foram elaborados em 02/10/2026 **a partir do chat do grupo**; não existiam atas dessas datas. Os campos `☐` não constam nas fontes e precisam ser confirmados por quem participou.
 
 ---
 # Ata de Reunião — 27/09/2026 (domingo)
@@ -108,4 +108,4 @@ Sem camada de dados; Detalhe e Atualizar fixos na DM-2048; sem login/perfis; "Sa
 15. **Depois do redirecionamento pela gerência, o novo setor tem 24h para aceitar; antes eram 48h** — ☐ a confirmar. As 24 h contam do redirecionamento. A gerência escolhe o novo setor e o tipo de atendimento dele, **com justificativa obrigatória**: cada redirecionamento reinicia o relógio de 24 h, e sem motivo registrado a gerência poderia redirecionar várias vezes sem ninguém saber por quê (combinado desde a 2A). A demanda volta a Pendente de aceite e o histórico registra setor, tipo e justificativa. Já implementado no Bloco 4C, antes da votação.
 
 ## Pendências
-☐ Quem revisa cada PR · ☐ Responsável pelo login (Ata 29/09: Pedro, "se der tempo") · ☐ Limites de caracteres · ☐ Horário da apresentação (terça, 06/10, à noite).
+☐ Quem revisa cada PR · ☐ Responsável pelo login (Ata 29/09: Pedro, "se der tempo") · ☐ Limites de caracteres · ☐ Data e horário da apresentação.

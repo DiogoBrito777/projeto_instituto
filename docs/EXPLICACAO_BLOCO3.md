@@ -3,7 +3,7 @@
 > Teste só com o teclado (Tab, Shift+Tab, Enter, Esc) e, se puder, com o Narrador do Windows (Ctrl+Win+Enter) ou o NVDA.
 
 ## 1. A ideia em uma frase
-O app passou a funcionar para quem **não usa mouse**, quem **usa leitor de tela** e quem **enxerga pouco**. A Fase 1 arrumou a **estrutura** (o que o leitor de tela entende); a Fase 2 arrumou o **visual** (foco, contraste, tamanho de letra e quebra de texto), mudando o mínimo no CSS dos colegas.
+O Bloco 3 corrigiu a estrutura e o visual para quem **não usa mouse**, quem **usa leitor de tela** e quem **enxerga pouco** (testes manuais em `docs/TESTES_PENDENTES.md`). A Fase 1 arrumou a **estrutura** (o que o leitor de tela entende); a Fase 2 arrumou o **visual** (foco, contraste, tamanho de letra e quebra de texto), mudando o mínimo no CSS dos colegas.
 
 ## 2. Fase 1 — estrutura (sem mudar o visual)
 | O quê | Por quê (WCAG) | Onde |
@@ -18,11 +18,11 @@ O app passou a funcionar para quem **não usa mouse**, quem **usa leitor de tela
 
 ## 3. Bugs achados no teste do Edge e a causa
 1. **O skip link aparecia por cima da marca "Demanda de aço".** Os dois ficavam no mesmo canto (`top: 8px; left: 8px`). Agora o skip link fica no topo, centralizado (no celular, à direita).
-2. **O Enter no skip link "não fazia nada".** O foco ia para o `<main>`, e uma regra minha escondia o contorno. Pior: o skip link sumia, a marca aparecia no lugar e parecia focada. Agora o foco vai para o **título da tela**, com contorno verde visível.
+2. **O Enter no skip link "não fazia nada".** O foco ia para o `<main>`, e uma regra minha escondia o contorno. Além disso, o skip link sumia, a marca aparecia no lugar e parecia focada. Agora o foco vai para o **título da tela**, com contorno verde visível.
 3. **Com Shift+Tab, Enter na marca ia para Demandas.** O link apontava para `#inicio`, uma rota que não existe e caía em Demandas. Agora aponta para `#visao-geral`.
 4. **A lupa do topo de Demandas** só levava o foco à busca, que já estava visível logo abaixo. Ela foi removida, e o ícone foi para **dentro** da barra de busca, como nas outras telas.
 
-**Lição:** o teste automático e o navegador embutido não pegaram 1 e 2; o **teste humano com teclado** pegou. Por isso o enunciado pede teste manual.
+**Observação:** os itens 1 e 2 não foram detectados pelo teste automático nem pelo navegador embutido; apareceram no teste manual com teclado.
 
 ## 4. Fase 2 — visual
 - **Foco visível (2.4.7).** Uma regra só, `:focus-visible { outline: 2px solid #1b7766 }`, vale para tudo que recebe foco. `:focus-visible` aparece quando se usa o **teclado**; no clique com mouse o visual dos colegas continua igual. As 11 linhas `outline: none` dos colegas foram removidas, porque escondiam o foco.
@@ -31,7 +31,7 @@ O app passou a funcionar para quem **não usa mouse**, quem **usa leitor de tela
   - Um script calculou cada cor e trocou pela **mais próxima na mesma cor** que passa (ex.: cinza `#87938f` 3,18 → `#6b7773` 4,65). A paleta continua a mesma, só um pouco mais escura.
   - Os cards de Demandas ganharam borda visível.
 - **Quebra de palavra.** `overflow-wrap: anywhere` faz um texto sem espaço ("fsdfsadff…") quebrar dentro do card em vez de estourar a largura e criar rolagem lateral.
-- **Alvos de toque (2.5.8).** Tudo que se clica tem pelo menos 24 × 24 px (Sair e select de prioridade).
+- **Alvos de toque (2.5.8).** Os alvos corrigidos (Sair e select de prioridade) têm pelo menos 24 × 24 px; o axe "depois" não apontou alvo pequeno.
 - **Menos movimento (2.3.3).** Quem configurou "reduzir animações" no sistema não vê transições.
 - **Fonte mínima de 14 px (1.4.4).**
   - Fica num **arquivo separado**, `src/fonte-minima.css`, carregado por último no `main.jsx`.

@@ -1,4 +1,4 @@
-# Catálogo de mensagens e instruções (proposta — responde ao "determinar?" de 02/10)
+# Catálogo de mensagens e instruções (proposta, a aprovar pelo grupo; pedido da reunião de 02/10)
 
 Princípios: dizer **o que fazer**, não só "inválido"; texto junto ao campo (`aria-describedby`); foco no primeiro erro; resumo anunciado por `aria-live`; instrução do campo visível **antes** do erro. Revisar e aprovar em grupo.
 
@@ -89,6 +89,6 @@ Usam os textos já aprovados da seção abaixo ("Redirecionar sem escolher setor
 | Lista vazia | "Nenhuma demanda encontrada. Tente outra busca ou outro departamento." |
 | Envio com sucesso | "Demanda DM-XXXX enviada com sucesso." |
 | Envio com erro | "Não foi possível enviar. Seus dados continuam salvos. Tente novamente." |
-| Offline | "Você está sem conexão. A demanda foi salva neste aparelho e será enviada quando a conexão voltar." |
-| Reconectado | "Conexão restabelecida. Enviando demandas pendentes…" |
+| Offline (não implementado) | "Você está sem conexão. A demanda foi salva neste aparelho e será enviada quando a conexão voltar." |
+| Reconectado (não implementado) | "Conexão restabelecida. Enviando demandas pendentes…" |
 | Sem permissão | "Demanda não encontrada ou sem permissão." |

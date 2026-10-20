@@ -5,7 +5,7 @@ Projeto do PBL de Programação Web (UnDF), **Problema 1: o formulário das seis
 Aplicação web responsiva para **abrir, acompanhar e decidir demandas entre setores** (TI, Hidráulica, Administrativo, Elétrica e Gerenciamento), feita com React e Vite. Nesta etapa o sistema funciona **somente no front-end** e usa dados simulados em arquivos JSON; não é necessário iniciar um back-end.
 
 - **Versão entregue:** tag `v1.0-pbl`, na branch `main`.
-- **Experimente online (sem instalar nada):** https://projeto-instituto.vercel.app (funciona no computador e no celular).
+- **Experimente online (sem instalar nada):** https://projeto-instituto.vercel.app
 - **Wireframes e protótipo (Figma):**
   - Interface (Figma Design): https://www.figma.com/design/Xc0uXdnZjy6oy5cc1datYf/frontendz%C3%A3o-do-prof?node-id=38-53
   - Layout base (Figma Make): https://www.figma.com/make/zNWLi7mmp60RYxb40Yl8wP/Desktop-Web-Interface-Design
@@ -99,7 +99,7 @@ Servem só para a apresentação. Vão na parte de busca do endereço, **antes d
 
 ## Falhas e limitações conhecidas
 
-Estão registradas, e não escondidas, em `docs/DOCUMENTACAO.md` (seção 23). As principais: sem aviso de falta de conexão, o formulário se perde ao recarregar e o envio pode travar em celular quando o app é aberto por `http://IP` da rede (pela Vercel, em HTTPS, funciona).
+Falhas e limitações conhecidas estão em `docs/DOCUMENTACAO.md` (seção 23). As principais: sem aviso de falta de conexão, o formulário se perde ao recarregar e o envio pode travar em celular quando o app é aberto por `http://IP` da rede.
 
 ## Documentação
 

@@ -1,12 +1,12 @@
 # Demanda de Aço — Documentação do Produto (PBL Problema 1)
 
-> **Documento vivo — kit final de 03/10/2026.** Base analisada: repositório do GitHub (`main`) com as telas Visão Geral, Detalhes e Atualizar (React 19 + Vite, 6 rotas por hash). Diagnóstico da seção 7 vem da **leitura do código**; `npm run lint` e `npm run build` passam. *Quando o kit foi escrito (03/10)*, o app não tinha sido aberto no navegador e nenhuma auditoria ou teste manual tinha sido feito. **Atualização (04/10):**
+> **Documento vivo — versão inicial de 03/10/2026.** Base analisada: repositório do GitHub (`main`) com as telas Visão Geral, Detalhes e Atualizar (React 19 + Vite, 6 rotas por hash). Diagnóstico da seção 7 vem da **leitura do código**; `npm run lint` e `npm run build` passam. *Quando esta versão foi escrita (03/10)*, o app não tinha sido aberto no navegador e nenhuma auditoria ou teste manual tinha sido feito. **Atualização (04/10):**
 > - o app passou a ser aberto e conferido no navegador a cada bloco (registros em `docs/CHANGELOG.md`);
 > - há auditoria axe "antes" e "depois" (seção 19);
-> - há testes manuais feitos pelo autor (Bruno Diogo) nos Blocos 1, 2A e 2B (`docs/evidencias/depois/` e CHANGELOG);
-> - **o Lighthouse ainda não foi executado**;
+> - há testes manuais feitos pelo autor nos Blocos 1, 2A e 2B (`docs/evidencias/depois/` e CHANGELOG);
+> - **o Lighthouse foi executado em Visão Geral e Nova Demanda (`admin`, desktop); nas demais telas e no mobile não foi executado (seção 19)**;
 > - o que falta testar está em `docs/TESTES_PENDENTES.md`.
-> Campos `☐` são evidências que a equipe precisa gerar. Nada aqui foi inventado.
+> Os campos `☐` são evidências que a equipe ainda precisa gerar.
 > Itens marcados **[PROPOSTA]** vieram da conversa de 03/10 e precisam ser votados e registrados em ata.
 > Fontes: enunciado, Atas 08/09, 15/09, 22/09 e 29/09, documento técnico de 15/09, chat do grupo (até 02/10), código do Git de 03/10 e `docs/REQUISITOS_REGRAS_DE_NEGOCIO.md`.
 
@@ -107,7 +107,7 @@ Critérios de US14–US16 e regras de negócio: `docs/REQUISITOS_REGRAS_DE_NEGOC
 ## 6. Matriz de rastreabilidade
 ✅ atende · 🟡 parcial · ❌ não atende.
 - **"Em 03/10":** status por **leitura do código** do Git de 03/10, antes das correções (diagnóstico da seção 7). Mantido como histórico.
-- **"Em 04/10":** status do código atual (branch `fix/ajustes-teste-manual`), com a evidência que existe.
+- **"Em 04/10":** status do código da `main` em 04/10, com a evidência que existe.
 - "Teste da equipe pendente" quer dizer que só há testes automáticos e/ou conferência do assistente; o roteiro está em `docs/TESTES_PENDENTES.md`.
 
 | Necessidade (fonte) | Req. | História | Tela / componente | Teste | Em 03/10 | Em 04/10 |
@@ -127,7 +127,9 @@ Critérios de US14–US16 e regras de negócio: `docs/REQUISITOS_REGRAS_DE_NEGOC
 | Perfis e visibilidade (03/10) | RF13 | US17 | `permissoes.js` | TC15 | ❌ | ✅ funções puras com testes automáticos; CT-R03, CT-R04 e CT-R07 em `TESTE_MANUAL_BLOCO2A.md` |
 | Aceite/triagem/encerramento (03/10) | RF14 | US14, US15 | Detalhes, Atualizar, Triagem | TC16 | ❌ | ✅ aceite com prioridade, recusa, redirecionar (com justificativa), Não aplicável, Cancelar, concluir; testes automáticos e conferência do assistente; teste da equipe pendente |
 | Prazos e cobrança (03/10) | RF15 | US16 | Detalhe/Visão Geral | TC17 | ❌ | 🟡 prazos por prioridade, selos (a expirar, vencida, atrasada para aceite/triagem) ✅; **novo prazo com justificativa e cobrança no histórico sem tela** (adiados, seção 18) |
-| Estados (enunciado) | RNF06 | US03, US05 | todas | TC14 | 🟡 só lista vazia | ✅ carregando, vazio, sucesso e erro (dados corrompidos e `?falha=1`) |
+| Estados (enunciado) | RNF06 | US03, US05 | todas | TC14 | 🟡 só lista vazia | ✅ carregando, vazio, sucesso e erro (dados corrompidos e `?falha=1`); dados corrompidos: só teste automático (`storage.test.js`), teste manual não executado (`TESTES_PENDENTES.md`, 1.1) |
+| Notificação ao solicitante e ao departamento (Ata 08/09, 15/09) | RF12 | US13 | — | — | ❌ | ❌ não implementado (seção 18). O app só mostra avisos na própria tela: pop-up de confirmação ao enviar a demanda e aviso "Precisa de atenção" na Visão Geral; não há e-mail, nem simulado |
+| Desempenho com 100 demandas (equipe) | RNF08 | — | listas | — | — | ☐ não executado: a medição nunca foi feita |
 
 ## 7. Diagnóstico do estado atual (Git de 03/10)
 **Pontos positivos (vistos no código):** `lang="pt-BR"`; `document.title` por página; `<label>` nos campos principais; `aria-current` no menu e nas migalhas (breadcrumb); `<nav>` com rótulo; `aria-live` na contagem de resultados e `role="status"` no aviso do formulário; `<time dateTime>` nos cards; paginação com `aria-label`; diálogo com `role="dialog"`, `aria-modal` e `aria-labelledby`; `:focus-visible` global em links e botões; `@media` nos 4 CSS; README com passo a passo; build e lint passando.
@@ -157,12 +159,12 @@ Critérios de US14–US16 e regras de negócio: `docs/REQUISITOS_REGRAS_DE_NEGOC
 | G20 | **Contraste medido pelo axe: 24 combinações de cor abaixo de 4,5:1 em todas as telas** (ver `evidencias/antes/`); alvo de toque pequeno em `select[name=prioridade]` (Atualizar). Alvos de toque restantes e possível colisão de nomes de classes CSS entre `App.css` e `VisaoGeral.css`: verificar no navegador | Média | RNF01, RNF04 | 3 |
 
 ## 8. Decisões de arquitetura (ADR)
-- **ADR-01 React + Vite.** Decidido na Ata 29/09 por votação. *Motivo:* componentes reutilizáveis. O domínio de React no grupo era limitado; por isso a estrutura inicial foi montada com auxílio de IA (29/09), a partir dos wireframes do Figma Design e dos documentos que o grupo já tinha, para haver um projeto visível. *Custo:* quem não conhece React; código gerado por IA exige que todos saibam explicar.
-- **ADR-02 JSON como seed + `localStorage` como persistência.** *Contexto:* o enunciado proíbe back-end real e aceita "JSON ou solução equivalente"; Ata 15/09 exige não perder o formulário. *Decisão:* JSON lido uma vez (primeira carga = `getItem(...) === null`); leitura/escrita seguintes no `localStorage`, chave **versionada**, `try/catch`, botão "Resetar dados". Camada assíncrona simulada, com falha simulável (`?falha=1`) para demonstrar o estado de erro. *Limites:* dados só no navegador, editáveis pelo DevTools, cerca de 5 MB, sem sincronização. *Troca futura:* só a camada `storage` muda com um back-end.
-- **ADR-03 Um JSON por entidade** (`demandas`, `departamentos`, `usuarios`), não por página, porque as telas compartilham dados. Cada demanda ganha `origem`, `destino`, `tipo`, `prioridade`, `status`, `cobrancas[]`, `historico[]`. `VisaoGeral.json` deixa de ser fonte própria: os números são calculados. *(Atende a "mais de um JSON" da Ata 29/09.)*
+- **ADR-01 React + Vite.** Decidido na Ata 29/09 por votação. *Motivo:* componentes reutilizáveis. O domínio de React no grupo era limitado; por isso a estrutura inicial foi montada com auxílio de IA (29/09), a partir dos wireframes do Figma Design e dos documentos que o grupo já tinha, para haver um projeto visível. *Custo:* quem não conhecia React precisou aprender durante o projeto.
+- **ADR-02 JSON como seed + `localStorage` como persistência.** *Contexto:* o enunciado pede dados simulados ("JSON ou solução equivalente"), sem back-end real; Ata 15/09 exige não perder o formulário. *Decisão:* JSON lido uma vez (primeira carga = `getItem(...) === null`); leitura/escrita seguintes no `localStorage`, chave **versionada**, `try/catch`, botão "Resetar dados". Camada assíncrona simulada, com falha simulável (`?falha=1`) para demonstrar o estado de erro. *Limites:* dados só no navegador, editáveis pelo DevTools, cerca de 5 MB, sem sincronização. *Troca futura:* só a camada `storage` muda com um back-end.
+- **ADR-03 Um JSON por entidade** (`demandas`, `departamentos`, `usuarios`), não por página, porque as telas compartilham dados. Cada demanda ganha `origem`, `destino`, `tipo`, `prioridade`, `status` e `historico[]` (as cobranças são itens do histórico, com `tipo: cobranca`). `VisaoGeral.json` deixa de ser fonte própria: os números são calculados. *(Atende a "mais de um JSON" da Ata 29/09.)*
 - **ADR-04 Roteamento por hash.** Simples e sem dependência. Exige gerenciar foco e título a cada mudança (G14).
 - **ADR-05 Acompanhamento público descartado** (Ata 22/09).
-- **ADR-06 Uso de IA** na estrutura e no código, permitido pelo professor desde que todos expliquem. Registrar as ferramentas (Figma Make; Codex, usado por outros membros para montar a base no Git a partir do Figma Design; Gemini/Antigravity; Claude e Claude Code, usados pelo autor nas correções) e quem revisou cada PR.
+- **ADR-06 Uso de IA** na estrutura e no código. Ferramentas: Figma Make; Codex, usado por outros membros para montar a base no Git a partir do Figma Design; Gemini/Antigravity; Claude e Claude Code, usados pelo autor nas correções. Quem revisou cada PR não consta nos documentos do repositório (pendência).
 - **ADR-07 [PROPOSTA] Perfis `gerenciamento` e `departamento`.** Logins `admin` e `user01`–`user04` (senha = usuário). Departamentos independentes; gerência vê tudo e não define prioridade; setor nunca envia direto a outro setor. Regras em funções puras (`src/domain/permissoes.js`, `prazos.js`) com teste. *Limite:* perfil em `sessionStorage` é simulação, não segurança.
 - **ADR-08 [PROPOSTA] Status (7):** Pendente de aceite, Em andamento, Aguardando (processamento interno), Em triagem, Concluída, Não aplicável, Cancelada. Finais e imutáveis: Concluída, Não aplicável, Cancelada. Transições em `src/domain/status.js` (ver `REQUISITOS_REGRAS_DE_NEGOCIO.md`, seção 4).
 - **ADR-09 Entrega em blocos, uma branch e um PR por bloco**, com CHANGELOG, `docs/EXPLICACAO_*.md` e revisão por pares (ver `docs/CONVENCOES.md`).
@@ -184,16 +186,16 @@ Critérios de US14–US16 e regras de negócio: `docs/REQUISITOS_REGRAS_DE_NEGOC
 eMAG: usar as recomendações equivalentes por tema (marcação, comportamento, conteúdo/informação, formulários). **Mapear os números exatos no eMAG 3.1 e citar no relatório.**
 
 **Procedimento "antes/depois":** (1) rodar Lighthouse e axe **no estado atual, antes de corrigir**, e guardar relatórios e prints em `docs/evidencias/antes/`; (2) corrigir G10–G14 (Bloco 3); (3) rodar de novo e guardar em `docs/evidencias/depois/`; (4) teste manual só com teclado e com NVDA (Windows) ou VoiceOver.
-Evidências: `☐ lighthouse-antes` `☒ axe-antes` (assistente, `docs/evidencias/antes/`) `☐ lighthouse-depois` `☒ axe-depois` (assistente, na nuvem, `docs/evidencias/depois/`; rodada pela equipe pendente) `☐ gravação com teclado` `☐ gravação com leitor de tela`.
+Evidências: `☐ lighthouse-antes` `☒ axe-antes` (assistente, `docs/evidencias/antes/`) `☐ lighthouse-depois` (parcial: Visão Geral e Nova Demanda, desktop; seção 19) `☒ axe-depois` (assistente, na nuvem, `docs/evidencias/depois/`; rodada pela equipe pendente) `☐ gravação com teclado` `☐ gravação com leitor de tela`.
 
 ## 10. Plano de testes
 | ID | Cenário | Passos | Esperado | Resultado |
 |---|---|---|---|---|
-| TC01 | Nova demanda — campos | Abrir Nova Demanda como `ti` | Origem travada em TI; destino em lista; tipo depende do destino | ☐ (sem registro da equipe; conferido só pelo assistente, CHANGELOG 2B) |
+| TC01 | Nova demanda — campos | Abrir Nova Demanda como `user01` | Origem travada em TI; destino em lista; tipo depende do destino | ☒ passou — `TESTES_PENDENTES.md`, 2.5 (reteste 7 e Bloco B, no computador). No celular o envio falha (F1, seção 23) |
 | TC02 | Validação | Enviar vazio | Mensagens claras, foco no 1º erro, anunciadas | ☐ (parcial: o teste da 2B pelo autor achou a falha do limite de caracteres, corrigida, e o reteste passou, conforme relato do autor; não há registro do envio vazio nem do anúncio por leitor de tela) |
-| TC03 | Envio com sucesso/erro | Enviar; repetir com `?falha=1` | Loading → confirmação / erro com retry | ☐ (conferido só pelo assistente, CHANGELOG 2B) |
+| TC03 | Envio com sucesso/erro | Enviar; repetir com `?falha=1` | Loading → confirmação / erro com retry | ☒ passou — `TESTES_PENDENTES.md`, seção 0 (sucesso no reteste 7; erro com `?falha=1` no Bloco C, parte 1) |
 | TC04 | Offline | DevTools → Offline, enviar, recarregar, reconectar | Dados mantidos; aviso; envio ao reconectar | ☐ (não implementado: 2C adiada) |
-| TC05 | Ordenação | Abrir lista | Prioridade → data → nome | ☐ |
+| TC05 | Ordenação | Abrir lista | Prioridade → data → nome | ☐ (parcial: ordenação conferida no reteste 12 e no Bloco A, `TESTES_PENDENTES.md` 4B.4; a ordem padrão hoje é "Atenção primeiro", seção 22) |
 | TC06 | Filtro/lista vazia | Buscar termo inexistente | Mensagem de lista vazia | ☐ |
 | TC07 | Detalhe | Abrir 3 demandas diferentes; trocar status; enviar mensagem | Dados de cada uma; histórico atualizado e persistido | ☐ (parcial: Detalhes e Atualizar passaram, com reteste, em `evidencias/depois/TESTE_MANUAL_BLOCO2A.md`; "enviar mensagem" é o chat, adiado) |
 | TC08 | Departamentos | Acessar setor | Só demandas do setor | ☒ passou — `evidencias/depois/TESTE_MANUAL_BLOCO2A.md` |
@@ -202,9 +204,9 @@ Evidências: `☐ lighthouse-antes` `☒ axe-antes` (assistente, `docs/evidencia
 | TC11 | Responsivo | 360, 768 e 1280 px | Sem rolagem horizontal | ☐ (parcial: Sair em 360 px passou no reteste do autor, com DevTools; o axe "depois" mediu 0 rolagem em 360 e 1280, mas é automático; falta 768 px) |
 | TC12 | Visão Geral | Comparar números com a lista | Indicadores batem com os dados | ☒ passou — `evidencias/depois/TESTE_MANUAL_BLOCO2A.md` (a contagem acompanhou a conclusão da DM-2012) |
 | TC13 | Login/Sair | Credencial errada; Sair; botão Voltar | Erro acessível; sessão encerrada | ☐ (parcial: Sair passou em `evidencias/depois/TESTE_MANUAL_BLOCO1.md`; credencial errada e Voltar depois de Sair sem registro) |
-| TC14 | Estados | Simular atraso e falha | Loading, vazio, sucesso e erro visíveis | ☐ |
+| TC14 | Estados | Simular atraso e falha | Loading, vazio, sucesso e erro visíveis | ☐ (parcial: erro com `?falha=1` passou, `TESTES_PENDENTES.md` 2.4; busca sem resultado e dados corrompidos sem registro) |
 | TC15 | Perfis | 5 usuários; URL de demanda alheia | CT-R01 a CT-R04, CT-R07, CT-R11 | ☐ (parcial: ver CT-R02, R03, R04, R07 e R11 em `REQUISITOS_REGRAS_DE_NEGOCIO.md`, seção 9; CT-R01 sem registro) |
-| TC16 | Aceite, recusa e encerramento | Aceitar com/sem prioridade; recusar; redirecionar; concluir | CT-R05, CT-R06, CT-R08 | ☐ (conferido só pelo assistente, CHANGELOG 4A e 4C; teste da equipe pendente) |
+| TC16 | Aceite, recusa e encerramento | Aceitar com/sem prioridade; recusar; redirecionar; concluir | CT-R05, CT-R06, CT-R08 | ☐ (parcial: aceite passou no reteste 8, `TESTES_PENDENTES.md` 4A.1; demanda final sem ações passou, 2.3; recusa e redirecionar conferidos só pelo assistente, CHANGELOG 4A e 4C) |
 | TC17 | Prazos e cobrança | Novo prazo; prazos por perfil | CT-R09, CT-R10 | ☐ (novo prazo e cobrança ainda não têm tela) |
 
 `☒` = feito, com a fonte ao lado. `☐` = não feito ou só em parte: a observação diz o que falta.
@@ -212,7 +214,7 @@ Evidências: `☐ lighthouse-antes` `☒ axe-antes` (assistente, `docs/evidencia
 Casos detalhados de regras de negócio (CT-R01…CT-R14): `docs/REQUISITOS_REGRAS_DE_NEGOCIO.md`, seção 9.
 **Registro de defeitos corrigidos** (preencher): `ID | commit da correção | evidência antes | evidência depois`.
 
-## 11. Limitações conhecidas (não esconder na apresentação)
+## 11. Limitações conhecidas
 Sem back-end; dados e perfis só no navegador e editáveis (não é segurança); e-mail apenas simulado; login fictício; sem sincronização entre dispositivos; teste com leitor de tela restrito ao que a equipe executar; layout mudou durante o desenvolvimento (seção 12); setores fixos em 4 (TI, Hidráulica, Administrativo, Elétrica), em `departamentos.json`: **cadastro de novos setores é funcionalidade futura**, e até lá um pedido de área fora deles segue devolução à triagem → redirecionar ou "Não aplicável" (proposta em `ATAS_RASCUNHO_27-09_e_02-10.md`, item 11). **Detalhes, tabela do que um back-end substituiria e trabalho futuro: seção 20.**
 
 ## 12. Lacunas de processo a corrigir
@@ -227,21 +229,21 @@ Sem back-end; dados e perfis só no navegador e editáveis (não é segurança);
 `Login → perfil`
 → **Gerenciamento:** Visão Geral (todas as demandas, "sem posição", triagem) → redirecionar ou "Não aplicável" → **cobrar** setores.
 → **Departamento:** Departamentos/Demandas do setor (prioridade → data → nome) → Detalhe (definir prioridade, status, histórico, mensagem; **devolver à triagem**; responder cobrança).
-→ **Qualquer perfil:** Nova Demanda (origem automática, destino, tipo, descrição) → confirmação; sem rede: guarda localmente e envia depois.
+→ **Qualquer perfil:** Nova Demanda (origem automática, destino, tipo, descrição) → confirmação; sem rede: guarda localmente e envia depois (não implementado; seção 18).
 Estados em todas as telas: carregando · vazio · sucesso · erro. Diagramas em `docs/FLUXOS.md`.
 
 ## 14. Retrospectiva (rascunho a partir dos registros; o grupo revisa e completa)
-> Escrito a partir do CHANGELOG, das evidências e dos relatos do autor. **Não é a opinião do grupo** até ser discutido; cada pessoa pode acrescentar ou discordar.
+> Escrito a partir do CHANGELOG, das evidências e dos relatos do autor.
 
 **O que deu certo**
 - Entrega em blocos pequenos (1 → 2A/2B → 3 → 4A/4B/4C), um PR por bloco, com CHANGELOG e um `EXPLICACAO_BLOCO*.md` para estudar.
-- Regras de negócio em funções puras com teste automático (de 61 testes no Bloco 1 para 245 agora). Mudanças de regra, como os prazos de 48 h e de 24 h, ficaram baratas e seguras.
-- Teste manual do autor no Edge depois de cada bloco. Ele achou falhas que os testes automáticos e o navegador embutido não acharam: Sair sumindo no celular, campo travado no Atualizar, limite de caracteres, skip link por cima da marca e o "card gordo".
-- Honestidade nas evidências: o que não foi feito está escrito como "não executado" (`docs/TESTES_PENDENTES.md`).
+- Regras de negócio em funções puras com teste automático (de 61 testes no Bloco 1 para 245 agora). Mudanças de regra, como os prazos de 48 h e de 24 h, foram feitas trocando constantes e testes (`atencao.js`, `atencao.test.js`).
+- Teste manual do autor no Edge nos Blocos 1, 2A, 2B e 3 e na rodada final de 04/10. Ele achou falhas que os testes automáticos e o navegador embutido não acharam: Sair sumindo no celular, campo travado no Atualizar, limite de caracteres, skip link por cima da marca e o "card gordo".
+- Evidências: o que não foi feito está registrado como "não executado" (`docs/TESTES_PENDENTES.md`).
 
 **O que não deu certo**
 - Atas de 27/09 e 02/10 escritas depois, como rascunho; as decisões de 03/10 em diante ainda não foram votadas.
-- Documentos que se contradiziam (axe "depois" existente e "não existe"; testes "não executados" e "passou"). Foram corrigidos em 04/10.
+- Documentos que se contradiziam (axe "depois" existente e "não existe"; testes "não executados" e "passou"). Parte foi corrigida em 04/10 e o restante na revisão de 20/10 (`docs/VERIFICATION.md`).
 - Requisitos que mudaram no meio (prazo de aceite de 72 h → 48 h; redirecionamento com teto de 48 h → 24 h fixas; justificativa no redirecionar) exigiram retrabalho.
 - Parte do que estava no escopo ficou para depois por falta de tempo (seção 18): modo offline, novo prazo, cobrança.
 
@@ -258,7 +260,7 @@ Estados em todas as telas: carregando · vazio · sucesso · erro. Diagramas em 
 - Requisito ambíguo e como ficou testável. Exemplos: "demanda parada" virou a fila de atenção, com 48 h e 24 h; "quem define prioridade". `☐`
 
 ## 15. Checklist pré-demonstração
-☐ Todos instalam, rodam e explicam o projeto · ☐ Tag da versão entregue · ☐ Cada critério de aceitação com evidência real · ☐ Limitações (seção 11) registradas · ☐ Cenário de usuário com **ao menos uma falha** demonstrada (sugestão: envio offline → aviso → reconexão) · ☐ Recursos de terceiros e de IA identificados · ☐ Os 5 usuários de teste documentados no README.
+☐ Todos instalam, rodam e explicam o projeto · ☒ Tag da versão entregue (`v1.0-pbl`) · ☐ Cada critério de aceitação com evidência · ☐ Limitações (seção 11) registradas · ☐ Cenário de usuário com **ao menos uma falha** demonstrada (sugestão: envio com `?falha=1` → mensagem de erro → formulário mantido) · ☐ Recursos de terceiros e de IA identificados · ☒ Os 5 usuários de teste documentados no README.
 
 ## 16. Mapa defeito → bloco de correção
 | Bloco | Branch | Conteúdo | Defeitos |
@@ -272,23 +274,24 @@ Estados em todas as telas: carregando · vazio · sucesso · erro. Diagramas em 
 ## 17. Rastreio da lista de ajustes do grupo (02/10, 21h)
 Cobertura item a item em `docs/REQUISITOS_REGRAS_DE_NEGOCIO.md`, seção 11.
 
-## 18. Escopo entregue × adiado (atualizado em 04/10, com honestidade)
+## 18. Escopo entregue × adiado (atualizado em 04/10)
 | Item | Entregue? | Justificativa se adiado |
 |---|---|---|
 | Núcleo (Blocos 1–3): login simulado e Sair, dados no navegador, telas ligadas aos dados, Nova Demanda com validação e pop-up, acessibilidade (foco, contraste, skip link, fonte de 14 px) | ☒ entregue | — |
 | Regras do Bloco 4: aceite com prioridade e recusa (4A), fila de atenção (4B), redirecionar com justificativa, Não aplicável e Cancelar (4C), concluir pela tela Atualizar | ☒ entregue | Regras ainda **não votadas em ata** (propostas 12 a 15 do rascunho de 03/10) |
-| Ajustes do teste manual (PR #9): cards clicáveis, paginação, busca, contraste das bordas, menu no celular, "(obrigatório)", confirmação do reset | ☒ entregue | Reteste do autor pendente (`TESTES_PENDENTES.md`, R.1 a R.9) |
+| Ajustes do teste manual (PR #9): cards clicáveis, paginação, busca, contraste das bordas, menu no celular, "(obrigatório)", confirmação do reset | ☒ entregue | Reteste do autor: R.1 a R.3, R.8 e R.9 passaram; R.4 a R.7 parciais ou não executados (`TESTES_PENDENTES.md`) |
 | Novo prazo com justificativa (RN14, RF-R11, CT-R09) | ☐ adiado | Prioridade ao fluxo principal no prazo de 3 dias. A permissão já existe e é testada (`podeRegistrarPrazo`); falta a tela |
 | Cobrança no histórico (RN21, RF-R12) | ☐ adiado | Mesmo motivo. A permissão existe (`podeCobrar`) e o seed tem um exemplo de cobrança (DM-2011); falta a tela |
 | Devolver à triagem uma demanda já aceita (Em andamento/Aguardando → Em triagem) | ☐ adiado | A transição está prevista em `status.js`; a tela só oferece a recusa de uma demanda pendente |
 | Envio da Nova Demanda no celular real, acessando pelo IP da rede | ☐ não funciona (falha F1, seção 23) | Achado no teste de 04/10, à noite; não corrigido por falta de tempo antes da apresentação. Causa não confirmada |
 | Status de conexão, fila "Pendentes de envio" e rascunho guardado (RF10, RNF03, "2C") | ☐ adiado | Sem back-end, nada no app depende da rede depois de carregado (seção 20). Num sistema real seriam necessários aviso de conexão e fila com service worker |
+| Notificação por e-mail simulada (RF12, US13) | ☐ Adiado: implementação futura | O envio real de e-mail depende de back-end, que está fora do escopo do projeto (seção 3). A versão simulada (RF12) não foi implementada; não há decisão registrada em ata sobre ela |
 | Chat, reabrir com citação, "visualizada", responsável individual | ☐ adiado | Prazo; especificados em `REQUISITOS_REGRAS_DE_NEGOCIO.md` (RN23 a RN26) |
 | Tema escuro/claro | ☐ futuro | Custo alto e risco para o contraste já validado (seção 20) |
 | Testes automáticos de interface (cliques, foco) | ☐ não feito | Não há biblioteca para isso no projeto (jsdom/Testing Library); os 245 testes cobrem as regras |
-| NVDA na rodada de reteste, nova rodada do axe, Lighthouse nas demais telas, zoom de 400% e 500%, dados corrompidos pelo F12, reabrir o aviso de limite de 500 caracteres, Voz de Acesso | ☐ **não executado** | Falta de tempo antes da apresentação (decisão do autor, 04/10/2026). Detalhes em `TESTES_PENDENTES.md`, seção 0 |
+| NVDA na rodada de reteste, nova rodada do axe, Lighthouse nas demais telas, zoom de 400% e 500%, dados corrompidos pelo F12, reabrir o aviso de limite de 500 caracteres, Voz de Acesso | ☐ **não executado** | Falta de tempo antes da apresentação (decisão, 04/10/2026). Detalhes em `TESTES_PENDENTES.md`, seção 0 |
 
-## 19. Evidência real já existente
+## 19. Evidências existentes
 - **Axe "antes":** `docs/evidencias/antes/RELATORIO_AXE_ANTES.md` e `axe_antes.json`. Auditoria automática (axe-core 4.13.0) do `main` de 03/10, **antes** das correções. Achado dominante: contraste (24 combinações reprovadas) em todas as telas.
 - **Axe "depois":** `docs/evidencias/depois/RELATORIO_AXE_DEPOIS.md` e `axe_depois.json`.
   - Feita no Bloco 3 (branch `fix/acessibilidade`), gerada **pelo assistente, em ambiente de nuvem, não pela equipe**.
@@ -296,7 +299,7 @@ Cobertura item a item em `docs/REQUISITOS_REGRAS_DE_NEGOCIO.md`, seção 11.
   - 12 itens "incompletos": contraste do menu lateral em 360 px, a conferir a mão.
 - **Testes manuais do autor:** `docs/evidencias/depois/TESTE_MANUAL_BLOCO1.md` e `TESTE_MANUAL_BLOCO2A.md`. O teste da 2B tem registro escrito só no CHANGELOG, mas tem prints (tabela abaixo).
 
-**Evidências relatadas pelo autor (Bruno Diogo) em 04/10, com os prints que existem na pasta** (conferido em 04/10). Onde não há arquivo, está escrito.
+**Evidências relatadas pelo autor em 04/10, com os prints que existem na pasta** (conferido em 04/10). Onde não há arquivo, está escrito.
 | Evidência | Resultado relatado | Arquivo esperado |
 |---|---|---|
 | Lighthouse, Visão Geral, `admin`, desktop | 100/100 | `docs/evidencias/depois/lighthouse_visao-geral_admin_desktop.png` |
@@ -305,12 +308,12 @@ Cobertura item a item em `docs/REQUISITOS_REGRAS_DE_NEGOCIO.md`, seção 11.
 | 360 px no DevTools (Samsung Galaxy A55), antes do PR #9 | Achados (menu com rolagem e itens cortados), corrigidos no PR #9 | `docs/evidencias/depois/devtools-360px_galaxy-a55_visao-geral.png`, `docs/evidencias/depois/devtools-360px_galaxy-a55_demandas.png` |
 | Zoom de 200% no Chrome (1920 × 1080, escala 100%) | OK | `docs/evidencias/depois/zoom-200_chrome_1920x1080_visao-geral.png` |
 | Celular real Android, pela rede Wi-Fi (`npm run dev -- --host`), antes do PR #9 | Visão Geral, Demandas, Departamentos e Nova Demanda abriram; achados corrigidos no PR #9 | `docs/evidencias/depois/celular-android_visao-geral.jpeg`, `docs/evidencias/depois/celular-android_demandas.jpeg`, `docs/evidencias/depois/celular-android_departamentos.jpeg`, `docs/evidencias/depois/celular-android_nova-demanda.jpeg` |
-| **Rodada final do autor, 04/10/2026:** retestes 1 a 12 do PR #9 | Todos passaram (detalhes em `docs/TESTES_PENDENTES.md`, seção 0). O passo 1 do reteste 10 está **sem print** | Prints com o autor, ainda não salvos em `docs/evidencias/` |
-| Bloco A: encerrada sem ações, em andamento com ações, ordenação | Passou | Prints com o autor, ainda não salvos |
-| Bloco B: Nova Demanda só com teclado, tipo "Outros", DM-2015 → Elétrica, DM-2016 → Administrativo, pop-up com foco em "Ver demanda", Esc devolve o foco | Passou, **por relato do autor**; sem print de cada passo (a captura exige mouse); há prints do resultado | Prints do resultado com o autor, ainda não salvos |
-| Bloco C, parte 1: falha simulada `?falha=1` | Passou: mensagem "Não foi possível enviar. Seus dados continuam salvos. Tente novamente.", formulário mantido, nenhuma demanda criada | Print com o autor, ainda não salvo |
-| Bloco C, parte 2: Resetar dados com confirmação | Passou: "Voltar" não apaga; confirmar volta ao exemplo (`admin`: Abertas 10, Pendentes de aceite 2, aviso "2 aguardando triagem · 2 pendentes de aceite"). Em dois prints o `?falha=1` ainda estava no endereço; o reset funcionou mesmo assim | Prints com o autor, ainda não salvos |
-| Bloco D, parte 1: celular Android real (Chrome, `user03`) | Telas abrem, sem rolagem lateral, o teclado não esconde o campo, alvos de toque OK. **Falhou o envio da Nova Demanda** (F1, seção 23), reproduzido 2 vezes (19:47 e 19:48) | `docs/evidencias/depois/celular/` (**pasta ainda não existe; o autor vai criá-la e salvar os prints**) |
+| **Rodada final do autor, 04/10/2026:** retestes 1 a 12 do PR #9 | Todos passaram (detalhes em `docs/TESTES_PENDENTES.md`, seção 0). O passo 1 do reteste 10 está **sem print** | Sem print no repositório |
+| Bloco A: encerrada sem ações, em andamento com ações, ordenação | Passou | Sem print no repositório |
+| Bloco B: Nova Demanda só com teclado, tipo "Outros", DM-2015 → Elétrica, DM-2016 → Administrativo, pop-up com foco em "Ver demanda", Esc devolve o foco | Passou, **por relato do autor**; sem print de cada passo (a captura exige mouse) | Sem print no repositório |
+| Bloco C, parte 1: falha simulada `?falha=1` | Passou: mensagem "Não foi possível enviar. Seus dados continuam salvos. Tente novamente.", formulário mantido, nenhuma demanda criada | Sem print no repositório |
+| Bloco C, parte 2: Resetar dados com confirmação | Passou: "Voltar" não apaga; confirmar volta ao exemplo (`admin`: Abertas 10, Pendentes de aceite 2, aviso "2 aguardando triagem · 2 pendentes de aceite"). Em dois prints o `?falha=1` ainda estava no endereço; o reset funcionou mesmo assim | Sem print no repositório |
+| Bloco D, parte 1: celular Android real (Chrome, `user03`) | Telas abrem, sem rolagem lateral, o teclado não esconde o campo, alvos de toque OK. **Falhou o envio da Nova Demanda** (F1, seção 23), reproduzido 2 vezes (19:47 e 19:48) | Sem print no repositório |
 | Falha do Bloco 1 (antes da correção) | Sair escondido em 360 px | **Sem print do estado anterior** (defeito corrigido; não reproduzível sem voltar o código). Registro escrito em `docs/evidencias/depois/TESTE_MANUAL_BLOCO1.md` |
 | Falhas dos Blocos 2A e 2B (antes da correção) | Campo travado no Atualizar; limite "2400/60" e "3072/500" | `docs/evidencias/antes/teste-manual_bloco2a_atualizar-sem-campo.png`, `docs/evidencias/antes/teste-manual_bloco2b_limite-titulo-2400-60.png`, `docs/evidencias/antes/teste-manual_bloco2b_limite-descricao-3072-500.png` |
 | axe | 0 violações nas 26 combinações, **na rodada antiga** (Bloco 3, assistente na nuvem). **Nova rodada no código atual: não executada** | `docs/evidencias/depois/RELATORIO_AXE_DEPOIS.md` e `axe_depois.json` (existem). Para a nova rodada, sugestão de nome: `docs/evidencias/depois/axe_rodada2_<data>.json` (ainda não existe) |
@@ -320,13 +323,12 @@ Cobertura item a item em `docs/REQUISITOS_REGRAS_DE_NEGOCIO.md`, seção 11.
 - **Pendentes:** nova rodada do axe no código atual; Lighthouse nas outras telas e em mobile; resultado do NVDA por tela; comando de voz; reteste do PR #9. Roteiro em `docs/TESTES_PENDENTES.md`.
 
 ## 20. Limitações e trabalho futuro: simulação sem back-end
-> O enunciado proíbe back-end real e aceita "JSON ou solução equivalente" (ADR-02). Tudo abaixo é **simulação para a demonstração**, não um sistema seguro.
+> O enunciado pede dados simulados ("JSON ou solução equivalente"), sem back-end real (ADR-02). Tudo abaixo é **simulação para a demonstração**, não um sistema seguro.
 
 ### 20.1 De onde vêm os dados
 - **`src/data/seed-demandas.json`:** as 13 demandas de exemplo.
   - Criado no Bloco 1 (CHANGELOG, "Arquivos novos"); a DM-2013 foi acrescentada no Bloco 4B.
   - Não há script que o gere: o `package.json` só tem `dev`, `build`, `lint`, `preview` e `test`. O arquivo foi escrito à mão, com as datas no formato "há X horas" (`criadaHaHoras`, `haHoras`…).
-  - **Quem digitou cada linha não é possível determinar pelo código; ver o histórico do arquivo no GitHub.**
 - **`src/data/usuarios.json`:** os 5 logins de teste (senha = usuário).
 - **`src/data/departamentos.json`:** os 4 setores e os tipos de atendimento.
 - **`src/data/demandas.json` e `src/data/VisaoGeral.json`:** dados antigos das telas dos colegas. **Nenhum arquivo do código os importa mais** (desde a 2A); mantidos até o grupo aprovar a remoção.
@@ -369,7 +371,7 @@ Cobertura item a item em `docs/REQUISITOS_REGRAS_DE_NEGOCIO.md`, seção 11.
 - **Permissões só no navegador:** quem edita a chave `demanda-de-aco:v1:sessao` ou `demanda-de-aco:v1:demandas` pelo DevTools pode se passar por outro perfil ou mudar qualquer demanda.
 - **Sem criptografia**, sem validação no servidor, sem registro confiável de quem fez o quê: o histórico pode ser editado.
 - **Dados presos a um navegador:** outro computador não vê as mesmas demandas.
-- **Por que é aceitável:** é um protótipo de interface para uma disciplina, com dados fictícios, sem dados pessoais reais, e o enunciado proíbe back-end. As regras ficaram em funções puras (`src/domain/`) justamente para serem levadas a um servidor depois.
+- **Por que é aceitável:** é um protótipo de interface para uma disciplina, com dados fictícios, sem dados pessoais reais, e o enunciado pede dados simulados. As regras ficaram em funções puras (`src/domain/`) justamente para serem levadas a um servidor depois.
 
 ### 20.5 O que um back-end real substituiria
 | Hoje (simulação) | Num sistema real |
@@ -409,8 +411,8 @@ Cobertura item a item em `docs/REQUISITOS_REGRAS_DE_NEGOCIO.md`, seção 11.
 | Persona | O que o app faz | Evidência | Futuro / não executado |
 |---|---|---|---|
 | **Rafael (só teclado)** | Ordem do Tab segue a tela; o 1º Tab mostra "Ir para o conteúdo"; o foco vai para o título a cada troca de tela; contorno verde em tudo que recebe foco; pop-ups com foco preso, Esc para fechar e foco de volta ao botão de origem; cards da Visão Geral são links | Conferência do assistente a cada bloco (CHANGELOG); o autor conferiu no Edge skip link, Tab, Enter, Shift+Tab e contorno (`evidencias/depois/RELATORIO_AXE_DEPOIS.md`); **Bloco B (04/10): Nova Demanda inteira só com teclado passou** (relato do autor) | Volta completa só com teclado em todas as telas, inclusive as dos Blocos 4A a 4C (`TESTES_PENDENTES.md`, 1.6, 2.1, 4A.1, 4C.1) |
-| **Bia (leitor de tela / assistente por voz)** | Um `<h1>` por tela; rótulos ligados aos campos; erros ligados por `aria-describedby`; contagens e avisos em `role="status"`; pop-ups com `role="dialog"`; selos em texto, não só cor | **NVDA 2026.2 + Edge InPrivate, testado 2 ou 3 vezes (relato do autor)**; prints esperados na seção 19 | Resultado por tela a registrar. **Comando de voz (ex.: Voz de Acesso do Windows): não executado** |
-| **Dona Célia (celular, rede instável)** | Telas sem rolagem lateral de 320 a 1280 px; menu quebra linha; botões de 24 px ou mais; o formulário continua preenchido se o envio falha (`?falha=1`) | 360 px passou no reteste 6 (04/10). Celular real Android (Bloco D, `user03`): telas abrem, sem rolagem lateral, teclado não esconde o campo, alvos de toque OK; **o envio da Nova Demanda trava em "Enviando…" (F1, seção 23)** | **F1 não corrigida.** **Não há detecção de offline**: o código não usa `navigator.onLine` nem os eventos `online`/`offline`; não há aviso de conexão; o texto digitado **some ao recarregar**. Justificativa: sem back-end, depois que a página carrega nada depende da rede (os dados ficam no navegador). Num sistema real seriam necessários aviso de conexão e rascunho/fila de envio com service worker (seção 18) |
+| **Bia (leitor de tela / assistente por voz)** | Um `<h1>` por tela; rótulos ligados aos campos; erros ligados por `aria-describedby`; contagens e avisos em `role="status"`; pop-ups com `role="dialog"`; selos em texto, não só cor | **NVDA 2026.2 + Edge InPrivate, testado 2 ou 3 vezes (relato do autor)**; prints na seção 19 | Resultado por tela a registrar. **Comando de voz (ex.: Voz de Acesso do Windows): não executado** |
+| **Dona Célia (celular, rede instável)** | Telas sem rolagem lateral de 320 a 1280 px (conferido pelo assistente; 360 px também no reteste 6); menu quebra linha; botões de 24 px ou mais; o formulário continua preenchido se o envio falha (`?falha=1`) | 360 px passou no reteste 6 (04/10). Celular real Android (Bloco D, `user03`): telas abrem, sem rolagem lateral, teclado não esconde o campo, alvos de toque OK; **o envio da Nova Demanda trava em "Enviando…" (F1, seção 23)** | **F1 não corrigida.** **Não há detecção de offline**: o código não usa `navigator.onLine` nem os eventos `online`/`offline`; não há aviso de conexão; o texto digitado **some ao recarregar**. Justificativa: sem back-end, depois que a página carrega nada depende da rede (os dados ficam no navegador). Num sistema real seriam necessários aviso de conexão e rascunho/fila de envio com service worker (seção 18) |
 
 ## 22. O aviso "Precisa de atenção" (para a apresentação)
 - **O que mostra:** no topo da Visão Geral, uma faixa com "N aguardando triagem" e "N pendentes de aceite". Cada número é um link que abre a lista de Demandas já filtrada. **Só aparece se houver pelo menos uma.**
@@ -430,7 +432,7 @@ Cobertura item a item em `docs/REQUISITOS_REGRAS_DE_NEGOCIO.md`, seção 11.
 - **Onde está no código:** `src/domain/atencao.js` (prazos e selos) e `src/domain/listas.js` (`avisoDeAtencao`, `ordenarPorAtencao`), com testes. Explicação completa em `docs/EXPLICACAO_BLOCO4B.md`.
 
 ## 23. Falhas conhecidas (encontradas no teste de 04/10/2026; não corrigidas por falta de tempo)
-> Decisão do autor: **nenhuma correção de código antes da apresentação (terça, 06/10, à noite).** A "origem no código" foi conferida por leitura, **sem alterar e sem depurar**. Onde não deu para confirmar, está escrito.
+> Decisão: **nenhuma correção de código antes da apresentação.** A "origem no código" foi conferida por leitura, **sem alterar e sem depurar**. Onde não deu para confirmar, está escrito.
 
 | # | Sintoma | Onde acontece | Impacto | Origem no código | Status |
 |---|---|---|---|---|---|

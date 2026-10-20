@@ -4,7 +4,7 @@
 - **Executado por:** Bruno Diogo (relato do autor)
 - **Prints:** `docs/evidencias/antes/teste-manual_bloco2a_atualizar-sem-campo.png` (o defeito, antes da correção)
 - **Ambiente:** Microsoft Edge, `npm run dev` (branch `feat/telas-nova-demanda`)
-- **Roteiro:** "Teste manual por tela" do relatório da 2A
+- **Roteiro:** teste manual por tela, definido no Bloco 2A
 
 ## Resultados
 | Tela / cenário | Requisito | Resultado | Observação |
